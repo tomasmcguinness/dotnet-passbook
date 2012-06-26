@@ -76,6 +76,13 @@ namespace Passbook.Generator
           }
         }
       }
+
+      SignManigestFile(request, manifestFileAndPath);
+    }
+
+    private void SignManigestFile(PassGeneratorRequest request, string manifestFileAndPath)
+    {
+      throw new NotImplementedException();
     }
 
     private string GetHashForFile(string fileAndPath)
