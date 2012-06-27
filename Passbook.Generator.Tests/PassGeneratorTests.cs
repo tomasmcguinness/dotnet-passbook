@@ -17,8 +17,8 @@ namespace Passbook.Generator.Tests
             request.OrganizationName = "Tomas McGuinness";
             request.TeamIdentifier = "Team America";
 
-            request.IconFile = @"c:\development\icon.png";
-            request.IconRetinaFile = @"c:\development\icon@2x.png";
+            request.IconFile = @"icon.png";
+            request.IconRetinaFile = @"Icon@2x.png";
 
             request.Event = new EventTicket();
             request.Event.PrimaryFields = new System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, string>>();
