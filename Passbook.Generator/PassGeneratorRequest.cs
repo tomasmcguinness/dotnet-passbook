@@ -21,12 +21,22 @@ namespace Passbook.Generator
         public string TeamIdentifier { get; set; }
         [JsonProperty("organizationName")]
         public string OrganizationName { get; set; }
+
         [JsonIgnore]
         public string IconFile { get; set; }
         [JsonIgnore]
         public string IconRetinaFile { get; set; }
 
+        [JsonIgnore]
+        public string LogoFile { get; set; }
+        [JsonIgnore]
+        public string LogoRetinaFile { get; set; }
+
         [JsonProperty("eventTicket")]
         public EventTicket Event { get; set; }
+        [JsonProperty("backgroundColor")]
+        public string BackgroundColor { get; set; }
+        [JsonProperty("logoText")]
+        public string LogoText { get; set; }
     }
 }
