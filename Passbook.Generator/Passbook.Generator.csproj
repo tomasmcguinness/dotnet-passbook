@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BarcodeType.cs" />
     <Compile Include="EventTicket.cs" />
     <Compile Include="PassGenerator.cs" />
     <Compile Include="Pass.cs" />

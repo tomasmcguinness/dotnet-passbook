@@ -33,7 +33,9 @@ namespace Passbook.Sample.Web.Controllers
             request.Event.PrimaryFields = new System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, string>>();
             request.Event.PrimaryFields.Add(new System.Collections.Generic.Dictionary<string, string>());
             request.Event.PrimaryFields[0].Add("key", "event-name");
-            request.Event.PrimaryFields[0].Add("value", "Amazing Event");
+            request.Event.PrimaryFields[0].Add("value", "This is a most amazing event");
+
+            request.AddBarCode("http://test", BarcodeType.PKBarcodeFormatQR, "iso-8859-1", "BarCode AltText");
 
             Pass generatedPass = generator.Generate(request);
 

@@ -38,5 +38,17 @@ namespace Passbook.Generator
         public string BackgroundColor { get; set; }
         [JsonProperty("logoText")]
         public string LogoText { get; set; }
+
+        [JsonProperty("barcode")]
+        public Dictionary<string, string> Barcode { get; set; }
+
+        public void AddBarCode(string message, BarcodeType type, string encoding, string altText)
+        {
+            Barcode = new Dictionary<string, string>();
+            Barcode.Add("format", type.ToString());
+            Barcode.Add("message", message);
+            Barcode.Add("messageEncoding", encoding);
+            Barcode.Add("altText", altText);
+        }
     }
 }

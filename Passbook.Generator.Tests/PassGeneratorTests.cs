@@ -30,6 +30,8 @@ namespace Passbook.Generator.Tests
             request.Event.PrimaryFields[0].Add("key", "event-name");
             request.Event.PrimaryFields[0].Add("value", "Amazing Event");
 
+            request.AddBarCode("http://test", BarcodeType.PKBarcodeFormatQR, "iso-8859-1", "BarCode AltText");
+
             PassGenerator generator = new PassGenerator();
             generator.Generate(request);
         }
