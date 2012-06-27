@@ -50,5 +50,8 @@ namespace Passbook.Generator
             Barcode.Add("messageEncoding", encoding);
             Barcode.Add("altText", altText);
         }
+
+        [JsonIgnore]
+        public string CertThumbnail { get; set; }
     }
 }

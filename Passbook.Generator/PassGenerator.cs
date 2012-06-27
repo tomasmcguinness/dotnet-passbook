@@ -106,7 +106,7 @@ namespace Passbook.Generator
         {
             byte[] dataToSign = File.ReadAllBytes(manifestFileAndPath);
 
-            X509Certificate2 card = GetCertificate();
+            X509Certificate2 card = GetCertificate(request);
             Org.BouncyCastle.X509.X509Certificate cert = DotNetUtilities.FromX509Certificate(card);
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
 
@@ -122,7 +122,7 @@ namespace Passbook.Generator
             File.WriteAllBytes(signatureFileAndPath, signedData.GetEncoded());
         }
 
-        public static X509Certificate2 GetCertificate()
+        public static X509Certificate2 GetCertificate(PassGeneratorRequest request)
         {
             X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             store.Open(OpenFlags.ReadOnly);
@@ -137,7 +137,7 @@ namespace Passbook.Generator
 
                     Debug.WriteLine(cert.Thumbprint);
 
-                    if (cert.Thumbprint.ToLower() == "eb8a1ef17793dd0678d92ff721be7df1b8d47f0b")
+                    if (cert.Thumbprint.ToLower() == request.CertThumbnail.ToLower())
                     {
                         // Cert found, so return it
                         //
