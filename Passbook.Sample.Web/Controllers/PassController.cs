@@ -20,9 +20,7 @@ namespace Passbook.Sample.Web.Controllers
             request.Description = "My first pass";
             request.OrganizationName = "Tomas McGuinness";
             request.TeamIdentifier = "Team America";
-
             request.LogoText = "My Pass";
-
             request.BackgroundColor = "rgb(23, 187, 82)";
 
             request.IconFile = Server.MapPath(@"icon.png");
