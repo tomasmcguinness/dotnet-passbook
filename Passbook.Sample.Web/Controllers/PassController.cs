@@ -14,8 +14,8 @@ namespace Passbook.Sample.Web.Controllers
             PassGenerator generator = new PassGenerator();
 
             PassGeneratorRequest request = new PassGeneratorRequest();
-            request.Identifier = "R5QS56362W.pass.tomasmcguinness.com";
-            request.CertThumbnail = "eb8a1ef17793dd0678d92ff721be7df1b8d47f0b";
+            request.Identifier = "pass.tomasmcguinness.com";
+            request.CertThumbnail = "‎46C1E98690AB593F2303F916C37668FDAA327A76";
             request.FormatVersion = 1;
             request.SerialNumber = "121212";
             request.Description = "My first pass";

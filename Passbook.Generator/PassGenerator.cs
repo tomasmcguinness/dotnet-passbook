@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Security;
+using Org.BouncyCastle.X509.Store;
 
 namespace Passbook.Generator
 {
@@ -94,7 +95,7 @@ namespace Passbook.Generator
                         string hash = GetHashForFile(fileNameWithPath);
 
                         jsonWriter.WritePropertyName(fileName);
-                        jsonWriter.WriteValue(hash);
+                        jsonWriter.WriteValue(hash.ToLower());
                     }
                 }
             }
@@ -111,10 +112,19 @@ namespace Passbook.Generator
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
 
             CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
+
             generator.AddSigner(privateKey, cert, CmsSignedDataGenerator.DigestSha1);
 
+            ArrayList certList = new ArrayList();
+            certList.Add(cert);
+
+            Org.BouncyCastle.X509.Store.X509CollectionStoreParameters PP = new Org.BouncyCastle.X509.Store.X509CollectionStoreParameters(certList);
+            Org.BouncyCastle.X509.Store.IX509Store st1 = Org.BouncyCastle.X509.Store.X509StoreFactory.Create("CERTIFICATE/COLLECTION", PP);
+
+            generator.AddCertificates(st1);
+
             CmsProcessable content = new CmsProcessableByteArray(dataToSign);
-            CmsSignedData signedData = generator.Generate(content, true);
+            CmsSignedData signedData = generator.Generate(content, false);
 
             string outputDirectory = Path.GetDirectoryName(manifestFileAndPath);
             string signatureFileAndPath = Path.Combine(outputDirectory, "signature");
@@ -137,7 +147,7 @@ namespace Passbook.Generator
 
                     Debug.WriteLine(cert.Thumbprint);
 
-                    if (cert.Thumbprint.ToLower() == request.CertThumbnail.ToLower())
+                    if (cert.Thumbprint.CompareTo(request.CertThumbnail) == 0)
                     {
                         // Cert found, so return it
                         //
