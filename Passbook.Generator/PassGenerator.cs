@@ -72,8 +72,54 @@ namespace Passbook.Generator
 
             using (StreamWriter sr = File.CreateText(passFileAndPath))
             {
-                JsonSerializer serializer = new JsonSerializer();
-                serializer.Serialize(sr, request);
+                using (JsonWriter writer = new JsonTextWriter(sr))
+                {
+                    writer.WriteStartObject();
+
+                    writer.WritePropertyName("passTypeIdentifier");
+                    writer.WriteValue(request.Identifier);
+
+                    writer.WritePropertyName("formatVersion");
+                    writer.WriteValue(request.FormatVersion);
+
+                    writer.WritePropertyName("serialNumber");
+                    writer.WriteValue(request.SerialNumber);
+
+                    writer.WritePropertyName("description");
+                    writer.WriteValue(request.Description);
+
+                    writer.WritePropertyName("organizationName");
+                    writer.WriteValue(request.OrganizationName);
+
+                    writer.WritePropertyName("teamIdentifier");
+                    writer.WriteValue(request.TeamIdentifier);
+
+                    writer.WritePropertyName("backgroundColor");
+                    writer.WriteValue(request.BackgroundColor);
+
+                    if (request.Event != null)
+                    {
+                        writer.WritePropertyName("eventTicket");
+                        writer.WriteStartObject();
+
+                        writer.WritePropertyName("primaryFields");
+
+                        writer.WriteStartArray();
+
+                        writer.WriteStartObject();
+                        writer.WritePropertyName("key");
+                        writer.WriteValue("event-name");
+                        writer.WritePropertyName("value");
+                        writer.WriteValue(request.Event.EventName);
+                        writer.WriteEndObject();
+
+                        writer.WriteEndArray();
+
+                        writer.WriteEndObject();
+                    }
+
+                    writer.WriteEndObject();
+                }
             }
         }
 
@@ -149,8 +195,6 @@ namespace Passbook.Generator
 
                     if (cert.Thumbprint.CompareTo(request.CertThumbnail) == 0)
                     {
-                        // Cert found, so return it
-                        //
                         return certs[i];
                     }
                 }

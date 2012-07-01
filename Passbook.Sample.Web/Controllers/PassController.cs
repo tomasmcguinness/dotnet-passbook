@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -15,7 +16,7 @@ namespace Passbook.Sample.Web.Controllers
 
             PassGeneratorRequest request = new PassGeneratorRequest();
             request.Identifier = "pass.tomasmcguinness.com";
-            request.CertThumbnail = "‎46C1E98690AB593F2303F916C37668FDAA327A76";
+            request.CertThumbnail = ConfigurationManager.AppSettings["PassBookCertificateThumbnail"];
             request.FormatVersion = 1;
             request.SerialNumber = "121212";
             request.Description = "My first pass";
@@ -31,10 +32,8 @@ namespace Passbook.Sample.Web.Controllers
             request.LogoRetinaFile = Server.MapPath(@"logo@2x.png");
 
             request.Event = new EventTicket();
-            request.Event.PrimaryFields = new System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, string>>();
-            request.Event.PrimaryFields.Add(new System.Collections.Generic.Dictionary<string, string>());
-            request.Event.PrimaryFields[0].Add("key", "event-name");
-            request.Event.PrimaryFields[0].Add("value", "This is a most amazing event");
+            request.Event.EventName = "Amazing Event";
+            request.Event.VenueName = "The O2 Arena";
 
             request.AddBarCode("http://test", BarcodeType.PKBarcodeFormatQR, "iso-8859-1", "BarCode AltText");
 

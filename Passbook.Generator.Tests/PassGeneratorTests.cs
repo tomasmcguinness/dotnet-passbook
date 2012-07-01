@@ -26,10 +26,8 @@ namespace Passbook.Generator.Tests
             request.LogoRetinaFile = @"logo@2x.png";
 
             request.Event = new EventTicket();
-            request.Event.PrimaryFields = new System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, string>>();
-            request.Event.PrimaryFields.Add(new System.Collections.Generic.Dictionary<string, string>());
-            request.Event.PrimaryFields[0].Add("key", "event-name");
-            request.Event.PrimaryFields[0].Add("value", "Amazing Event");
+            request.Event.EventName = "Amazing Event";
+            request.Event.VenueName = "Amazing Venue";
 
             request.AddBarCode("http://test", BarcodeType.PKBarcodeFormatQR, "iso-8859-1", "BarCode AltText");
 

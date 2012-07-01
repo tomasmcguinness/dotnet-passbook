@@ -9,7 +9,10 @@ namespace Passbook.Generator
 {
     public class EventTicket
     {
-        [JsonProperty("primaryFields")]
-        public List<Dictionary<string, string>> PrimaryFields { get; set; }
+        public string EventName { get; set; }
+        public string VenueName { get; set; }
+
+
+
     }
 }
