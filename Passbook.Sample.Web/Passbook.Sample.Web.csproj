@@ -118,11 +118,17 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Content Include="logo%402x.png" />
-    <Content Include="logo.png" />
+    <Content Include="Icons\Starbucks\background%402x.png" />
+    <Content Include="Icons\Starbucks\background.png" />
+    <Content Include="Icons\logo%402x.png" />
+    <Content Include="Icons\logo.png" />
     <Content Include="Global.asax" />
-    <Content Include="icon%402x.png" />
-    <Content Include="icon.png" />
+    <Content Include="Icons\icon%402x.png" />
+    <Content Include="Icons\icon.png" />
+    <Content Include="Icons\Starbucks\icon%402x.png" />
+    <Content Include="Icons\Starbucks\icon.png" />
+    <Content Include="Icons\Starbucks\logo%402x.png" />
+    <Content Include="Icons\Starbucks\logo.png" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

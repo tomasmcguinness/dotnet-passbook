@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Passbook.Generator
 {
-    public class EventTicket
+    public class StoreCardGeneratorRequest : PassGeneratorRequest
     {
-        public string EventName { get; set; }
-        public string VenueName { get; set; }
-
-
-
+        public double Balance { get; set; }
+        public object OwnersName { get; set; }
     }
 }

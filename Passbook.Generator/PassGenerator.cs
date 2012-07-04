@@ -64,6 +64,12 @@ namespace Passbook.Generator
 
             File.Copy(request.LogoFile, targetLogoFileAndPath);
             File.Copy(request.LogoRetinaFile, targetLogoRetinaFileAndPath);
+
+            string targetBackgroundFileAndPath = Path.Combine(tempPath, Path.GetFileName(request.BackgroundFile));
+            string targetBackgroundRetinaFileAndPath = Path.Combine(tempPath, Path.GetFileName(request.BackgroundRetinaFile));
+
+            File.Copy(request.BackgroundFile, targetBackgroundFileAndPath);
+            File.Copy(request.BackgroundRetinaFile, targetBackgroundRetinaFileAndPath);
         }
 
         private void CreatePassFile(PassGeneratorRequest request, string tempPath)
@@ -76,51 +82,163 @@ namespace Passbook.Generator
                 {
                     writer.WriteStartObject();
 
-                    writer.WritePropertyName("passTypeIdentifier");
-                    writer.WriteValue(request.Identifier);
+                    WriteStandardKeys(writer, request);
+                    WriteAppearanceKeys(writer, request);
 
-                    writer.WritePropertyName("formatVersion");
-                    writer.WriteValue(request.FormatVersion);
+                    WriteStyleSpecificKeys(writer, request);
 
-                    writer.WritePropertyName("serialNumber");
-                    writer.WriteValue(request.SerialNumber);
-
-                    writer.WritePropertyName("description");
-                    writer.WriteValue(request.Description);
-
-                    writer.WritePropertyName("organizationName");
-                    writer.WriteValue(request.OrganizationName);
-
-                    writer.WritePropertyName("teamIdentifier");
-                    writer.WriteValue(request.TeamIdentifier);
-
-                    writer.WritePropertyName("backgroundColor");
-                    writer.WriteValue(request.BackgroundColor);
-
-                    if (request.Event != null)
-                    {
-                        writer.WritePropertyName("eventTicket");
-                        writer.WriteStartObject();
-
-                        writer.WritePropertyName("primaryFields");
-
-                        writer.WriteStartArray();
-
-                        writer.WriteStartObject();
-                        writer.WritePropertyName("key");
-                        writer.WriteValue("event-name");
-                        writer.WritePropertyName("value");
-                        writer.WriteValue(request.Event.EventName);
-                        writer.WriteEndObject();
-
-                        writer.WriteEndArray();
-
-                        writer.WriteEndObject();
-                    }
+                    WriteBarcode(writer, request);
 
                     writer.WriteEndObject();
                 }
             }
+        }
+
+        private void WriteBarcode(JsonWriter writer, PassGeneratorRequest request)
+        {
+            writer.WritePropertyName("barcode");
+
+            writer.WriteStartObject();
+            writer.WritePropertyName("format");
+            writer.WriteValue(request.Barcode.Type.ToString());
+            writer.WritePropertyName("message");
+            writer.WriteValue(request.Barcode.Message);
+            writer.WritePropertyName("messageEncoding");
+            writer.WriteValue(request.Barcode.Encoding);
+            writer.WritePropertyName("altText");
+            writer.WriteValue(request.Barcode.AlternateText);
+            writer.WriteEndObject();
+        }
+
+        private void WriteStandardKeys(JsonWriter writer, PassGeneratorRequest request)
+        {
+            writer.WritePropertyName("passTypeIdentifier");
+            writer.WriteValue(request.Identifier);
+
+            writer.WritePropertyName("formatVersion");
+            writer.WriteValue(request.FormatVersion);
+
+            writer.WritePropertyName("serialNumber");
+            writer.WriteValue(request.SerialNumber);
+
+            writer.WritePropertyName("description");
+            writer.WriteValue(request.Description);
+
+            writer.WritePropertyName("organizationName");
+            writer.WriteValue(request.OrganizationName);
+
+            writer.WritePropertyName("teamIdentifier");
+            writer.WriteValue(request.TeamIdentifier);
+
+            writer.WritePropertyName("logoText");
+            writer.WriteValue(request.Title);
+        }
+
+        private void WriteAppearanceKeys(JsonWriter writer, PassGeneratorRequest request)
+        {
+            writer.WritePropertyName("foregroundColor");
+            writer.WriteValue(request.ForegroundColor);
+
+            writer.WritePropertyName("backgroundColor");
+            writer.WriteValue(request.BackgroundColor);
+        }
+
+        private void WriteStyleSpecificKeys(JsonWriter writer, PassGeneratorRequest request)
+        {
+            EventPassGeneratorRequest eventRequest = request as EventPassGeneratorRequest;
+
+            if (eventRequest != null)
+            {
+                WriteEventRequestKeys(writer, eventRequest);
+                return;
+            }
+
+            StoreCardGeneratorRequest storeCardRequest = request as StoreCardGeneratorRequest;
+
+            if (storeCardRequest != null)
+            {
+                WriteStoreCardKeys(writer, storeCardRequest);
+                return;
+            }
+        }
+
+        private void WriteStoreCardKeys(JsonWriter writer, StoreCardGeneratorRequest storeCardRequest)
+        {
+            writer.WritePropertyName("storeCard");
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("secondaryFields");
+            writer.WriteStartArray();
+
+            writer.WriteStartObject();
+            writer.WritePropertyName("key");
+            writer.WriteValue("balance");
+            writer.WritePropertyName("label");
+            writer.WriteValue("Balance");
+            writer.WritePropertyName("value");
+            writer.WriteValue(storeCardRequest.Balance);
+            writer.WritePropertyName("labelColor");
+            writer.WriteValue("#FFFFFF");
+            writer.WriteEndObject();
+
+            writer.WriteStartObject();
+            writer.WritePropertyName("key");
+            writer.WriteValue("nickname");
+            writer.WritePropertyName("label");
+            writer.WriteValue("Nickname");
+            writer.WritePropertyName("value");
+            writer.WriteValue(storeCardRequest.OwnersName);
+            writer.WritePropertyName("labelColor");
+            writer.WriteValue("#FFFFFF");
+            writer.WriteEndObject();
+
+            writer.WriteEndArray();
+            writer.WriteEndObject();
+        }
+
+        private void WriteEventRequestKeys(JsonWriter writer, EventPassGeneratorRequest eventRequest)
+        {
+            writer.WritePropertyName("eventTicket");
+            writer.WriteStartObject();
+
+            writer.WritePropertyName("primaryFields");
+            writer.WriteStartArray();
+
+            writer.WriteStartObject();
+            writer.WritePropertyName("key");
+            writer.WriteValue("event-name");
+            writer.WritePropertyName("value");
+            writer.WriteValue(eventRequest.EventName);
+            writer.WriteEndObject();
+
+            writer.WriteStartObject();
+            writer.WritePropertyName("key");
+            writer.WriteValue("venue-name");
+            writer.WritePropertyName("label");
+            writer.WriteValue("Venue");
+            writer.WritePropertyName("value");
+            writer.WriteValue(eventRequest.VenueName);
+            writer.WriteEndObject();
+
+            writer.WriteStartObject();
+            writer.WritePropertyName("dateStyle");
+            writer.WriteValue("PKDateStyleMedium");
+            writer.WritePropertyName("timeStyle");
+            writer.WriteValue("PKDateStyleMedium");
+            writer.WritePropertyName("isRelative");
+            writer.WriteValue(true);
+
+            writer.WritePropertyName("label");
+            writer.WriteValue("Starts in");
+            writer.WritePropertyName("key");
+            writer.WriteValue("start-time");
+            writer.WritePropertyName("value");
+            writer.WriteValue("2012-12-31T20:03Z");
+
+            writer.WriteEndObject();
+
+            writer.WriteEndArray();
+            writer.WriteEndObject();
         }
 
         private void GenerateManifestFile(PassGeneratorRequest request, string tempPath)
