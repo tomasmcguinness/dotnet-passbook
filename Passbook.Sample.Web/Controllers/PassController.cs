@@ -71,6 +71,9 @@ namespace Passbook.Sample.Web.Controllers
             request.Title = "Starbucks";
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
+            request.AuthorizationCode = "12345";
+            request.WebServiceUrl = "https://example.com/pass-updates/";
+
             Pass generatedPass = generator.Generate(request);
 
             return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");

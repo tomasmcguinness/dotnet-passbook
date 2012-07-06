@@ -40,9 +40,10 @@ namespace Passbook.Generator
         }
 
         public string CertThumbnail { get; set; }
-
         public object ForegroundColor { get; set; }
-
         public object Title { get; set; }
+
+        public string WebServiceUrl { get; set; }
+        public string AuthorizationCode { get; set; }
     }
 }

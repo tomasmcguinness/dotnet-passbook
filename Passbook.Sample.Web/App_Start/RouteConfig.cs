@@ -14,6 +14,13 @@ namespace Passbook.Sample.Web
     {
       routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+      //https://webServiceURL/version/devices/deviceLibraryIdentifier/registrations/passTypeIdentifier/serialNumber
+
+      routes.MapHttpRoute(
+          name: "Registration",
+          routeTemplate: "{version}/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}{serialNumber}",
+          defaults: new { Controller = "Registration" });
+
       routes.MapHttpRoute(
           name: "DefaultApi",
           routeTemplate: "api/{controller}/{id}",
