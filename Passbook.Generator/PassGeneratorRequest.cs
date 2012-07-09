@@ -44,5 +44,6 @@ namespace Passbook.Generator
         public object Title { get; set; }
         public string AuthenticationToken { get; set; }
         public string WebServiceUrl { get; set; }
+        public string AuthorizationCode { get; set; }
     }
 }

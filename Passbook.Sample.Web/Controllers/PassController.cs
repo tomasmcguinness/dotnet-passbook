@@ -83,7 +83,6 @@ namespace Passbook.Sample.Web.Controllers
             request.WebServiceUrl = "http://192.168.1.89:81/api/";
 
             Pass generatedPass = generator.Generate(request);
-
             return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
         }
     }
