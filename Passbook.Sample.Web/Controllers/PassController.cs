@@ -80,7 +80,7 @@ namespace Passbook.Sample.Web.Controllers
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
             request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
-            request.WebServiceUrl = "http://192.168.1.89:81/api/";
+            request.WebServiceUrl = "http://192.168.2.26:81/api/";
 
             Pass generatedPass = generator.Generate(request);
             return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
