@@ -16,18 +16,23 @@ namespace Passbook.Sample.Web
 
       //api/version/devices/deviceLibraryIdentifier/registrations/passTypeIdentifier/serialNumber
       routes.MapHttpRoute(
-          name: "Registration",
+          name: "RegistraterPass",
           routeTemplate: "api/{version}/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}/{serialNumber}",
           defaults: new { Controller = "PassRegistration", Action = "Post" });
 
-      ///api/v1/devices/d754ba022bd37181fed36ead4e7cf5d8/registrations/pass.tomasmcguinness.com
+      //api/v1/devices/d754ba022bd37181fed36ead4e7cf5d8/registrations/pass.tomasmcguinness.com
       routes.MapHttpRoute(
-          name: "PassFetchUpdatedPasses",
+          name: "FetchUpdatedPasses",
           routeTemplate: "api/{version}/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}",
           defaults: new { Controller = "PassRegistration", Action = "Get" }
       );
 
-
+      //api/version/passes/passTypeIdentifier/serialNumber
+      routes.MapHttpRoute(
+          name: "FetchPass",
+          routeTemplate: "api/{version}/passes/{passTypeIdentifier}/{serialNumber}",
+          defaults: new { Controller = "PassRegistration", Action = "GetPass" }
+      );
 
       routes.MapRoute(
           name: "Default",
