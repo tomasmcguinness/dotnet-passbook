@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="BarCode.cs" />
     <Compile Include="BarcodeType.cs" />
+    <Compile Include="Requests\CouponPassGeneratorRequest.cs" />
     <Compile Include="Requests\StoreCardGeneratorRequest.cs" />
     <Compile Include="Requests\EventPassGeneratorRequest.cs" />
     <Compile Include="PassGenerator.cs" />

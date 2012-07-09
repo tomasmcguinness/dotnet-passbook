@@ -88,9 +88,21 @@ namespace Passbook.Generator
                     WriteStyleSpecificKeys(writer, request);
 
                     WriteBarcode(writer, request);
+                    WriteUrls(writer, request);
 
                     writer.WriteEndObject();
                 }
+            }
+        }
+
+        private void WriteUrls(JsonWriter writer, PassGeneratorRequest request)
+        {
+            if (!string.IsNullOrEmpty(request.AuthenticationToken))
+            {
+                writer.WritePropertyName("authenticationToken");
+                writer.WriteValue(request.AuthenticationToken);
+                writer.WritePropertyName("webServiceURL");
+                writer.WriteValue(request.WebServiceUrl);
             }
         }
 

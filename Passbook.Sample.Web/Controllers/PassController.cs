@@ -25,6 +25,9 @@ namespace Passbook.Sample.Web.Controllers
             request.LogoText = "My Pass";
             request.BackgroundColor = "rgb(255, 255, 255)";
 
+            request.BackgroundFile = Server.MapPath(@"~/Icons/Starbucks/background.png");
+            request.BackgroundRetinaFile = Server.MapPath(@"~/Icons/Starbucks/background@2x.png");
+
             request.IconFile = Server.MapPath(@"~/Icons/icon.png");
             request.IconRetinaFile = Server.MapPath(@"~/Icons/icon@2x.png");
 
@@ -33,6 +36,11 @@ namespace Passbook.Sample.Web.Controllers
 
             request.EventName = "Jeff Wayne's War of the Worlds";
             request.VenueName = "The O2";
+
+            request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
+            request.WebServiceUrl = "http://192.168.1.89:81/api";
+
+            request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
             Pass generatedPass = generator.Generate(request);
 
@@ -70,6 +78,9 @@ namespace Passbook.Sample.Web.Controllers
             request.OwnersName = "Tomas McGuinness";
             request.Title = "Starbucks";
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
+
+            request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
+            request.WebServiceUrl = "http://192.168.1.89:81/api/";
 
             Pass generatedPass = generator.Generate(request);
 
