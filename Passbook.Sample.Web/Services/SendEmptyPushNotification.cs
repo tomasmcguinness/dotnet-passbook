@@ -54,7 +54,7 @@ namespace WhereAreMyStaff.Services.Mobile
                     bw.Write((byte)0);
 
                     //string msg = "{{\"aps\":{{\"alert\": {{ \"body\": \"\"}} }} }}";
-                    string msg = "{\"aps\":[]}";
+                    string msg = "{}";
 
                     bw.Write(new byte[] { 0, 2 });
                     bw.Write(msg.ToCharArray());
@@ -71,8 +71,6 @@ namespace WhereAreMyStaff.Services.Mobile
 
                     byte[] response = new byte[6];
                     sslStream.Read(response, 0, 6);
-
-
                 }
             }
         }
