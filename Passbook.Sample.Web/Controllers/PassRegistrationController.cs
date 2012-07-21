@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using Newtonsoft.Json;
+<<<<<<< HEAD
 using Passbook.Generator;
 
 namespace Passbook.Sample.Web.Controllers
@@ -22,6 +23,69 @@ namespace Passbook.Sample.Web.Controllers
             JsonSerializer serializer = new JsonSerializer();
             return new HttpResponseMessage(HttpStatusCode.Created);
         }
+=======
+using Newtonsoft.Json.Linq;
+using Passbook.Sample.Web.Services;
+
+namespace Passbook.Sample.Web.Controllers
+{
+  public class PassRegistrationController : ApiController
+  {
+    private IWebServiceHandler handler;
+
+    public PassRegistrationController()
+    {
+      this.handler = new WebServiceHandler();
+    }
+
+    public PassRegistrationController(IWebServiceHandler handler)
+    {
+      this.handler = handler;
+    }
+
+    /// <summary>
+    /// This method is called by passes that have just been added to PassBook.
+    /// </summary>
+    /// <param name="version"></param>
+    /// <param name="deviceLibraryIdentifier"></param>
+    /// <param name="passTypeIdentifier"></param>
+    /// <param name="serialNumber"></param>
+    /// <param name="message"></param>
+    /// <remarks>
+    /// https://webServiceURL/version/devices/deviceLibraryIdentifier/registrations/passTypeIdentifier/serialNumber
+    /// </remarks>
+    /// <returns></returns>
+    public async Task<HttpResponseMessage> Post(string version, string deviceLibraryIdentifier, string passTypeIdentifier, string serialNumber, HttpRequestMessage message)
+    {
+      string authorizationToken = message.Headers.Authorization.Parameter;
+
+      string jsonBody = await message.Content.ReadAsStringAsync();
+
+      JObject json = JObject.Parse(jsonBody);
+      string pushToken = json["pushToken"].Value<string>();
+
+      PassRegistrationResult result;
+
+      this.handler.RegisterPass(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, pushToken, authorizationToken, out result);
+
+      HttpStatusCode resultCode = HttpStatusCode.InternalServerError;
+
+      switch (result)
+      {
+        case PassRegistrationResult.SuccessfullyRegistered:
+          resultCode = HttpStatusCode.Created;
+          break;
+        case PassRegistrationResult.UnAuthorized:
+          resultCode = HttpStatusCode.Unauthorized;
+          break;
+        case PassRegistrationResult.AlreadyRegistered:
+          resultCode = HttpStatusCode.OK;
+          break;
+      }
+
+      return new HttpResponseMessage(resultCode);
+    }
+>>>>>>> ac038b2f622bf523d9c6d44b556a18cef3fdcd8c
 
         //https://webServiceURL/version/devices/deviceLibraryIdentifier/registrations/passTypeIdentifier?passesUpdatedSince=tag
         public async Task<HttpResponseMessage> Get(string version, string deviceLibraryIdentifier, string passTypeIdentifier, HttpRequestMessage request)

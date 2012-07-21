@@ -71,8 +71,6 @@ namespace WhereAreMyStaff.Services.Mobile
 
                     byte[] response = new byte[6];
                     sslStream.Read(response, 0, 6);
-
-
                 }
             }
         }
