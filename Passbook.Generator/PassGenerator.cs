@@ -310,7 +310,7 @@ namespace Passbook.Generator
 
         public static X509Certificate2 GetCertificate(PassGeneratorRequest request)
         {
-            X509Store store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
+            X509Store store = new X509Store(StoreName.My, request.CertLocation);
             store.Open(OpenFlags.ReadOnly);
 
             X509Certificate2Collection certs = store.Certificates;

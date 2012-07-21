@@ -18,7 +18,7 @@ namespace Passbook.Sample.Web.Controllers
         public ActionResult Index(string deviceIdentifier)
         {
             iPhoneMobileNotificationService service = new iPhoneMobileNotificationService();
-            service.SendEmptyPushNotification(deviceIdentifier, "46c1e98690ab593f2303f916c37668fdaa327a76");// ‎"46c1e98690ab593f2303f916c37668fdaa327a76");
+            service.SendEmptyPushNotification(deviceIdentifier, "46c1e98690ab593f2303f916c37668fdaa327a76");
             return View();
         }
     }
