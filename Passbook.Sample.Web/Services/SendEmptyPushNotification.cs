@@ -51,9 +51,7 @@ namespace WhereAreMyStaff.Services.Mobile
 
                     byte[] deviceToken = HexToData(deviceIdentifier);
                     bw.Write(deviceToken);
-                    bw.Write((byte)0);
-
-                    //string msg = "{{\"aps\":{{\"alert\": {{ \"body\": \"\"}} }} }}";
+                    
                     string msg = "{}";
 
                     bw.Write(new byte[] { 0, 2 });

@@ -53,11 +53,11 @@ namespace Passbook.Sample.Web.Controllers
             PassGenerator generator = new PassGenerator();
 
             StoreCardGeneratorRequest request = new StoreCardGeneratorRequest();
-            request.Identifier = "pass.tomasmcguinness.com";
+            request.Identifier = "pass.tomasmcguinness.coupons";
             request.CertThumbnail = ConfigurationManager.AppSettings["PassBookCertificateThumbnail"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
             request.FormatVersion = 1;
-            request.SerialNumber = "121212";
+            request.SerialNumber = "121212111";
             request.Description = "My first pass";
             request.OrganizationName = "Tomas McGuinness";
             request.TeamIdentifier = "Team America";
