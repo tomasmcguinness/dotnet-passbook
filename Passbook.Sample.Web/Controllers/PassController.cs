@@ -17,6 +17,7 @@ namespace Passbook.Sample.Web.Controllers
             EventPassGeneratorRequest request = new EventPassGeneratorRequest();
             request.Identifier = "pass.tomasmcguinness.com";
             request.CertThumbnail = ConfigurationManager.AppSettings["PassBookCertificateThumbnail"];
+            request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
             request.FormatVersion = 1;
             request.SerialNumber = "121212";
             request.Description = "My first pass";
@@ -38,7 +39,7 @@ namespace Passbook.Sample.Web.Controllers
             request.VenueName = "The O2";
 
             request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
-            request.WebServiceUrl = "http://192.168.1.89:81/api";
+            request.WebServiceUrl = "http://192.168.1.3:81/api";
 
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
@@ -54,6 +55,7 @@ namespace Passbook.Sample.Web.Controllers
             StoreCardGeneratorRequest request = new StoreCardGeneratorRequest();
             request.Identifier = "pass.tomasmcguinness.com";
             request.CertThumbnail = ConfigurationManager.AppSettings["PassBookCertificateThumbnail"];
+            request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
             request.FormatVersion = 1;
             request.SerialNumber = "121212";
             request.Description = "My first pass";
@@ -80,7 +82,7 @@ namespace Passbook.Sample.Web.Controllers
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
             request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
-            request.WebServiceUrl = "http://192.168.2.26:81/api/";
+            request.WebServiceUrl = "http://192.168.1.3:81/api/";
 
             Pass generatedPass = generator.Generate(request);
             return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");

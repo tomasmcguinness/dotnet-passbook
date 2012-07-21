@@ -108,6 +108,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\BinaryFormatter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PassController.cs" />
     <Compile Include="Controllers\PassRegistrationController.cs" />

@@ -54,7 +54,7 @@ namespace WhereAreMyStaff.Services.Mobile
                     bw.Write((byte)0);
 
                     //string msg = "{{\"aps\":{{\"alert\": {{ \"body\": \"\"}} }} }}";
-                    string msg = "{\"aps\":[]}";
+                    string msg = "{}";
 
                     bw.Write(new byte[] { 0, 2 });
                     bw.Write(msg.ToCharArray());
@@ -80,7 +80,7 @@ namespace WhereAreMyStaff.Services.Mobile
         private static X509Certificate GetAppleServerCert(string thumbprint)
         {
             X509Store store;
-            store = new X509Store(StoreLocation.LocalMachine);
+            store = new X509Store(StoreLocation.CurrentUser);
 
             if (store != null)
             {
