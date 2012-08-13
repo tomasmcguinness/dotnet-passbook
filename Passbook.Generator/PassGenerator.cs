@@ -143,7 +143,7 @@ namespace Passbook.Generator
             writer.WriteValue(request.TeamIdentifier);
 
             writer.WritePropertyName("logoText");
-            writer.WriteValue(request.Title);
+            writer.WriteValue(request.LogoText);
         }
 
         private void WriteAppearanceKeys(JsonWriter writer, PassGeneratorRequest request)

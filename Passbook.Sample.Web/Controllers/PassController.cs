@@ -24,7 +24,8 @@ namespace Passbook.Sample.Web.Controllers
             request.OrganizationName = "Tomas McGuinness";
             request.TeamIdentifier = "Team America";
             request.LogoText = "My Pass";
-            request.BackgroundColor = "rgb(255, 255, 255)";
+            request.BackgroundColor = "#FFFFFF";
+            request.ForegroundColor = "#000000";
 
             request.BackgroundFile = Server.MapPath(@"~/Icons/Starbucks/background.png");
             request.BackgroundRetinaFile = Server.MapPath(@"~/Icons/Starbucks/background@2x.png");
