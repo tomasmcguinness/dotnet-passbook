@@ -91,7 +91,7 @@ namespace Passbook.Sample.Web.Controllers
         {
             StoreCardGeneratorRequest request = new StoreCardGeneratorRequest();
             request.Identifier = "pass.tomasmcguinness.coupons";
-            request.CertThumbnail = ConfigurationManager.AppSettings["PassBookCertificateThumbnail"];
+            request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbnail"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
             request.FormatVersion = 1;
             request.SerialNumber = "121212111";

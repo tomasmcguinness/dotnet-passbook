@@ -41,7 +41,7 @@ namespace Passbook.Generator
             Barcode.AlternateText = altText;
         }
 
-        public string CertThumbnail { get; set; }
+        public string CertThumbprint { get; set; }
         public StoreLocation CertLocation { get; set; }
         public object Title { get; set; }
         public string AuthenticationToken { get; set; }

@@ -323,7 +323,7 @@ namespace Passbook.Generator
 
                     Debug.WriteLine(cert.Thumbprint);
 
-                    if (cert.Thumbprint.CompareTo(request.CertThumbnail) == 0)
+                    if (string.Compare(cert.Thumbprint, request.CertThumbprint, true) == 0)
                     {
                         return certs[i];
                     }
