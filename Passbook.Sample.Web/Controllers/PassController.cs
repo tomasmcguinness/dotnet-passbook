@@ -15,7 +15,7 @@ namespace Passbook.Sample.Web.Controllers
             PassGenerator generator = new PassGenerator();
 
             EventPassGeneratorRequest request = new EventPassGeneratorRequest();
-            request.Identifier = "pass.tomasmcguinness.coupons";
+            request.Identifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
             request.FormatVersion = 1;
@@ -54,7 +54,7 @@ namespace Passbook.Sample.Web.Controllers
             PassGenerator generator = new PassGenerator();
 
             StoreCardGeneratorRequest request = new StoreCardGeneratorRequest();
-            request.Identifier = "pass.tomasmcguinness.coupons";
+            request.Identifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
             request.FormatVersion = 1;
@@ -83,7 +83,7 @@ namespace Passbook.Sample.Web.Controllers
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
             request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
-            request.WebServiceUrl = "http://192.168.1.3:81/api/";
+            request.WebServiceUrl = "http://192.168.1.59:82/api/";
 
             Pass generatedPass = generator.Generate(request);
             return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");

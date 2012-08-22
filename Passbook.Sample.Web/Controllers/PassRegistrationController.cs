@@ -90,8 +90,8 @@ namespace Passbook.Sample.Web.Controllers
         public HttpResponseMessage GetPass(string version, string passTypeIdentifier, string serialNumber)
         {
             StoreCardGeneratorRequest request = new StoreCardGeneratorRequest();
-            request.Identifier = "pass.tomasmcguinness.coupons";
-            request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbnail"];
+            request.Identifier = "pass.tomsamcguinness.events";
+            request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
             request.FormatVersion = 1;
             request.SerialNumber = "121212111";
