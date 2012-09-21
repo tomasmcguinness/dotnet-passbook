@@ -218,14 +218,14 @@ namespace Passbook.Generator
 
             writer.WriteStartObject();
             writer.WritePropertyName("key");
-            writer.WriteValue("event-name");
+            writer.WriteValue("event");
             writer.WritePropertyName("value");
             writer.WriteValue(eventRequest.EventName);
             writer.WriteEndObject();
 
             writer.WriteStartObject();
             writer.WritePropertyName("key");
-            writer.WriteValue("venue-name");
+            writer.WriteValue("venue");
             writer.WritePropertyName("label");
             writer.WriteValue("Venue");
             writer.WritePropertyName("value");
@@ -243,7 +243,7 @@ namespace Passbook.Generator
             writer.WritePropertyName("label");
             writer.WriteValue("Starts in");
             writer.WritePropertyName("key");
-            writer.WriteValue("start-time");
+            writer.WriteValue("start");
             writer.WritePropertyName("value");
             writer.WriteValue("2012-12-31T20:03Z");
 
@@ -273,6 +273,12 @@ namespace Passbook.Generator
                         jsonWriter.WritePropertyName(fileName);
                         jsonWriter.WriteValue(hash.ToLower());
                     }
+
+                    //jsonWriter.WritePropertyName("manifest.json");
+                    //jsonWriter.WriteValue("");
+
+                    jsonWriter.WritePropertyName("signature");
+                    jsonWriter.WriteValue("");
                 }
             }
 
@@ -299,12 +305,12 @@ namespace Passbook.Generator
             Org.BouncyCastle.X509.Store.IX509Store st1 = Org.BouncyCastle.X509.Store.X509StoreFactory.Create("CERTIFICATE/COLLECTION", PP);
 
             CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
+            
             generator.AddSigner(privateKey, cert, CmsSignedDataGenerator.DigestSha1);
-
             generator.AddCertificates(st1);
 
             CmsProcessable content = new CmsProcessableByteArray(dataToSign);
-            CmsSignedData signedData = generator.Generate(content, true);
+            CmsSignedData signedData = generator.Generate(content, false);
 
             string outputDirectory = Path.GetDirectoryName(manifestFileAndPath);
             string signatureFileAndPath = Path.Combine(outputDirectory, "signature");

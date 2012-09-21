@@ -61,7 +61,7 @@ namespace Passbook.Sample.Web.Controllers
             request.SerialNumber = "121212111";
             request.Description = "My first pass";
             request.OrganizationName = "Tomas McGuinness";
-            request.TeamIdentifier = "Team America";
+            request.TeamIdentifier = "R5QS56362W";
             request.LogoText = "My Pass";
             request.BackgroundColor = "#000000";
             request.ForegroundColor = "#FFFFFF";
