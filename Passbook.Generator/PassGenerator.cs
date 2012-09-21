@@ -287,20 +287,24 @@ namespace Passbook.Generator
             Org.BouncyCastle.X509.X509Certificate cert = DotNetUtilities.FromX509Certificate(card);
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
 
-            CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
+            X509Certificate2 appleCA = GetAppleCertificate();
+            Org.BouncyCastle.X509.X509Certificate appleCert = DotNetUtilities.FromX509Certificate(appleCA);
 
-            generator.AddSigner(privateKey, cert, CmsSignedDataGenerator.DigestSha1);
+            ArrayList intermediateCerts = new ArrayList();
 
-            ArrayList certList = new ArrayList();
-            certList.Add(cert);
+            intermediateCerts.Add(appleCert);
+            intermediateCerts.Add(cert);
 
-            Org.BouncyCastle.X509.Store.X509CollectionStoreParameters PP = new Org.BouncyCastle.X509.Store.X509CollectionStoreParameters(certList);
+            Org.BouncyCastle.X509.Store.X509CollectionStoreParameters PP = new Org.BouncyCastle.X509.Store.X509CollectionStoreParameters(intermediateCerts);
             Org.BouncyCastle.X509.Store.IX509Store st1 = Org.BouncyCastle.X509.Store.X509StoreFactory.Create("CERTIFICATE/COLLECTION", PP);
+
+            CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
+            generator.AddSigner(privateKey, cert, CmsSignedDataGenerator.DigestSha1);
 
             generator.AddCertificates(st1);
 
             CmsProcessable content = new CmsProcessableByteArray(dataToSign);
-            CmsSignedData signedData = generator.Generate(content, false);
+            CmsSignedData signedData = generator.Generate(content, true);
 
             string outputDirectory = Path.GetDirectoryName(manifestFileAndPath);
             string signatureFileAndPath = Path.Combine(outputDirectory, "signature");
@@ -308,9 +312,19 @@ namespace Passbook.Generator
             File.WriteAllBytes(signatureFileAndPath, signedData.GetEncoded());
         }
 
+        private X509Certificate2 GetAppleCertificate()
+        {
+            return GetSpecifiedCertificate("‎0950b6cd3d2f37ea246a1aaa20dfaadbd6fe1f75", StoreName.CertificateAuthority, StoreLocation.LocalMachine);
+        }
+
         public static X509Certificate2 GetCertificate(PassGeneratorRequest request)
         {
-            X509Store store = new X509Store(StoreName.My, request.CertLocation);
+            return GetSpecifiedCertificate(request.CertThumbprint, StoreName.My, request.CertLocation);
+        }
+
+        private static X509Certificate2 GetSpecifiedCertificate(string thumbPrint, StoreName storeName, StoreLocation storeLocation)
+        {
+            X509Store store = new X509Store(storeName, storeLocation);
             store.Open(OpenFlags.ReadOnly);
 
             X509Certificate2Collection certs = store.Certificates;
@@ -323,7 +337,7 @@ namespace Passbook.Generator
 
                     Debug.WriteLine(cert.Thumbprint);
 
-                    if (string.Compare(cert.Thumbprint, request.CertThumbprint, true) == 0)
+                    if (string.Compare(cert.Thumbprint, thumbPrint, true) == 0)
                     {
                         return certs[i];
                     }

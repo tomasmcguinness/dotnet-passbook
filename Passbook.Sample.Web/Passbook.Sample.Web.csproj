@@ -145,7 +145,9 @@
     <Content Include="Icons\Starbucks\icon.png" />
     <Content Include="Icons\Starbucks\logo%402x.png" />
     <Content Include="Icons\Starbucks\logo.png" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

@@ -17,12 +17,12 @@ namespace Passbook.Sample.Web.Controllers
             EventPassGeneratorRequest request = new EventPassGeneratorRequest();
             request.Identifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
-            request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
+            request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
             request.FormatVersion = 1;
-            request.SerialNumber = "121212";
+            request.SerialNumber = "121211";
             request.Description = "My first pass";
             request.OrganizationName = "Tomas McGuinness";
-            request.TeamIdentifier = "Team America";
+            request.TeamIdentifier = "R5QS56362W";
             request.LogoText = "My Pass";
             request.BackgroundColor = "#FFFFFF";
             request.ForegroundColor = "#000000";
@@ -39,8 +39,8 @@ namespace Passbook.Sample.Web.Controllers
             request.EventName = "Jeff Wayne's War of the Worlds";
             request.VenueName = "The O2";
 
-            request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
-            request.WebServiceUrl = "http://192.168.1.59:82/api";
+            //request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
+            //request.WebServiceUrl = "http://192.168.1.59:82/api";
 
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
@@ -56,7 +56,7 @@ namespace Passbook.Sample.Web.Controllers
             StoreCardGeneratorRequest request = new StoreCardGeneratorRequest();
             request.Identifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
-            request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
+            request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
             request.FormatVersion = 1;
             request.SerialNumber = "121212111";
             request.Description = "My first pass";
