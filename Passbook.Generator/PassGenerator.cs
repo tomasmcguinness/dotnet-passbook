@@ -273,12 +273,6 @@ namespace Passbook.Generator
                         jsonWriter.WritePropertyName(fileName);
                         jsonWriter.WriteValue(hash.ToLower());
                     }
-
-                    //jsonWriter.WritePropertyName("manifest.json");
-                    //jsonWriter.WriteValue("");
-
-                    jsonWriter.WritePropertyName("signature");
-                    jsonWriter.WriteValue("");
                 }
             }
 
