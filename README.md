@@ -76,4 +76,4 @@ As part of Passbook.Sample.Web project, you can run this and access the pages fr
 /Pass/StoreCard will generate a Starbucks sample card. This is working and the card will be saved to the iPhone's Passbook.
 
 <h2>Contribute</h2>
-All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com
+All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
