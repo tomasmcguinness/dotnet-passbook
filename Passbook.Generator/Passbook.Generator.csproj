@@ -48,19 +48,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BarCode.cs" />
-    <Compile Include="BarcodeType.cs" />
-    <Compile Include="DateField.cs" />
-    <Compile Include="Field.cs" />
-    <Compile Include="NumberField.cs" />
-    <Compile Include="NumberStyle.cs" />
-    <Compile Include="StandardField.cs" />
-    <Compile Include="FieldDateTimeStyle.cs" />
-    <Compile Include="FieldTextAlignment.cs" />
+    <Compile Include="Exceptions\RequiredFieldValueMissingException.cs" />
+    <Compile Include="Fields\BarCode.cs" />
+    <Compile Include="Fields\BarcodeType.cs" />
+    <Compile Include="Fields\DateField.cs" />
+    <Compile Include="Fields\Field.cs" />
+    <Compile Include="Fields\NumberField.cs" />
+    <Compile Include="Fields\FieldNumberStyle.cs" />
+    <Compile Include="Fields\StandardField.cs" />
+    <Compile Include="Fields\FieldDateTimeStyle.cs" />
+    <Compile Include="Fields\FieldTextAlignment.cs" />
     <Compile Include="PassStyle.cs" />
-    <Compile Include="Requests\CouponPassGeneratorRequest.cs" />
-    <Compile Include="Requests\StoreCardGeneratorRequest.cs" />
-    <Compile Include="Requests\EventPassGeneratorRequest.cs" />
     <Compile Include="PassGenerator.cs" />
     <Compile Include="Pass.cs" />
     <Compile Include="PassGeneratorRequest.cs" />

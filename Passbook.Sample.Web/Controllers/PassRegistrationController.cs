@@ -13,6 +13,8 @@ using Passbook.Sample.Web.Services;
 using Passbook.Generator;
 using System.Text;
 using System.IO;
+using Passbook.Generator.Fields;
+using Passbook.Sample.Web.Requests;
 
 namespace Passbook.Sample.Web.Controllers
 {
@@ -89,7 +91,7 @@ namespace Passbook.Sample.Web.Controllers
         //https://webServiceURL/version/passes/passTypeIdentifier/serialNumber
         public HttpResponseMessage GetPass(string version, string passTypeIdentifier, string serialNumber)
         {
-            StoreCardGeneratorRequest request = new StoreCardGeneratorRequest();
+            EventPassGeneratorRequest request = new EventPassGeneratorRequest();
             request.Identifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
@@ -113,8 +115,9 @@ namespace Passbook.Sample.Web.Controllers
 
             // Specific information
             //
-            request.Balance = 121.12;
-            request.OwnersName = "Tomas McGuinness";
+            request.EventName = "Jeff Wayne's War of the Worlds";
+            request.SeatingSection = 10;
+            request.DoorsOpen = new DateTime(2012, 11, 04, 11, 30, 00); // move the date!
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
             request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";

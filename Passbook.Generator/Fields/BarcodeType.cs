@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Passbook.Generator
+namespace Passbook.Generator.Fields
 {
     public enum BarcodeType
     {

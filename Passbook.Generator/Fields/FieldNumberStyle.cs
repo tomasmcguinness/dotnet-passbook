@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Passbook.Generator
+namespace Passbook.Generator.Fields
 {
-    public enum NumberStyle
+    public enum FieldNumberStyle
     {
+        Unspecified,
         PKNumberStyleDecimal,
         PKNumberStylePercent,
         PKNumberStyleScientific,

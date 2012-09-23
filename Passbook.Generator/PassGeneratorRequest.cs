@@ -5,10 +5,11 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Passbook.Generator.Fields;
 
 namespace Passbook.Generator
 {
-    public abstract class PassGeneratorRequest
+    public class PassGeneratorRequest
     {
         public PassGeneratorRequest()
         {
@@ -42,7 +43,6 @@ namespace Passbook.Generator
         public List<Field> SecondaryFields { get; private set; }
         public List<Field> AuxiliaryFields { get; private set; }
         public List<Field> BackFields { get; private set; }
-
         public BarCode Barcode { get; private set; }
 
         public void AddHeaderField(Field field)
@@ -87,5 +87,151 @@ namespace Passbook.Generator
 
         public string AuthenticationToken { get; set; }
         public string WebServiceUrl { get; set; }
+
+        public virtual void PopulateFields()
+        {
+            // NO OP.
+        }
+
+        internal void Write(JsonWriter writer)
+        {
+            PopulateFields();
+
+            writer.WriteStartObject();
+
+            WriteStandardKeys(writer, this);
+            WriteAppearanceKeys(writer, this);
+
+            OpenStyleSpecificKey(writer, this);
+
+            WriteSection(writer, "headerFields", this.HeaderFields);
+            WriteSection(writer, "primaryFields", this.PrimaryFields);
+            WriteSection(writer, "secondaryFields", this.SecondaryFields);
+            WriteSection(writer, "auxiliaryFields", this.AuxiliaryFields);
+            WriteSection(writer, "backFields", this.BackFields);
+
+            if (this.Style == PassStyle.BoardingPass)
+            {
+                writer.WritePropertyName("transitType");
+                writer.WriteValue(this.TransitType.ToString());
+            }
+
+            CloseStyleSpecificKey(writer);
+
+            WriteBarcode(writer, this);
+            WriteUrls(writer, this);
+
+            writer.WriteEndObject();
+        }
+
+        private void WriteUrls(JsonWriter writer, PassGeneratorRequest request)
+        {
+            if (!string.IsNullOrEmpty(request.AuthenticationToken))
+            {
+                writer.WritePropertyName("authenticationToken");
+                writer.WriteValue(request.AuthenticationToken);
+                writer.WritePropertyName("webServiceURL");
+                writer.WriteValue(request.WebServiceUrl);
+            }
+        }
+
+        private void WriteBarcode(JsonWriter writer, PassGeneratorRequest request)
+        {
+            if (Barcode != null)
+            {
+                writer.WritePropertyName("barcode");
+
+                writer.WriteStartObject();
+                writer.WritePropertyName("format");
+                writer.WriteValue(request.Barcode.Type.ToString());
+                writer.WritePropertyName("message");
+                writer.WriteValue(request.Barcode.Message);
+                writer.WritePropertyName("messageEncoding");
+                writer.WriteValue(request.Barcode.Encoding);
+                writer.WritePropertyName("altText");
+                writer.WriteValue(request.Barcode.AlternateText);
+                writer.WriteEndObject();
+            }
+        }
+
+        private void WriteStandardKeys(JsonWriter writer, PassGeneratorRequest request)
+        {
+            writer.WritePropertyName("passTypeIdentifier");
+            writer.WriteValue(request.Identifier);
+
+            writer.WritePropertyName("formatVersion");
+            writer.WriteValue(request.FormatVersion);
+
+            writer.WritePropertyName("serialNumber");
+            writer.WriteValue(request.SerialNumber);
+
+            writer.WritePropertyName("description");
+            writer.WriteValue(request.Description);
+
+            writer.WritePropertyName("organizationName");
+            writer.WriteValue(request.OrganizationName);
+
+            writer.WritePropertyName("teamIdentifier");
+            writer.WriteValue(request.TeamIdentifier);
+
+            writer.WritePropertyName("logoText");
+            writer.WriteValue(request.LogoText);
+        }
+
+        private void WriteAppearanceKeys(JsonWriter writer, PassGeneratorRequest request)
+        {
+            writer.WritePropertyName("foregroundColor");
+            writer.WriteValue(request.ForegroundColor);
+
+            writer.WritePropertyName("backgroundColor");
+            writer.WriteValue(request.BackgroundColor);
+        }
+
+        private void OpenStyleSpecificKey(JsonWriter writer, PassGeneratorRequest request)
+        {
+            switch (request.Style)
+            {
+                case PassStyle.EventTicket:
+                    writer.WritePropertyName("eventTicket");
+                    writer.WriteStartObject();
+                    break;
+                case PassStyle.StoreCard:
+                    writer.WritePropertyName("eventTicket");
+                    writer.WriteStartObject();
+                    break;
+                case PassStyle.BoardingPass:
+                    writer.WritePropertyName("boardingPass");
+                    writer.WriteStartObject();
+                    break;
+                case PassStyle.Generic:
+                    writer.WritePropertyName("generic");
+                    writer.WriteStartObject();
+                    break;
+                case PassStyle.Coupon:
+                    writer.WritePropertyName("coupon");
+                    writer.WriteStartObject();
+                    break;
+                default:
+                    throw new InvalidOperationException("Unsupported pass style specified");
+            }
+        }
+
+        private void CloseStyleSpecificKey(JsonWriter writer)
+        {
+            writer.WriteEndObject();
+        }
+
+        private void WriteSection(JsonWriter writer, string sectionName, List<Field> fields)
+        {
+            writer.WritePropertyName(sectionName);
+            writer.WriteStartArray();
+
+            foreach (var field in fields)
+            {
+                field.Write(writer);
+            }
+
+            writer.WriteEndArray();
+        }
     }
 }

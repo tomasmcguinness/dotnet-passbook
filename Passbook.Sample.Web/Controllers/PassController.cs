@@ -5,12 +5,14 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Passbook.Generator;
+using Passbook.Generator.Fields;
+using Passbook.Sample.Web.Requests;
 
 namespace Passbook.Sample.Web.Controllers
 {
     public class PassController : Controller
     {
-        public ActionResult Index()
+        public ActionResult EventTicket()
         {
             PassGenerator generator = new PassGenerator();
 
@@ -37,10 +39,8 @@ namespace Passbook.Sample.Web.Controllers
             request.LogoRetinaFile = Server.MapPath(@"~/Icons/logo@2x.png");
 
             request.EventName = "Jeff Wayne's War of the Worlds";
-            request.VenueName = "The O2";
-
-            //request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
-            //request.WebServiceUrl = "http://192.168.1.59:82/api";
+            request.SeatingSection = 10;
+            request.DoorsOpen = new DateTime(2012, 11, 03, 11, 30, 00);
 
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
@@ -49,11 +49,11 @@ namespace Passbook.Sample.Web.Controllers
             return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
         }
 
-        public ActionResult StoreCard()
+        public ActionResult BoardingCard()
         {
             PassGenerator generator = new PassGenerator();
 
-            StoreCardGeneratorRequest request = new StoreCardGeneratorRequest();
+            BoardingCardGeneratorRequest request = new BoardingCardGeneratorRequest();
             request.Identifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
@@ -77,9 +77,17 @@ namespace Passbook.Sample.Web.Controllers
 
             // Specific information
             //
-            request.Balance = 100.12;
-            request.OwnersName = "Tomas McGuinness";
-            request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
+            request.Origin = "San Francisco";
+            request.OriginCode = "SFO";
+
+            request.Destination = "London";
+            request.DestinationCode = "LDN";
+
+            request.Seat = "7A";
+            request.BoardingGate = "F12";
+            request.PassengerName = "John Appleseed";
+
+            request.TransitType = TransitType.PKTransitTypeAir;
 
             request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
             request.WebServiceUrl = "http://192.168.1.59:82/api/";

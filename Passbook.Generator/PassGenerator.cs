@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509.Store;
+using Passbook.Generator.Fields;
 
 namespace Passbook.Generator
 {
@@ -80,157 +81,9 @@ namespace Passbook.Generator
             {
                 using (JsonWriter writer = new JsonTextWriter(sr))
                 {
-                    writer.WriteStartObject();
-
-                    WriteStandardKeys(writer, request);
-                    WriteAppearanceKeys(writer, request);
-
-                    WriteStyleSpecificKey(writer, request);
-
-                    WritePrimaryFields(writer, request);
-                    WriteSecondaryFields(writer, request);
-                    WriteBackFields(writer, request);
-
-                    WriteBarcode(writer, request);
-                    WriteUrls(writer, request);
-
-                    CloseStyleSpecificKey(writer);
-
-                    writer.WriteEndObject();
+                    request.Write(writer);
                 }
             }
-        }
-
-        private void WriteUrls(JsonWriter writer, PassGeneratorRequest request)
-        {
-            if (!string.IsNullOrEmpty(request.AuthenticationToken))
-            {
-                writer.WritePropertyName("authenticationToken");
-                writer.WriteValue(request.AuthenticationToken);
-                writer.WritePropertyName("webServiceURL");
-                writer.WriteValue(request.WebServiceUrl);
-            }
-        }
-
-        private void WriteBarcode(JsonWriter writer, PassGeneratorRequest request)
-        {
-            writer.WritePropertyName("barcode");
-
-            writer.WriteStartObject();
-            writer.WritePropertyName("format");
-            writer.WriteValue(request.Barcode.Type.ToString());
-            writer.WritePropertyName("message");
-            writer.WriteValue(request.Barcode.Message);
-            writer.WritePropertyName("messageEncoding");
-            writer.WriteValue(request.Barcode.Encoding);
-            writer.WritePropertyName("altText");
-            writer.WriteValue(request.Barcode.AlternateText);
-            writer.WriteEndObject();
-        }
-
-        private void WriteStandardKeys(JsonWriter writer, PassGeneratorRequest request)
-        {
-            writer.WritePropertyName("passTypeIdentifier");
-            writer.WriteValue(request.Identifier);
-
-            writer.WritePropertyName("formatVersion");
-            writer.WriteValue(request.FormatVersion);
-
-            writer.WritePropertyName("serialNumber");
-            writer.WriteValue(request.SerialNumber);
-
-            writer.WritePropertyName("description");
-            writer.WriteValue(request.Description);
-
-            writer.WritePropertyName("organizationName");
-            writer.WriteValue(request.OrganizationName);
-
-            writer.WritePropertyName("teamIdentifier");
-            writer.WriteValue(request.TeamIdentifier);
-
-            writer.WritePropertyName("logoText");
-            writer.WriteValue(request.LogoText);
-        }
-
-        private void WriteAppearanceKeys(JsonWriter writer, PassGeneratorRequest request)
-        {
-            writer.WritePropertyName("foregroundColor");
-            writer.WriteValue(request.ForegroundColor);
-
-            writer.WritePropertyName("backgroundColor");
-            writer.WriteValue(request.BackgroundColor);
-        }
-
-        private void WriteStyleSpecificKey(JsonWriter writer, PassGeneratorRequest request)
-        {
-            switch (request.Style)
-            {
-                case PassStyle.EventTicket:
-                    writer.WritePropertyName("storeCard");
-                    writer.WriteStartObject();
-                    break;
-                case PassStyle.StoreCard:
-                    writer.WritePropertyName("eventTicket");
-                    writer.WriteStartObject();
-                    break;
-            }
-        }
-
-        private void CloseStyleSpecificKey(JsonWriter writer)
-        {
-            writer.WriteEndObject();
-        }
-
-        private void WriteHeaderFields(JsonWriter writer, PassGeneratorRequest request)
-        {
-            writer.WritePropertyName("primaryFields");
-            writer.WriteStartArray();
-
-            foreach (var headerField in request.HeaderFields)
-            {
-                WriteField(writer, headerField);
-            }
-
-            writer.WriteEndArray();
-            writer.WriteEndObject();
-        }
-
-        private void WritePrimaryFields(JsonWriter writer, PassGeneratorRequest request)
-        {
-        }
-
-        private void WriteSecondaryFields(JsonWriter writer, PassGeneratorRequest request)
-        {
-        }
-
-        private void WriteAuxiliaryFields(JsonWriter writer, PassGeneratorRequest request)
-        {
-        }
-
-        private void WriteBackFields(JsonWriter writer, PassGeneratorRequest request)
-        {
-        }
-
-        private void WriteField(JsonWriter writer, Field field)
-        {
-            writer.WriteStartObject();
-            
-            writer.WritePropertyName("key");
-            writer.WriteValue(field.Key);
-
-            writer.WritePropertyName("changeMessage");
-            writer.WriteValue(field.ChangeMessage);
-
-            writer.WritePropertyName("label");
-            writer.WriteValue(field.Label);
-
-            writer.WritePropertyName("textAlignment");
-            writer.WriteValue(field.TextAlignment);
-
-            //writer.WritePropertyName("value");
-            //writer.write.WriteValue(field.);
-            
-            writer.WriteEndObject();
         }
 
         private void GenerateManifestFile(PassGeneratorRequest request, string tempPath)
