@@ -88,9 +88,9 @@ There are several methods that the Pass will invoke when it's installed and upda
 
 The method that is of most interest in the beginning is the Post method as this actually captures the PushToken for the passes. The UpdateController has a very simple mechanism for sending an update. At present, the device ID is hard-coded, but this should provide a working reference
 
-## Sample Web
+## Sample Web Application
 
-As part of Passbook.Sample.Web project, you can run this and access the pages from your iPhone to see how the passes are installed and to see the registration and update mechanism is progress.
+Included as part of the solution, the Passbook.Sample.Web project allows you to create some sample passes. You can run this and access the pages from your iPhone to see how the passes are installed and to see the registration and update mechanism in operation.
 
 The project also includes some dummy requests, so illustrate how you can create wrappers around the basic PassGenerationRequest. The above BoardPass can be generated using the BoardingPassGeneratorRequest. Instead of adding the fields explicitly, this encapsulates this logic, so you can call 
 
