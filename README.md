@@ -79,7 +79,7 @@ Use GetPackage to get the zip file. This will return a byte[] representing all t
 
 ##Updating passes
 
-To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthentionToken and a WebServiceUrl.
+To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl.
 
 	request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
     request.WebServiceUrl = "http://192.168.1.59:82/api";
