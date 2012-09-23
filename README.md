@@ -4,10 +4,21 @@ A .Net Library for generating Passbook packages for iOS 6
 ##Why
 The goal of this project is to build a library that can generate, sign and zip Passbook files for use with iOS 6's Passbook. 
 
-##Technical Stuff
-Before you run the PassGenerator, you need to have the installed your Passbook certificate, which you get from the Developer Portal. You must have a full iPhone developer account. There are [instructions on my blog](http://www.tomasmcguinness.com/2012/06/28/generating-an-apple-ios-certificate-using-windows/) for generating a certificate if you're using a Windows Machine.
+##Certificates
 
-When you install the certificate, be sure to note the certificate's Thumbprint. 
+Before you run the PassGenerator, you need to ensure you have all the necessary certificates installed. There are two required. 
+
+Firstly, you need to install the Apple WWDR (WorldWide Developer Relations) certificate. You can download that from here [http://www.apple.com/certificateauthority/](http://www.apple.com/certificateauthority/) . You must install it in the Local Machine's Intermediate Certificate store. I've hardcoded that location 
+
+Secondly, you need to installed your Passbook certificate, which you get from the Developer Portal. You must have a full iPhone developer account. There are [instructions on my blog](http://www.tomasmcguinness.com/2012/06/28/generating-an-apple-ios-certificate-using-windows/) for generating a certificate if you're using a Windows Machine.
+
+You can place this certificate in any of the stores, but it must be placed into the "personal" folder.  When constructing the request for the pass, you specify the location and thumbprint for the certificate. If running this code in IIS for example, installing the certificate in the Local Machine area might make access easier. Alternatively, you could place the certificate into the AppPool's user's certification repository. When you install the certificate, be sure to note the certificate's Thumbprint. 
+
+## Types of Pass
+
+At present, there are two very simple pass types available with this code. They are just to give an idea of how the underlying PassGeneratorRequest can be customised. 
+
+##Technical Stuff
 
 To generate a pass, start by declaring a PassGenerator.
 
@@ -16,9 +27,7 @@ To generate a pass, start by declaring a PassGenerator.
 Next, create a PassGeneratorRequest of the type you want. At present, EventPassGeneratorRequest and StorePassGeneratorRequest are available. Fill out all the mandatory values.
 
     EventPassGeneratorRequest request = new EventPassGeneratorRequest();
-    request.Identifier = "pass.tomsamcguinness.events";
-    request.CertThumbprint = "22C5FADDFBF935E26E2DDB8656010C7D4103E02E";
-    request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
+    request.Identifier = "pass.tomsamcguinness.events";   
     request.FormatVersion = 1;
     request.SerialNumber = "121212";
     request.Description = "My first pass";
@@ -27,6 +36,11 @@ Next, create a PassGeneratorRequest of the type you want. At present, EventPassG
     request.LogoText = "My Pass";
     request.BackgroundColor = "#FFFFFF";
     request.ForegroundColor = "#000000";
+
+Choose the location of your Passbook certificate
+
+ 	request.CertThumbprint = "22C5FADDFBF935E26E2DDB8656010C7D4103E02E";
+    request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
 
 Next, define the background images you with to use. You must always include both standard and retina sized images.
 
