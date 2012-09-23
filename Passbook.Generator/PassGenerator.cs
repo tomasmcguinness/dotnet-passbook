@@ -85,10 +85,16 @@ namespace Passbook.Generator
                     WriteStandardKeys(writer, request);
                     WriteAppearanceKeys(writer, request);
 
-                    WriteStyleSpecificKeys(writer, request);
+                    WriteStyleSpecificKey(writer, request);
+
+                    WritePrimaryFields(writer, request);
+                    WriteSecondaryFields(writer, request);
+                    WriteBackFields(writer, request);
 
                     WriteBarcode(writer, request);
                     WriteUrls(writer, request);
+
+                    CloseStyleSpecificKey(writer);
 
                     writer.WriteEndObject();
                 }
@@ -155,101 +161,75 @@ namespace Passbook.Generator
             writer.WriteValue(request.BackgroundColor);
         }
 
-        private void WriteStyleSpecificKeys(JsonWriter writer, PassGeneratorRequest request)
+        private void WriteStyleSpecificKey(JsonWriter writer, PassGeneratorRequest request)
         {
-            EventPassGeneratorRequest eventRequest = request as EventPassGeneratorRequest;
-
-            if (eventRequest != null)
+            switch (request.Style)
             {
-                WriteEventRequestKeys(writer, eventRequest);
-                return;
-            }
-
-            StoreCardGeneratorRequest storeCardRequest = request as StoreCardGeneratorRequest;
-
-            if (storeCardRequest != null)
-            {
-                WriteStoreCardKeys(writer, storeCardRequest);
-                return;
+                case PassStyle.EventTicket:
+                    writer.WritePropertyName("storeCard");
+                    writer.WriteStartObject();
+                    break;
+                case PassStyle.StoreCard:
+                    writer.WritePropertyName("eventTicket");
+                    writer.WriteStartObject();
+                    break;
             }
         }
 
-        private void WriteStoreCardKeys(JsonWriter writer, StoreCardGeneratorRequest storeCardRequest)
+        private void CloseStyleSpecificKey(JsonWriter writer)
         {
-            writer.WritePropertyName("storeCard");
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("secondaryFields");
-            writer.WriteStartArray();
-
-            writer.WriteStartObject();
-            writer.WritePropertyName("key");
-            writer.WriteValue("balance");
-            writer.WritePropertyName("label");
-            writer.WriteValue("Balance");
-            writer.WritePropertyName("value");
-            writer.WriteValue(storeCardRequest.Balance);
-            writer.WritePropertyName("labelColor");
-            writer.WriteValue("#FFFFFF");
-            writer.WriteEndObject();
-
-            writer.WriteStartObject();
-            writer.WritePropertyName("key");
-            writer.WriteValue("nickname");
-            writer.WritePropertyName("label");
-            writer.WriteValue("Nickname");
-            writer.WritePropertyName("value");
-            writer.WriteValue(storeCardRequest.OwnersName);
-            writer.WritePropertyName("labelColor");
-            writer.WriteValue("#FFFFFF");
-            writer.WriteEndObject();
-
-            writer.WriteEndArray();
             writer.WriteEndObject();
         }
 
-        private void WriteEventRequestKeys(JsonWriter writer, EventPassGeneratorRequest eventRequest)
+        private void WriteHeaderFields(JsonWriter writer, PassGeneratorRequest request)
         {
-            writer.WritePropertyName("eventTicket");
-            writer.WriteStartObject();
-
             writer.WritePropertyName("primaryFields");
             writer.WriteStartArray();
 
-            writer.WriteStartObject();
-            writer.WritePropertyName("key");
-            writer.WriteValue("event");
-            writer.WritePropertyName("value");
-            writer.WriteValue(eventRequest.EventName);
-            writer.WriteEndObject();
-
-            writer.WriteStartObject();
-            writer.WritePropertyName("key");
-            writer.WriteValue("venue");
-            writer.WritePropertyName("label");
-            writer.WriteValue("Venue");
-            writer.WritePropertyName("value");
-            writer.WriteValue(eventRequest.VenueName);
-            writer.WriteEndObject();
-
-            writer.WriteStartObject();
-            writer.WritePropertyName("dateStyle");
-            writer.WriteValue("PKDateStyleMedium");
-            writer.WritePropertyName("timeStyle");
-            writer.WriteValue("PKDateStyleMedium");
-            writer.WritePropertyName("isRelative");
-            writer.WriteValue(true);
-
-            writer.WritePropertyName("label");
-            writer.WriteValue("Starts in");
-            writer.WritePropertyName("key");
-            writer.WriteValue("start");
-            writer.WritePropertyName("value");
-            writer.WriteValue("2012-12-31T20:03Z");
-
-            writer.WriteEndObject();
+            foreach (var headerField in request.HeaderFields)
+            {
+                WriteField(writer, headerField);
+            }
 
             writer.WriteEndArray();
+            writer.WriteEndObject();
+        }
+
+        private void WritePrimaryFields(JsonWriter writer, PassGeneratorRequest request)
+        {
+        }
+
+        private void WriteSecondaryFields(JsonWriter writer, PassGeneratorRequest request)
+        {
+        }
+
+        private void WriteAuxiliaryFields(JsonWriter writer, PassGeneratorRequest request)
+        {
+        }
+
+        private void WriteBackFields(JsonWriter writer, PassGeneratorRequest request)
+        {
+        }
+
+        private void WriteField(JsonWriter writer, Field field)
+        {
+            writer.WriteStartObject();
+            
+            writer.WritePropertyName("key");
+            writer.WriteValue(field.Key);
+
+            writer.WritePropertyName("changeMessage");
+            writer.WriteValue(field.ChangeMessage);
+
+            writer.WritePropertyName("label");
+            writer.WriteValue(field.Label);
+
+            writer.WritePropertyName("textAlignment");
+            writer.WriteValue(field.TextAlignment);
+
+            //writer.WritePropertyName("value");
+            //writer.write.WriteValue(field.);
+            
             writer.WriteEndObject();
         }
 
@@ -299,7 +279,7 @@ namespace Passbook.Generator
             Org.BouncyCastle.X509.Store.IX509Store st1 = Org.BouncyCastle.X509.Store.X509StoreFactory.Create("CERTIFICATE/COLLECTION", PP);
 
             CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
-            
+
             generator.AddSigner(privateKey, cert, CmsSignedDataGenerator.DigestSha1);
             generator.AddCertificates(st1);
 

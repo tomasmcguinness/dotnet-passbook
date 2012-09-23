@@ -79,7 +79,6 @@ namespace Passbook.Sample.Web.Controllers
             //
             request.Balance = 100.12;
             request.OwnersName = "Tomas McGuinness";
-            request.Title = "Starbucks";
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
             request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
