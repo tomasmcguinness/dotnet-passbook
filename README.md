@@ -24,9 +24,11 @@ To generate a pass, start by declaring a PassGenerator.
 
     PassGenerator generator = new PassGenerator();
 
-Next, create a PassGeneratorRequest of the type you want. At present, EventPassGeneratorRequest and StorePassGeneratorRequest are available. Fill out all the mandatory values.
+Next, create a PassGeneratorRequest. This is a raw request that gives you the full power to add all the fields necessary for the pass you wish to create. Each pass is broken down into several sections. Each section is rendered in a different way, based on the style of the pass you are trying to produce. For more information on this, please consult Apple's Passbook Programming Guide. The example below here will show how to create a very basic boarding pass.
 
-    EventPassGeneratorRequest request = new EventPassGeneratorRequest();
+Since each pass has a set of mandatory data, fill that in first. 
+
+    PassGeneratorRequest request = new PassGeneratorRequest();
     request.Identifier = "pass.tomsamcguinness.events";   
     request.FormatVersion = 1;
     request.SerialNumber = "121212";
@@ -53,20 +55,29 @@ Next, define the background images you with to use. You must always include both
     request.LogoFile = @"C:/Icons/logo.png";
     request.LogoRetinaFile = @"C:/Icons/logo@2x.png";
 
-You can now provide more pass specific information
+You can now provide more pass specific information. For a boarding pass the style must be set. All information is then added to fields in three sections. The primary, secondary and auxiliar sections.
 
-    request.EventName = "Jeff Wayne's War of the Worlds";
-    request.VenueName = "The O2";
+	request.Style = PassStyle.BoardingPass;
 
+    request.AddPrimaryField(new StandardField("origin", "San Francisco", "SFO"));
+    request.AddPrimaryField(new StandardField("destination", "London", "LDN"));
+
+    request.AddSecondaryField(new StandardField("boarding-gate", "Gate", "A55"));
+
+    request.AddAuxiliaryField(new StandardField("seat", "Seat", "G5" ));
+    request.AddAuxiliaryField(new StandardField("passenger-name", "Passenger", "Thomas Anderson"));
+
+ 	request.TransitType = TransitType.PKTransitTypeAir;
+	
 Finally, you can add a BarCode.
 
     request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
-Generate the pass, by passing the request into the Generator. This will actually create the package in a temporary folder and sign it.
+Generate the pass, by passing the request into the Generator. This will create the signed manifest and package all the the image files into zip.
 
     Pass generatedPass = generator.Generate(request);
 
-To get to contents of the package. This will return a byte[] representing all the data in the signed zipfile. 
+Call GetPackage to get the zip file. This will return a byte[] representing all the data in the signed zipfile. 
 
 	generatedPass.GetPackage()
 
@@ -85,9 +96,25 @@ The method that is of most interest in the beginning is the Post method as this 
 
 As part of Passbook.Sample.Web project, you can run this and access the pages from your iPhone to see how the passes are installed and to see the registration and update mechanism is progress.
 
-/Home/Index will open a simple HTML page where you can choose the card type.
-/Pass/Event will generate an event based Pass (not fully functional)
-/Pass/StoreCard will generate a Starbucks sample card. This is working and the card will be saved to the iPhone's Passbook.
+The project also includes some dummy requests, so illustrate how you can create wrappers around the basic PassGenerationRequest. The above BoardPass can be generated using the BoardingPassGeneratorRequest. Instead of adding the fields explicitly, this encapsulates this logic, so you can call 
+
+	request.Origin = "San Francisco";
+    request.OriginCode = "SFO";
+
+    request.Destination = "London";
+    request.DestinationCode = "LDN";
+
+    request.Seat = "7A";
+    request.BoardingGate = "F12";
+    request.PassengerName = "John Appleseed";
+
+    request.TransitType = TransitType.PKTransitTypeAir;
+
+/Home/Index will open a simple HTML page where you can choose the card type.  
+/Pass/EventTicket will generate an event based Pass (not fully functional).  
+/Pass/BoardingPass will generate simple baording card.
+
+These passes are functional and can be saved Passbook.
 
 <h2>Contribute</h2>
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
