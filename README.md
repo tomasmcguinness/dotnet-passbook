@@ -114,3 +114,5 @@ These passes are functional and can be saved Passbook.
 
 <h2>Contribute</h2>
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
+
+Dotnet-passbook is distributed under the MIT license. 
