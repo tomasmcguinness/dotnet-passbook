@@ -14,10 +14,6 @@ Secondly, you need to installed your Passbook certificate, which you get from th
 
 You can place this certificate in any of the stores, but it must be placed into the "personal" folder.  When constructing the request for the pass, you specify the location and thumbprint for the certificate. If running this code in IIS for example, installing the certificate in the Local Machine area might make access easier. Alternatively, you could place the certificate into the AppPool's user's certification repository. When you install the certificate, be sure to note the certificate's Thumbprint. 
 
-## Types of Pass
-
-At present, there are two very simple pass types available with this code. They are just to give an idea of how the underlying PassGeneratorRequest can be customised. 
-
 ##Technical Stuff
 
 To generate a pass, start by declaring a PassGenerator.
@@ -30,21 +26,21 @@ Since each pass has a set of mandatory data, fill that in first.
 
     PassGeneratorRequest request = new PassGeneratorRequest();
     request.Identifier = "pass.tomsamcguinness.events";   
+    request.TeamIdentifier = "RW121242";
     request.FormatVersion = 1;
     request.SerialNumber = "121212";
     request.Description = "My first pass";
     request.OrganizationName = "Tomas McGuinness";
-    request.TeamIdentifier = "Team America";
     request.LogoText = "My Pass";
     request.BackgroundColor = "#FFFFFF";
     request.ForegroundColor = "#000000";
 
-Choose the location of your Passbook certificate
+Choose the location of your Passbook certificate. This is used to sign the manifest.
 
  	request.CertThumbprint = "22C5FADDFBF935E26E2DDB8656010C7D4103E02E";
     request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
 
-Next, define the background images you with to use. You must always include both standard and retina sized images.
+Next, define the images you with to use. You must always include both standard and retina sized images.
 
     request.BackgroundFile = @"C:/Icons/Starbucks/background.png";
     request.BackgroundRetinaFile = @"C:/Icons/Starbucks/background@2x.png";
@@ -55,7 +51,7 @@ Next, define the background images you with to use. You must always include both
     request.LogoFile = @"C:/Icons/logo.png";
     request.LogoRetinaFile = @"C:/Icons/logo@2x.png";
 
-You can now provide more pass specific information. For a boarding pass the style must be set. All information is then added to fields in three sections. The primary, secondary and auxiliar sections.
+You can now provide more pass specific information. The Style must be set and then all information is then added to fields to the required sections. For a baording pass, the fields are add to three sections;  primary, secondary and auxiliary.
 
 	request.Style = PassStyle.BoardingPass;
 
@@ -69,15 +65,15 @@ You can now provide more pass specific information. For a boarding pass the styl
 
  	request.TransitType = TransitType.PKTransitTypeAir;
 	
-Finally, you can add a BarCode.
+You can add a BarCode.
 
     request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
-Generate the pass, by passing the request into the Generator. This will create the signed manifest and package all the the image files into zip.
+Finally, generate the pass by passing the request into the instance of the Generator. This will create the signed manifest and package all the the image files into zip.
 
     Pass generatedPass = generator.Generate(request);
 
-Call GetPackage to get the zip file. This will return a byte[] representing all the data in the signed zipfile. 
+Use GetPackage to get the zip file. This will return a byte[] representing all the data in the signed zipfile. 
 
 	generatedPass.GetPackage()
 
