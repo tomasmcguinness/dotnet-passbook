@@ -112,7 +112,9 @@ The project also includes some dummy requests, so illustrate how you can create 
 
 These passes are functional and can be saved Passbook.
 
-<h2>Contribute</h2>
+##Contribute
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
-Dotnet-passbook is distributed under the MIT license. 
+##License
+
+Dotnet-passbook is distributed under the MIT license: [http://tomasmcguinness.mit-license.org/](http://tomasmcguinness.mit-license.org/)
