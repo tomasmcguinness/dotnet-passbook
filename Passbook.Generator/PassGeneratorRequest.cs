@@ -35,7 +35,7 @@ namespace Passbook.Generator
         /// </summary>
         public string SerialNumber { get; set; }
         /// <summary>
-        /// A simple description of the pass
+        /// Required. A simple description of the pass
         /// </summary>
         public string Description { get; set; }
         /// <summary>
@@ -68,7 +68,7 @@ namespace Passbook.Generator
         /// <summary>
         /// Optional. Foreground color of the pass, specified as a CSS-style RGB triple. For example, rgb(100, 10, 110).
         /// </summary>
-        public object ForegroundColor { get; set; }
+        public string ForegroundColor { get; set; }
         /// <summary>
         /// Optional. Background color of the pass, specified as an CSS-style RGB triple. For example, rgb(23, 187, 82).
         /// </summary>
@@ -123,7 +123,7 @@ namespace Passbook.Generator
         public TransitType TransitType { get; set; }
 
         #endregion
-        
+
         #region Certificate
 
         /// <summary>
@@ -243,8 +243,12 @@ namespace Passbook.Generator
                 writer.WriteValue(request.Barcode.Message);
                 writer.WritePropertyName("messageEncoding");
                 writer.WriteValue(request.Barcode.Encoding);
-                writer.WritePropertyName("altText");
-                writer.WriteValue(request.Barcode.AlternateText);
+
+                if (request.Barcode.AlternateText != null)
+                {
+                    writer.WritePropertyName("altText");
+                    writer.WriteValue(request.Barcode.AlternateText);
+                }
                 writer.WriteEndObject();
             }
         }
@@ -269,17 +273,30 @@ namespace Passbook.Generator
             writer.WritePropertyName("teamIdentifier");
             writer.WriteValue(request.TeamIdentifier);
 
-            writer.WritePropertyName("logoText");
-            writer.WriteValue(request.LogoText);
+            if (request.LogoText != null)
+            {
+                writer.WritePropertyName("logoText");
+                writer.WriteValue(request.LogoText);
+            }
+            if (request.LabelColor != null)
+            {
+                writer.WritePropertyName("labelColor");
+                writer.WriteValue(request.LabelColor);
+            }
         }
 
         private void WriteAppearanceKeys(JsonWriter writer, PassGeneratorRequest request)
         {
-            writer.WritePropertyName("foregroundColor");
-            writer.WriteValue(request.ForegroundColor);
-
-            writer.WritePropertyName("backgroundColor");
-            writer.WriteValue(request.BackgroundColor);
+            if (request.ForegroundColor != null)
+            {
+                writer.WritePropertyName("foregroundColor");
+                writer.WriteValue(request.ForegroundColor);
+            }
+            if (request.BackgroundColor != null)
+            {
+                writer.WritePropertyName("backgroundColor");
+                writer.WriteValue(request.BackgroundColor);
+            }
         }
 
         private void OpenStyleSpecificKey(JsonWriter writer, PassGeneratorRequest request)
@@ -291,7 +308,7 @@ namespace Passbook.Generator
                     writer.WriteStartObject();
                     break;
                 case PassStyle.StoreCard:
-                    writer.WritePropertyName("eventTicket");
+                    writer.WritePropertyName("storeCard");
                     writer.WriteStartObject();
                     break;
                 case PassStyle.BoardingPass:
