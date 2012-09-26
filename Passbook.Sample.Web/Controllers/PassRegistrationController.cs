@@ -104,14 +104,7 @@ namespace Passbook.Sample.Web.Controllers
             request.BackgroundColor = "#000000";
             request.ForegroundColor = "#FFFFFF";
 
-            request.BackgroundFile = HttpContext.Current.Server.MapPath(@"~/Icons/Starbucks/background.png");
-            request.BackgroundRetinaFile = HttpContext.Current.Server.MapPath(@"~/Icons/Starbucks/background@2x.png");
-
-            request.IconFile = HttpContext.Current.Server.MapPath(@"~/Icons/Starbucks/icon.png");
-            request.IconRetinaFile = HttpContext.Current.Server.MapPath(@"~/Icons/Starbucks/icon@2x.png");
-
-            request.LogoFile = HttpContext.Current.Server.MapPath(@"~/Icons/Starbucks/logo.png");
-            request.LogoRetinaFile = HttpContext.Current.Server.MapPath(@"~/Icons/Starbucks/logo@2x.png");
+            request.ImagesPath = HttpContext.Current.Server.MapPath(@"~/Icons/Starbucks/");
 
             // Specific information
             //

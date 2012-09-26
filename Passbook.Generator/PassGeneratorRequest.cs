@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Passbook.Generator.Fields;
 
@@ -13,11 +11,13 @@ namespace Passbook.Generator
     {
         public PassGeneratorRequest()
         {
-            HeaderFields = new List<Field>();
-            PrimaryFields = new List<Field>();
-            SecondaryFields = new List<Field>();
-            AuxiliaryFields = new List<Field>();
-            BackFields = new List<Field>();
+            this.HeaderFields = new List<Field>();
+            this.PrimaryFields = new List<Field>();
+            this.SecondaryFields = new List<Field>();
+            this.AuxiliaryFields = new List<Field>();
+            this.BackFields = new List<Field>();
+
+            this.ImagesList = new Dictionary<PassbookImage, string>();
         }
 
         public string Identifier { get; set; }
@@ -27,12 +27,16 @@ namespace Passbook.Generator
         public string TeamIdentifier { get; set; }
         public string OrganizationName { get; set; }
 
-        public string BackgroundFile { get; set; }
-        public string BackgroundRetinaFile { get; set; }
-        public string IconFile { get; set; }
-        public string IconRetinaFile { get; set; }
-        public string LogoFile { get; set; }
-        public string LogoRetinaFile { get; set; }
+        /// <summary>
+        /// Passbook images folder
+        /// Images names and sizes can be found at http://developer.apple.com/library/ios/#documentation/userexperience/Conceptual/PassKit_PG/Chapters/Creating.html#//apple_ref/doc/uid/TP40012195-CH4-SW1
+        /// </summary>
+        public string ImagesPath { get; set; }
+        /// <summary>
+        /// Images override from <paramref name="ImagesPath"/> where you specify the file to override and give it's path and filename
+        /// </summary>
+        public Dictionary<PassbookImage, string> ImagesList { get; set; }
+
         public object ForegroundColor { get; set; }
         public string BackgroundColor { get; set; }
         public string LogoText { get; set; }

@@ -29,14 +29,12 @@ namespace Passbook.Sample.Web.Controllers
             request.BackgroundColor = "#FFFFFF";
             request.ForegroundColor = "#000000";
 
-            request.BackgroundFile = Server.MapPath(@"~/Icons/Starbucks/background.png");
-            request.BackgroundRetinaFile = Server.MapPath(@"~/Icons/Starbucks/background@2x.png");
+            // images folder
+            request.ImagesPath = Server.MapPath(@"~/Icons/Starbucks/");
 
-            request.IconFile = Server.MapPath(@"~/Icons/icon.png");
-            request.IconRetinaFile = Server.MapPath(@"~/Icons/icon@2x.png");
-
-            request.LogoFile = Server.MapPath(@"~/Icons/logo.png");
-            request.LogoRetinaFile = Server.MapPath(@"~/Icons/logo@2x.png");
+            // override icon and icon retina
+            request.ImagesList.Add(PassbookImage.Icon, Server.MapPath("~/Icons/icon.png"));
+            request.ImagesList.Add(PassbookImage.IconRetina, Server.MapPath("~/Icons/icon@2x.png"));
 
             request.EventName = "Jeff Wayne's War of the Worlds";
             request.SeatingSection = 10;
@@ -66,14 +64,7 @@ namespace Passbook.Sample.Web.Controllers
             request.BackgroundColor = "#000000";
             request.ForegroundColor = "#FFFFFF";
 
-            request.BackgroundFile = Server.MapPath(@"~/Icons/Starbucks/background.png");
-            request.BackgroundRetinaFile = Server.MapPath(@"~/Icons/Starbucks/background@2x.png");
-
-            request.IconFile = Server.MapPath(@"~/Icons/Starbucks/icon.png");
-            request.IconRetinaFile = Server.MapPath(@"~/Icons/Starbucks/icon@2x.png");
-
-            request.LogoFile = Server.MapPath(@"~/Icons/Starbucks/logo.png");
-            request.LogoRetinaFile = Server.MapPath(@"~/Icons/Starbucks/logo@2x.png");
+            request.ImagesPath = Server.MapPath(@"~/Icons/Starbucks/");
 
             // Specific information
             //
