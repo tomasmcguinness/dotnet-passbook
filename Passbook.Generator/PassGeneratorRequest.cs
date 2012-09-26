@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 using Passbook.Generator.Fields;
+using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Passbook.Generator
 {
@@ -20,12 +20,36 @@ namespace Passbook.Generator
             this.ImagesList = new Dictionary<PassbookImage, string>();
         }
 
+        #region Standard Keys
+
+        /// <summary>
+        /// Required. Pass type identifier, as issued by Apple. The value must correspond with your signing certificate.
+        /// </summary>
         public string Identifier { get; set; }
-        public int FormatVersion { get; set; }
+        /// <summary>
+        /// Required. Version of the file format. The value must be 1.
+        /// </summary>
+        public int FormatVersion { get { return 1; } }
+        /// <summary>
+        /// Required. Serial number that uniquely identifies the pass. No two passes with the same pass type identifier may have the same serial number.
+        /// </summary>
         public string SerialNumber { get; set; }
+        /// <summary>
+        /// A simple description of the pass
+        /// </summary>
         public string Description { get; set; }
+        /// <summary>
+        /// Required. Team identifier of the organization that originated and signed the pass, as issued by Apple.
+        /// </summary>
         public string TeamIdentifier { get; set; }
+        /// <summary>
+        /// Required. Display name of the organization that originated and signed the pass.
+        /// </summary>
         public string OrganizationName { get; set; }
+
+        #endregion
+
+        #region Images Files
 
         /// <summary>
         /// Passbook images folder
@@ -37,43 +61,119 @@ namespace Passbook.Generator
         /// </summary>
         public Dictionary<PassbookImage, string> ImagesList { get; set; }
 
+        #endregion
+
+        #region Visual Appearance Keys
+
+        /// <summary>
+        /// Optional. Foreground color of the pass, specified as a CSS-style RGB triple. For example, rgb(100, 10, 110).
+        /// </summary>
         public object ForegroundColor { get; set; }
+        /// <summary>
+        /// Optional. Background color of the pass, specified as an CSS-style RGB triple. For example, rgb(23, 187, 82).
+        /// </summary>
         public string BackgroundColor { get; set; }
+        /// <summary>
+        /// Optional. Color of the label text, specified as a CSS-style RGB triple. For example, rgb(255, 255, 255).
+        /// If omitted, the label color is determined automatically.
+        /// </summary>
+        public string LabelColor { get; set; }
+        /// <summary>
+        /// Optional. Text displayed next to the logo on the pass.
+        /// </summary>
         public string LogoText { get; set; }
+        /// <summary>
+        /// Optional. If true, the strip image is displayed without a shine effect. The default value is false.
+        /// </summary>
         public bool SuppressStripeShine { get; set; }
 
+        /// <summary>
+        /// Optional. Fields to be displayed prominently on the front of the pass.
+        /// </summary>
         public List<Field> HeaderFields { get; private set; }
+        /// <summary>
+        /// Optional. Fields to be displayed prominently on the front of the pass.
+        /// </summary>
         public List<Field> PrimaryFields { get; private set; }
+        /// <summary>
+        /// Optional. Fields to be displayed on the front of the pass.
+        /// </summary>
         public List<Field> SecondaryFields { get; private set; }
+        /// <summary>
+        /// Optional. Additional fields to be displayed on the front of the pass.
+        /// </summary>
         public List<Field> AuxiliaryFields { get; private set; }
+        /// <summary>
+        /// Optional. Information about fields that are displayed on the back of the pass.
+        /// </summary>
         public List<Field> BackFields { get; private set; }
+
+        /// <summary>
+        /// Optional. Information specific to barcodes.
+        /// </summary>
         public BarCode Barcode { get; private set; }
+
+        /// <summary>
+        /// Required. Pass type.
+        /// </summary>
+        public PassStyle Style { get; set; }
+        /// <summary>
+        /// Required for boarding passes; otherwise not allowed. Type of transit.
+        /// </summary>
+        public TransitType TransitType { get; set; }
+
+        #endregion
+        
+        #region Certificate
+
+        /// <summary>
+        /// Certificate Thumbprint value
+        /// </summary>
+        public string CertThumbprint { get; set; }
+        /// <summary>
+        /// Certificate Store Location
+        /// </summary>
+        public StoreLocation CertLocation { get; set; }
+
+        #endregion
+
+        #region Web Service Keys
+
+        /// <summary>
+        /// The authentication token to use with the web service.
+        /// </summary>
+        public string AuthenticationToken { get; set; }
+        /// <summary>
+        /// The URL of a web service that conforms to the API described in Pass Kit Web Service Reference.
+        /// The web service must use the HTTPS protocol and includes the leading https://.
+        /// On devices configured for development, there is UI in Settings to allow HTTP web services.
+        /// </summary>
+        public string WebServiceUrl { get; set; }
+
+        #endregion
+
+        #region Helpers
 
         public void AddHeaderField(Field field)
         {
             this.HeaderFields.Add(field);
         }
-
         public void AddPrimaryField(Field field)
         {
             this.PrimaryFields.Add(field);
         }
-
         public void AddSecondaryField(Field field)
         {
             this.SecondaryFields.Add(field);
         }
-
         public void AddAuxiliaryField(Field field)
         {
             this.AuxiliaryFields.Add(field);
         }
-
         public void AddBackField(Field field)
         {
             this.BackFields.Add(field);
         }
-
         public void AddBarCode(string message, BarcodeType type, string encoding, string altText)
         {
             Barcode = new BarCode();
@@ -82,15 +182,6 @@ namespace Passbook.Generator
             Barcode.Encoding = encoding;
             Barcode.AlternateText = altText;
         }
-
-        public PassStyle Style { get; set; }
-        public TransitType TransitType { get; set; }
-
-        public string CertThumbprint { get; set; }
-        public StoreLocation CertLocation { get; set; }
-
-        public string AuthenticationToken { get; set; }
-        public string WebServiceUrl { get; set; }
 
         public virtual void PopulateFields()
         {
@@ -237,5 +328,7 @@ namespace Passbook.Generator
 
             writer.WriteEndArray();
         }
+
+        #endregion
     }
 }

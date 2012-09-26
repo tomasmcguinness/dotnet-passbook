@@ -20,7 +20,6 @@ namespace Passbook.Sample.Web.Controllers
             request.Identifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
-            request.FormatVersion = 1;
             request.SerialNumber = "121211";
             request.Description = "My first pass";
             request.OrganizationName = "Tomas McGuinness";
@@ -55,7 +54,6 @@ namespace Passbook.Sample.Web.Controllers
             request.Identifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
-            request.FormatVersion = 1;
             request.SerialNumber = "121212111";
             request.Description = "My first pass";
             request.OrganizationName = "Tomas McGuinness";
