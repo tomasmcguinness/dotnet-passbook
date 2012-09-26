@@ -54,23 +54,30 @@ namespace Passbook.Generator
 
         private void CopyImageFiles(PassGeneratorRequest request, string tempPath)
         {
-            string targetIconFileAndPath = Path.Combine(tempPath, Path.GetFileName(request.IconFile));
-            string targetIconRetinaFileAndPath = Path.Combine(tempPath, Path.GetFileName(request.IconRetinaFile));
+            // get and copy all files in given directory
+            if (request.ImagesPath != null)
+            {
+                foreach (var file in Directory.GetFiles(request.ImagesPath))
+                {
+                    string fileName = file.Split('\\').Last(),
+                           temporaryPathAndFile = Path.Combine(tempPath, fileName);
 
-            File.Copy(request.IconFile, targetIconFileAndPath);
-            File.Copy(request.IconRetinaFile, targetIconRetinaFileAndPath);
+                    // copy from origin to temp destination
+                    File.Copy(file, temporaryPathAndFile);
+                }
+            }
 
-            string targetLogoFileAndPath = Path.Combine(tempPath, Path.GetFileName(request.LogoFile));
-            string targetLogoRetinaFileAndPath = Path.Combine(tempPath, Path.GetFileName(request.LogoRetinaFile));
+            // override path
+            if (request.ImagesList != null && request.ImagesList.Count > 0)
+            {
+                foreach (var image in request.ImagesList)
+                {
+                    string temporaryPathAndFile = Path.Combine(tempPath, StringEnum.GetStringValue(image.Key));
 
-            File.Copy(request.LogoFile, targetLogoFileAndPath);
-            File.Copy(request.LogoRetinaFile, targetLogoRetinaFileAndPath);
-
-            string targetBackgroundFileAndPath = Path.Combine(tempPath, Path.GetFileName(request.BackgroundFile));
-            string targetBackgroundRetinaFileAndPath = Path.Combine(tempPath, Path.GetFileName(request.BackgroundRetinaFile));
-
-            File.Copy(request.BackgroundFile, targetBackgroundFileAndPath);
-            File.Copy(request.BackgroundRetinaFile, targetBackgroundRetinaFileAndPath);
+                    // copy from origin to temp destination
+                    File.Copy(image.Value, temporaryPathAndFile, true);
+                }
+            }
         }
 
         private void CreatePassFile(PassGeneratorRequest request, string tempPath)

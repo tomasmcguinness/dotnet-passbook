@@ -27,7 +27,6 @@ Since each pass has a set of mandatory data, fill that in first.
     PassGeneratorRequest request = new PassGeneratorRequest();
     request.Identifier = "pass.tomsamcguinness.events";   
     request.TeamIdentifier = "RW121242";
-    request.FormatVersion = 1;
     request.SerialNumber = "121212";
     request.Description = "My first pass";
     request.OrganizationName = "Tomas McGuinness";
@@ -42,14 +41,12 @@ Choose the location of your Passbook certificate. This is used to sign the manif
 
 Next, define the images you with to use. You must always include both standard and retina sized images.
 
-    request.BackgroundFile = @"C:/Icons/Starbucks/background.png";
-    request.BackgroundRetinaFile = @"C:/Icons/Starbucks/background@2x.png";
+    // images folder
+    request.ImagesPath = Server.MapPath(@"~/Icons/Starbucks/");
 
-    request.IconFile =@"C:/Icons/icon.png";
-    request.IconRetinaFile = @"C:/Icons/icon@2x.png";
-
-    request.LogoFile = @"C:/Icons/logo.png";
-    request.LogoRetinaFile = @"C:/Icons/logo@2x.png";
+    // override icon and icon retina
+    request.ImagesList.Add(PassbookImage.Icon, Server.MapPath("~/Icons/icon.png"));
+    request.ImagesList.Add(PassbookImage.IconRetina, Server.MapPath("~/Icons/icon@2x.png"));
 
 You can now provide more pass specific information. The Style must be set and then all information is then added to fields to the required sections. For a baording pass, the fields are add to three sections;  primary, secondary and auxiliary.
 
