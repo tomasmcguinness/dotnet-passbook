@@ -23,7 +23,7 @@ namespace Passbook.Generator
         {
             if (request == null)
             {
-                throw new ArgumentNullException("request");
+                throw new ArgumentNullException("request", "You must pass an instance of PassGeneratorRequest");
             }
 
             string pathToPackage = CreatePackage(request);
@@ -124,6 +124,12 @@ namespace Passbook.Generator
             byte[] dataToSign = File.ReadAllBytes(manifestFileAndPath);
 
             X509Certificate2 card = GetCertificate(request);
+
+            if (card == null)
+            {
+                throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
+            }
+
             Org.BouncyCastle.X509.X509Certificate cert = DotNetUtilities.FromX509Certificate(card);
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
 
