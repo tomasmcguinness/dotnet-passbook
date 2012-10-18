@@ -7,12 +7,20 @@ namespace Passbook.Generator.Fields
         public NumberField(string key, string label, int value, FieldNumberStyle numberStyle)
             : base(key, label)
         {
-            this.Value = value;
+            this.Value = (decimal)value;
             this.NumberStyle = numberStyle;
         }
+
+        public NumberField(string key, string label, decimal value, FieldNumberStyle numberStyle)
+          : base(key, label)
+        {
+          this.Value = value;
+          this.NumberStyle = numberStyle;
+        }
+
         public string CurrencyCode { get; set; }
         public FieldNumberStyle NumberStyle { get; set; }
-        public long Value { get; set; }
+        public decimal Value { get; set; }
 
         protected override void WriteKeys(Newtonsoft.Json.JsonWriter writer)
         {
