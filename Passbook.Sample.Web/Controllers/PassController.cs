@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using Passbook.Generator;
 using Passbook.Generator.Fields;
 using Passbook.Sample.Web.Requests;
+using System.IO;
 
 namespace Passbook.Sample.Web.Controllers
 {
@@ -43,7 +44,14 @@ namespace Passbook.Sample.Web.Controllers
 
             Pass generatedPass = generator.Generate(request);
 
-            return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
+            try
+            {
+                return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
+            }
+            finally
+            {
+                Directory.Delete(generatedPass.PackageDirectory, true);
+            }
         }
 
         public ActionResult BoardingCard()
@@ -82,7 +90,15 @@ namespace Passbook.Sample.Web.Controllers
             request.WebServiceUrl = "http://192.168.1.59:82/api/";
 
             Pass generatedPass = generator.Generate(request);
-            return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
+
+            try
+            {
+                return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
+            }
+            finally
+            {
+                Directory.Delete(generatedPass.PackageDirectory, true);
+            }
         }
     }
 }

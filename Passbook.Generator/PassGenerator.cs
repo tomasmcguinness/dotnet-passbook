@@ -35,21 +35,23 @@ namespace Passbook.Generator
 
         private string ZipPackage(string pathToPackage)
         {
-            string output = pathToPackage + "\\..\\pass.pkpass";
-            ZipFile.CreateFromDirectory(pathToPackage, output);
+            string output = pathToPackage + "\\pass.pkpass";
+            string fullPackagePath = Path.Combine(pathToPackage, "contents");
+            ZipFile.CreateFromDirectory(fullPackagePath, output);
             return output;
         }
 
         private string CreatePackage(PassGeneratorRequest request)
         {
-            string tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName(), "contents");
+            string rootPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            string tempPath = Path.Combine(rootPath, "contents");
             Directory.CreateDirectory(tempPath);
 
             CopyImageFiles(request, tempPath);
             CreatePassFile(request, tempPath);
             GenerateManifestFile(request, tempPath);
 
-            return tempPath;
+            return rootPath;
         }
 
         private void CopyImageFiles(PassGeneratorRequest request, string tempPath)
