@@ -78,6 +78,10 @@ Use GetPackage to get the zip file. This will return a byte[] representing all t
 
 	generatedPass.GetPackage()
 
+To clean up any temporary files, you can just delete the directory when done.
+
+    System.IO.Directory.Delete(generatedPass.PackageDirectory, true);
+ 
 ##Updating passes
 
 To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl.
