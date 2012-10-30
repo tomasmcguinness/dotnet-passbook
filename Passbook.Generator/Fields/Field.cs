@@ -52,7 +52,7 @@ namespace Passbook.Generator.Fields
             if (TextAlignment != FieldTextAlignment.Unspecified)
             {
                 writer.WritePropertyName("textAlignment");
-                writer.WriteValue(TextAlignment);
+                writer.WriteValue(TextAlignment.ToString());
             }
 
             WriteKeys(writer);
