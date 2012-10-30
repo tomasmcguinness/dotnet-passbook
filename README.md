@@ -120,6 +120,9 @@ These passes are functional and can be saved Passbook.
 ##Contribute
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
+##PassVerse	
+PassVerse is a service that I am building that will offer a simple way to design and generate Passbook passes. It will allow you to track usage and offer an API to push updates to your passes. This will provide you with an alternative to implementing this technology yourself. You can register your interest at [www.passverse.com](http://www.passverse.com)
+
 ##License
 
 Dotnet-passbook is distributed under the MIT license: [http://tomasmcguinness.mit-license.org/](http://tomasmcguinness.mit-license.org/)
