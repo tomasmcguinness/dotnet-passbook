@@ -6,8 +6,8 @@ using System.Web;
 using System.Web.Mvc;
 using Passbook.Generator;
 using Passbook.Generator.Fields;
-using Passbook.Sample.Web.Requests;
 using System.IO;
+using Passbook.Sample.Web.SampleRequests;
 
 namespace Passbook.Sample.Web.Controllers
 {
@@ -88,6 +88,43 @@ namespace Passbook.Sample.Web.Controllers
 
             request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
             request.WebServiceUrl = "http://192.168.1.59:82/api/";
+
+            Pass generatedPass = generator.Generate(request);
+
+            try
+            {
+                return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
+            }
+            finally
+            {
+                Directory.Delete(generatedPass.PackageDirectory, true);
+            }
+        }
+
+        public ActionResult Coupon()
+        {
+            PassGenerator generator = new PassGenerator();
+
+            CouponPassGeneratorRequest request = new CouponPassGeneratorRequest();
+            request.Identifier = "pass.tomsamcguinness.events";
+            request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
+            request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
+            request.SerialNumber = "121211";
+            request.Description = "My first pass";
+            request.OrganizationName = "Tomas McGuinness";
+            request.TeamIdentifier = "R5QS56362W";
+            request.LogoText = "My Pass";
+            request.BackgroundColor = "#FFFFFF";
+            request.ForegroundColor = "#000000";
+
+            // images folder
+            request.ImagesPath = Server.MapPath(@"~/Icons/Starbucks/");
+
+            // override icon and icon retina
+            request.ImagesList.Add(PassbookImage.Icon, Server.MapPath("~/Icons/icon.png"));
+            request.ImagesList.Add(PassbookImage.IconRetina, Server.MapPath("~/Icons/icon@2x.png"));
+
+            request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
             Pass generatedPass = generator.Generate(request);
 

@@ -14,7 +14,7 @@ using Passbook.Generator;
 using System.Text;
 using System.IO;
 using Passbook.Generator.Fields;
-using Passbook.Sample.Web.Requests;
+using Passbook.Sample.Web.SampleRequests;
 
 namespace Passbook.Sample.Web.Controllers
 {
