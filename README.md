@@ -117,6 +117,12 @@ The project also includes some dummy requests, so illustrate how you can create 
 
 These passes are functional and can be saved Passbook.
 
+##NuGet
+
+Dotnet-passbook is also available to  download from NuGet.
+
+	Install-Package dotnet-passbook
+
 ##Contribute
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
