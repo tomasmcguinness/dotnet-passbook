@@ -77,5 +77,7 @@ namespace Passbook.Generator.Fields
         }
 
         protected abstract void WriteValue(JsonWriter writer);
+
+        public abstract void SetValue(object value);
     }
 }

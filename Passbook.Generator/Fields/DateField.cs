@@ -39,5 +39,10 @@ namespace Passbook.Generator.Fields
         {
             writer.WriteValue(Value.ToString("yyyy-MM-ddTHH:mmZ"));
         }
+
+        public override void SetValue(object value)
+        {
+            this.Value = (DateTime)value;
+        }
     }
 }

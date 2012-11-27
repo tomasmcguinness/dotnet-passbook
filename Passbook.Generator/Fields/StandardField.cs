@@ -26,5 +26,10 @@ namespace Passbook.Generator.Fields
 
             writer.WriteValue(Value);
         }
+
+        public override void SetValue(object value)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
