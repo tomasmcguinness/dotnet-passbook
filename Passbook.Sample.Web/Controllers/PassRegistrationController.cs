@@ -103,8 +103,6 @@ namespace Passbook.Sample.Web.Controllers
             request.BackgroundColor = "#000000";
             request.ForegroundColor = "#FFFFFF";
 
-            request.ImagesPath = HttpContext.Current.Server.MapPath(@"~/Icons/Starbucks/");
-
             // Specific information
             //
             request.EventName = "Jeff Wayne's War of the Worlds";
@@ -116,10 +114,10 @@ namespace Passbook.Sample.Web.Controllers
             request.WebServiceUrl = "http://192.168.1.3:81/api/";
 
             PassGenerator generator = new PassGenerator();
-            Pass generatedPass = generator.Generate(request);
+            byte[] generatedPass = generator.Generate(request);
 
             var response = new HttpResponseMessage(HttpStatusCode.OK);
-            response.Content = new ObjectContent<Byte[]>(generatedPass.GetPackage(), new BinaryFormatter());
+            response.Content = new ObjectContent<Byte[]>(generatedPass, new BinaryFormatter());
             return response;
         }
     }

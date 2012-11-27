@@ -26,15 +26,12 @@ namespace Passbook.Sample.Web.Controllers
             request.OrganizationName = "Tomas McGuinness";
             request.TeamIdentifier = "R5QS56362W";
             request.LogoText = "My Pass";
-            request.BackgroundColor = "#FFFFFF";
-            request.ForegroundColor = "#000000";
-
-            // images folder
-            request.ImagesPath = Server.MapPath(@"~/Icons/Starbucks/");
+            request.BackgroundColor = "rgb(255,255,255)";
+            request.ForegroundColor = "rgb(0,0,0)";
 
             // override icon and icon retina
-            request.ImagesList.Add(PassbookImage.Icon, Server.MapPath("~/Icons/icon.png"));
-            request.ImagesList.Add(PassbookImage.IconRetina, Server.MapPath("~/Icons/icon@2x.png"));
+            request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon.png")));
+            request.Images.Add(PassbookImage.IconRetina, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@2x.png")));
 
             request.EventName = "Jeff Wayne's War of the Worlds";
             request.SeatingSection = 10;
@@ -42,16 +39,8 @@ namespace Passbook.Sample.Web.Controllers
 
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
-            Pass generatedPass = generator.Generate(request);
-
-            try
-            {
-                return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
-            }
-            finally
-            {
-                Directory.Delete(generatedPass.PackageDirectory, true);
-            }
+            byte[] generatedPass = generator.Generate(request);
+            return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
         }
 
         public ActionResult BoardingCard()
@@ -67,10 +56,8 @@ namespace Passbook.Sample.Web.Controllers
             request.OrganizationName = "Tomas McGuinness";
             request.TeamIdentifier = "R5QS56362W";
             request.LogoText = "My Pass";
-            request.BackgroundColor = "#000000";
-            request.ForegroundColor = "#FFFFFF";
-
-            request.ImagesPath = Server.MapPath(@"~/Icons/Starbucks/");
+            request.BackgroundColor = "rgb(255,255,255)";
+            request.ForegroundColor = "rgb(0,0,0)";
 
             // Specific information
             //
@@ -89,16 +76,9 @@ namespace Passbook.Sample.Web.Controllers
             request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
             request.WebServiceUrl = "http://192.168.1.59:82/api/";
 
-            Pass generatedPass = generator.Generate(request);
+            byte[] generatedPass = generator.Generate(request);
 
-            try
-            {
-                return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
-            }
-            finally
-            {
-                Directory.Delete(generatedPass.PackageDirectory, true);
-            }
+            return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
         }
 
         public ActionResult Coupon()
@@ -114,28 +94,18 @@ namespace Passbook.Sample.Web.Controllers
             request.OrganizationName = "Tomas McGuinness";
             request.TeamIdentifier = "R5QS56362W";
             request.LogoText = "My Pass";
-            request.BackgroundColor = "#FFFFFF";
-            request.ForegroundColor = "#000000";
-
-            // images folder
-            request.ImagesPath = Server.MapPath(@"~/Icons/Starbucks/");
+            request.BackgroundColor = "rgb(0,0,0)";
+            request.ForegroundColor = "rgb(255,255,255)";
 
             // override icon and icon retina
-            request.ImagesList.Add(PassbookImage.Icon, Server.MapPath("~/Icons/icon.png"));
-            request.ImagesList.Add(PassbookImage.IconRetina, Server.MapPath("~/Icons/icon@2x.png"));
+            request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon.png")));
+            request.Images.Add(PassbookImage.IconRetina, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@2x.png")));
 
             request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
-            Pass generatedPass = generator.Generate(request);
+            byte[] generatedPass = generator.Generate(request);
 
-            try
-            {
-                return new FileContentResult(generatedPass.GetPackage(), "application/vnd.apple.pkpass");
-            }
-            finally
-            {
-                Directory.Delete(generatedPass.PackageDirectory, true);
-            }
+            return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
         }
     }
 }

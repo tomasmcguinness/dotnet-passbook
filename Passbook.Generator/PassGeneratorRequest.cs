@@ -16,8 +16,7 @@ namespace Passbook.Generator
             this.SecondaryFields = new List<Field>();
             this.AuxiliaryFields = new List<Field>();
             this.BackFields = new List<Field>();
-
-            this.ImagesList = new Dictionary<PassbookImage, string>();
+            this.Images = new Dictionary<PassbookImage, byte[]>();
         }
 
         #region Standard Keys
@@ -52,14 +51,9 @@ namespace Passbook.Generator
         #region Images Files
 
         /// <summary>
-        /// Passbook images folder
-        /// Images names and sizes can be found at http://developer.apple.com/library/ios/#documentation/userexperience/Conceptual/PassKit_PG/Chapters/Creating.html#//apple_ref/doc/uid/TP40012195-CH4-SW1
+        /// When using in memory, the binary of each image is put here.
         /// </summary>
-        public string ImagesPath { get; set; }
-        /// <summary>
-        /// Images override from <paramref name="ImagesPath"/> where you specify the file to override and give it's path and filename
-        /// </summary>
-        public Dictionary<PassbookImage, string> ImagesList { get; set; }
+        public Dictionary<PassbookImage, byte[]> Images { get; set; }
 
         #endregion
 

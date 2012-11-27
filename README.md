@@ -43,14 +43,11 @@ Choose the location of your Passbook certificate. This is used to sign the manif
  	request.CertThumbprint = "22C5FADDFBF935E26E2DDB8656010C7D4103E02E";
     request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
 
-Next, define the images you with to use. You must always include both standard and retina sized images.
-
-    // images folder
-    request.ImagesPath = Server.MapPath(@"~/Icons/Starbucks/");
+Next, define the images you with to use. You must always include both standard and retina sized images. Images are supplied as byte[].
 
     // override icon and icon retina
-    request.ImagesList.Add(PassbookImage.Icon, Server.MapPath("~/Icons/icon.png"));
-    request.ImagesList.Add(PassbookImage.IconRetina, Server.MapPath("~/Icons/icon@2x.png"));
+    request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon.png")));
+    request.Images.Add(PassbookImage.IconRetina, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@2x.png")));
 
 You can now provide more pass specific information. The Style must be set and then all information is then added to fields to the required sections. For a baording pass, the fields are add to three sections;  primary, secondary and auxiliary.
 
@@ -72,15 +69,11 @@ You can add a BarCode.
 
 Finally, generate the pass by passing the request into the instance of the Generator. This will create the signed manifest and package all the the image files into zip.
 
-    Pass generatedPass = generator.Generate(request);
+    byte[] generatedPass = generator.Generate(request);
 
-Use GetPackage to get the zip file. This will return a byte[] representing all the data in the signed zipfile. 
+If you are using ASP.NET MVC for example, you can return this byte[] as a Passbook package
 
-	generatedPass.GetPackage()
-
-To clean up any temporary files, you can just delete the directory when done.
-
-    System.IO.Directory.Delete(generatedPass.PackageDirectory, true);
+	return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
  
 ##Updating passes
 
