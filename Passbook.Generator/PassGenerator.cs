@@ -344,7 +344,7 @@ namespace Passbook.Generator
             }
             else
             {
-                certificate = new X509Certificate2(bytes, password);
+                certificate = new X509Certificate2(bytes, password, X509KeyStorageFlags.Exportable);
             }
 
             return certificate;
