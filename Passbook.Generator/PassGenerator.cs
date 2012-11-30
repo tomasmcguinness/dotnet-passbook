@@ -24,6 +24,8 @@ namespace Passbook.Generator
         private byte[] manifestFile = null;
         private byte[] pkPassFile = null;
 
+        private const string APPLE_CERTIFICATE_THUMBPRINT = "‎0950b6cd3d2f37ea246a1aaa20dfaadbd6fe1f75";
+
         public byte[] Generate(PassGeneratorRequest request)
         {
             if (request == null)
@@ -261,7 +263,7 @@ namespace Passbook.Generator
             Org.BouncyCastle.X509.X509Certificate cert = DotNetUtilities.FromX509Certificate(card);
             Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
 
-            X509Certificate2 appleCA = GetAppleCertificate();
+            X509Certificate2 appleCA = GetAppleCertificate(request);
             Org.BouncyCastle.X509.X509Certificate appleCert = DotNetUtilities.FromX509Certificate(appleCA);
 
             ArrayList intermediateCerts = new ArrayList();
@@ -283,17 +285,31 @@ namespace Passbook.Generator
             signatureFile = signedData.GetEncoded();
         }
 
-        private X509Certificate2 GetAppleCertificate()
+        private X509Certificate2 GetAppleCertificate(PassGeneratorRequest request)
         {
-            return GetSpecifiedCertificate("‎0950b6cd3d2f37ea246a1aaa20dfaadbd6fe1f75", StoreName.CertificateAuthority, StoreLocation.LocalMachine);
+            if (request.AppleWWDRCACertificate == null)
+            {
+                return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority, StoreLocation.LocalMachine);
+            }
+            else
+            {
+                return GetCertificateFromBytes(request.AppleWWDRCACertificate, null);
+            }
         }
 
         public static X509Certificate2 GetCertificate(PassGeneratorRequest request)
         {
-            return GetSpecifiedCertificate(request.CertThumbprint, StoreName.My, request.CertLocation);
+            if (request.Certificate == null)
+            {
+                return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My, request.CertLocation);
+            }
+            else
+            {
+                return GetCertificateFromBytes(request.Certificate, request.CertificatePassword);
+            }
         }
 
-        private static X509Certificate2 GetSpecifiedCertificate(string thumbPrint, StoreName storeName, StoreLocation storeLocation)
+        private static X509Certificate2 GetSpecifiedCertificateFromCertStore(string thumbPrint, StoreName storeName, StoreLocation storeLocation)
         {
             X509Store store = new X509Store(storeName, storeLocation);
             store.Open(OpenFlags.ReadOnly);
@@ -316,6 +332,22 @@ namespace Passbook.Generator
             }
 
             return null;
+        }
+
+        private static X509Certificate2 GetCertificateFromBytes(byte[] bytes, string password)
+        {
+            X509Certificate2 certificate = null;
+
+            if (password == null)
+            {
+                certificate = new X509Certificate2(bytes);
+            }
+            else
+            {
+                certificate = new X509Certificate2(bytes, password);
+            }
+
+            return certificate;
         }
 
         private string GetHashForBytes(byte[] bytes)

@@ -121,6 +121,21 @@ namespace Passbook.Generator
         #region Certificate
 
         /// <summary>
+        /// A byte array containing the X509 certificate
+        /// </summary>
+        public byte[] Certificate { get; set; }
+
+        /// <summary>
+        /// A byte array containing the Apple WWDRCA X509 certificate
+        /// </summary>
+        public byte[] AppleWWDRCACertificate { get; set; }
+
+        /// <summary>
+        /// The private key password for the certificate.
+        /// </summary>
+        public string CertificatePassword { get; set; }
+
+        /// <summary>
         /// Certificate Thumbprint value
         /// </summary>
         public string CertThumbprint { get; set; }
