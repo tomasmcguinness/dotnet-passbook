@@ -38,10 +38,18 @@ Since each pass has a set of mandatory data, fill that in first.
     request.BackgroundColor = "#FFFFFF";
     request.ForegroundColor = "#000000";
 
-Choose the location of your Passbook certificate. This is used to sign the manifest.
+To select the certificate there are two options. Firstly, you can use the Windows Certificate store to hold the certificates. You choose the location of your Passbook certificate by specifying the thumbprint of the certificates. The Apple WWDRC is also loaded  in this way, so you don't need to specify anything.
 
  	request.CertThumbprint = "22C5FADDFBF935E26E2DDB8656010C7D4103E02E";
     request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
+
+An alternative way to pass the certificates into the PassGenerator is to load them as byte[] and add them to the request.
+
+	request.Certificate = certData; // Loaded from a database or other mechanism for example.
+    request.CertificatePassword = "abc123"; // The password for the certificate's private key.
+    string appleCertPath = (HttpContext.Current.Server.MapPath("~/Certificates
+    AppleWWDRCA.cer");
+	request.AppleWWDRCACertificate = File.ReadAllBytes(appleCertPath);
 
 Next, define the images you with to use. You must always include both standard and retina sized images. Images are supplied as byte[].
 

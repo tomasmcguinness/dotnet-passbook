@@ -29,7 +29,7 @@ namespace Passbook.Generator.Fields
 
         public override void SetValue(object value)
         {
-            throw new NotImplementedException();
+            this.Value = value as string;
         }
     }
 }
