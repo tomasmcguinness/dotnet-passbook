@@ -71,7 +71,7 @@ namespace Passbook.Generator
                         imageEntry = archive.CreateEntry(@"logo@2x.png");
                         using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
                         {
-                            writer.Write(request.Images[PassbookImage.Logo]);
+                            writer.Write(request.Images[PassbookImage.LogoRetina]);
                             writer.Flush();
                         }
                     }
@@ -191,7 +191,7 @@ namespace Passbook.Generator
                         jsonWriter.WritePropertyName(@"icon.png");
                         jsonWriter.WriteValue(hash.ToLower());
 
-                        hash = GetHashForBytes(request.Images[PassbookImage.Icon]);
+                        hash = GetHashForBytes(request.Images[PassbookImage.IconRetina]);
                         jsonWriter.WritePropertyName(@"icon@2x.png");
                         jsonWriter.WriteValue(hash.ToLower());
 
