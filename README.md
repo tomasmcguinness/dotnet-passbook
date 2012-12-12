@@ -35,8 +35,16 @@ Since each pass has a set of mandatory data, fill that in first.
     request.Description = "My first pass";
     request.OrganizationName = "Tomas McGuinness";
     request.LogoText = "My Pass";
+
+Colours can be specified in HTML format or in RGB format.
+
     request.BackgroundColor = "#FFFFFF";
+	request.LabelColor = "#000000";
     request.ForegroundColor = "#000000";
+
+	request.BackgroundColor = "rgb(255,255,255)";
+	request.LabelColor = "rgb(0,0,0)";
+    request.ForegroundColor = "rgb(0,0,0)";
 
 To select the certificate there are two options. Firstly, you can use the Windows Certificate store to hold the certificates. You choose the location of your Passbook certificate by specifying the thumbprint of the certificates. The Apple WWDRC is also loaded  in this way, so you don't need to specify anything.
 
