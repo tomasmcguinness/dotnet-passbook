@@ -288,11 +288,6 @@ namespace Passbook.Generator
                 writer.WritePropertyName("logoText");
                 writer.WriteValue(request.LogoText);
             }
-            if (request.LabelColor != null)
-            {
-                writer.WritePropertyName("labelColor");
-                writer.WriteValue(request.LabelColor);
-            }
         }
 
         private void WriteAppearanceKeys(JsonWriter writer, PassGeneratorRequest request)
