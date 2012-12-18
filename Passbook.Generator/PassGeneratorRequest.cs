@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Passbook.Generator.Fields;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
+using System.Drawing;
 
 namespace Passbook.Generator
 {
@@ -119,6 +120,21 @@ namespace Passbook.Generator
         #endregion
 
         #region Certificate
+
+        /// <summary>
+        /// A byte array containing the X509 certificate
+        /// </summary>
+        public byte[] Certificate { get; set; }
+
+        /// <summary>
+        /// A byte array containing the Apple WWDRCA X509 certificate
+        /// </summary>
+        public byte[] AppleWWDRCACertificate { get; set; }
+
+        /// <summary>
+        /// The private key password for the certificate.
+        /// </summary>
+        public string CertificatePassword { get; set; }
 
         /// <summary>
         /// Certificate Thumbprint value
@@ -272,11 +288,6 @@ namespace Passbook.Generator
                 writer.WritePropertyName("logoText");
                 writer.WriteValue(request.LogoText);
             }
-            if (request.LabelColor != null)
-            {
-                writer.WritePropertyName("labelColor");
-                writer.WriteValue(request.LabelColor);
-            }
         }
 
         private void WriteAppearanceKeys(JsonWriter writer, PassGeneratorRequest request)
@@ -284,12 +295,19 @@ namespace Passbook.Generator
             if (request.ForegroundColor != null)
             {
                 writer.WritePropertyName("foregroundColor");
-                writer.WriteValue(request.ForegroundColor);
+                writer.WriteValue(ConvertColor(request.ForegroundColor));
             }
+
             if (request.BackgroundColor != null)
             {
                 writer.WritePropertyName("backgroundColor");
-                writer.WriteValue(request.BackgroundColor);
+                writer.WriteValue(ConvertColor(request.BackgroundColor));
+            }
+
+            if (request.LabelColor != null)
+            {
+                writer.WritePropertyName("labelColor");
+                writer.WriteValue(ConvertColor(request.LabelColor));
             }
         }
 
@@ -338,6 +356,19 @@ namespace Passbook.Generator
             }
 
             writer.WriteEndArray();
+        }
+
+        private string ConvertColor(string colour)
+        {
+            if (colour != null && colour.Length > 0 && colour.Substring(0, 1) == "#")
+            {
+                Color c = ColorTranslator.FromHtml(colour);
+                return string.Format("rgb({0},{1},{2})", c.R, c.G, c.B);
+            }
+            else
+            {
+                return colour;
+            }
         }
 
         #endregion

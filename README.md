@@ -35,13 +35,29 @@ Since each pass has a set of mandatory data, fill that in first.
     request.Description = "My first pass";
     request.OrganizationName = "Tomas McGuinness";
     request.LogoText = "My Pass";
+
+Colours can be specified in HTML format or in RGB format.
+
     request.BackgroundColor = "#FFFFFF";
+	request.LabelColor = "#000000";
     request.ForegroundColor = "#000000";
 
-Choose the location of your Passbook certificate. This is used to sign the manifest.
+	request.BackgroundColor = "rgb(255,255,255)";
+	request.LabelColor = "rgb(0,0,0)";
+    request.ForegroundColor = "rgb(0,0,0)";
+
+To select the certificate there are two options. Firstly, you can use the Windows Certificate store to hold the certificates. You choose the location of your Passbook certificate by specifying the thumbprint of the certificates. The Apple WWDRC is also loaded  in this way, so you don't need to specify anything.
 
  	request.CertThumbprint = "22C5FADDFBF935E26E2DDB8656010C7D4103E02E";
     request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
+
+An alternative way to pass the certificates into the PassGenerator is to load them as byte[] and add them to the request.
+
+	request.Certificate = certData; // Loaded from a database or other mechanism for example.
+    request.CertificatePassword = "abc123"; // The password for the certificate's private key.
+    string appleCertPath = (HttpContext.Current.Server.MapPath("~/Certificates
+    AppleWWDRCA.cer");
+	request.AppleWWDRCACertificate = File.ReadAllBytes(appleCertPath);
 
 Next, define the images you with to use. You must always include both standard and retina sized images. Images are supplied as byte[].
 
@@ -120,7 +136,7 @@ Dotnet-passbook is also available to  download from NuGet.
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
 ##PassVerse	
-PassVerse is a service that I am building that will offer a simple way to design and generate Passbook passes. It will allow you to track usage and offer an API to push updates to your passes. This will provide you with an alternative to implementing this technology yourself. You can register your interest at [www.passverse.com](http://www.passverse.com)
+PassVerse is a service that I am building that will offer a simple way to design and generate Passbook passes. It will allow you to track usage and offer an API to push updates to your passes. You can sign up at [www.passverse.com](http://www.passverse.com). Use will be completely free during the beta period.
 
 ##License
 
