@@ -201,7 +201,11 @@ namespace Passbook.Generator
         }
         public void AddLocation(double latitude, double longitude)
         {
-            this.Locations.Add(new Location() { Latitude = latitude, Longitude = longitude });
+            AddLocation(latitude, longitude, null);
+        }
+        public void AddLocation(double latitude, double longitude, string relevantText)
+        {
+            this.Locations.Add(new Location() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });
         }
 
         public virtual void PopulateFields()

@@ -17,6 +17,7 @@ namespace Passbook.Generator
 
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string RelevantText { get; set; }
 
         public void Write(JsonWriter writer)
         {
@@ -27,6 +28,13 @@ namespace Passbook.Generator
             writer.WriteValue(Latitude);
             writer.WritePropertyName("longitude");
             writer.WriteValue(Longitude);
+
+            if (!string.IsNullOrEmpty(RelevantText))
+            {
+                writer.WritePropertyName("relevantText");
+                writer.WriteValue(RelevantText);
+            }
+
             writer.WriteEndObject();
         }
 
