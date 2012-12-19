@@ -18,6 +18,7 @@ namespace Passbook.Generator
             this.AuxiliaryFields = new List<Field>();
             this.BackFields = new List<Field>();
             this.Images = new Dictionary<PassbookImage, byte[]>();
+            this.Locations = new List<Location>();
         }
 
         #region Standard Keys
@@ -119,6 +120,12 @@ namespace Passbook.Generator
 
         #endregion
 
+        #region Location Keys
+
+        public List<Location> Locations { get; private set; }
+
+        #endregion
+
         #region Certificate
 
         /// <summary>
@@ -192,6 +199,10 @@ namespace Passbook.Generator
             Barcode.Encoding = encoding;
             Barcode.AlternateText = altText;
         }
+        public void AddLocation(double latitude, double longitude)
+        {
+            this.Locations.Add(new Location() { Latitude = latitude, Longitude = longitude });
+        }
 
         public virtual void PopulateFields()
         {
@@ -205,6 +216,7 @@ namespace Passbook.Generator
             writer.WriteStartObject();
 
             WriteStandardKeys(writer, this);
+            WriteLocationKeys(writer, this);
             WriteAppearanceKeys(writer, this);
 
             OpenStyleSpecificKey(writer, this);
@@ -227,6 +239,19 @@ namespace Passbook.Generator
             WriteUrls(writer, this);
 
             writer.WriteEndObject();
+        }
+
+        private void WriteLocationKeys(JsonWriter writer, PassGeneratorRequest passGeneratorRequest)
+        {
+            writer.WritePropertyName("locations");
+            writer.WriteStartArray();
+
+            foreach (var location in Locations)
+            {
+              location.Write(writer);
+            }
+
+            writer.WriteEndArray();
         }
 
         private void WriteUrls(JsonWriter writer, PassGeneratorRequest request)
