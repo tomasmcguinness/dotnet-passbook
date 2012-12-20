@@ -81,8 +81,7 @@ namespace Passbook.Generator
         /// <summary>
         /// Optional. If true, the strip image is displayed without a shine effect. The default value is false.
         /// </summary>
-        public bool SuppressStripeShine { get; set; }
-
+        public bool SuppressStripShine { get; set; }
         /// <summary>
         /// Optional. Fields to be displayed prominently on the front of the pass.
         /// </summary>
@@ -337,6 +336,12 @@ namespace Passbook.Generator
             {
                 writer.WritePropertyName("labelColor");
                 writer.WriteValue(ConvertColor(request.LabelColor));
+            }
+
+            if (request.SuppressStripShine)
+            {
+                writer.WritePropertyName("suppressStripShine");
+                writer.WriteValue(true);
             }
         }
 
