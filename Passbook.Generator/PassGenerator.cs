@@ -45,18 +45,26 @@ namespace Passbook.Generator
             {
                 using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update, true))
                 {
-                    ZipArchiveEntry imageEntry = archive.CreateEntry(@"icon.png");
-                    using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                    ZipArchiveEntry imageEntry = null;
+
+                    if (request.Images.ContainsKey(PassbookImage.Icon))
                     {
-                        writer.Write(request.Images[PassbookImage.Icon]);
-                        writer.Flush();
+                        imageEntry = archive.CreateEntry(@"icon.png");
+                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                        {
+                          writer.Write(request.Images[PassbookImage.Icon]);
+                          writer.Flush();
+                        }
                     }
 
-                    imageEntry = archive.CreateEntry(@"icon@2x.png");
-                    using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                    if (request.Images.ContainsKey(PassbookImage.IconRetina))
                     {
-                        writer.Write(request.Images[PassbookImage.IconRetina]);
-                        writer.Flush();
+                        imageEntry = archive.CreateEntry(@"icon@2x.png");
+                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                        {
+                          writer.Write(request.Images[PassbookImage.IconRetina]);
+                          writer.Flush();
+                        }
                     }
 
                     if (request.Images.ContainsKey(PassbookImage.Logo))
@@ -67,7 +75,10 @@ namespace Passbook.Generator
                             writer.Write(request.Images[PassbookImage.Logo]);
                             writer.Flush();
                         }
+                    }
 
+                    if (request.Images.ContainsKey(PassbookImage.LogoRetina))
+                    {
                         imageEntry = archive.CreateEntry(@"logo@2x.png");
                         using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
                         {
@@ -84,7 +95,10 @@ namespace Passbook.Generator
                             writer.Write(request.Images[PassbookImage.Background]);
                             writer.Flush();
                         }
+                    }
 
+                    if (request.Images.ContainsKey(PassbookImage.BackgroundRetina))
+                    {
                         imageEntry = archive.CreateEntry(@"background@2x.png");
                         using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
                         {
@@ -101,7 +115,10 @@ namespace Passbook.Generator
                             writer.Write(request.Images[PassbookImage.Strip]);
                             writer.Flush();
                         }
+                    }
 
+                    if (request.Images.ContainsKey(PassbookImage.StripRetina))
+                    {
                         imageEntry = archive.CreateEntry(@"strip@2x.png");
                         using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
                         {
@@ -118,7 +135,10 @@ namespace Passbook.Generator
                             writer.Write(request.Images[PassbookImage.Thumbnail]);
                             writer.Flush();
                         }
+                    }
 
+                    if (request.Images.ContainsKey(PassbookImage.ThumbnailRetina))
+                    {
                         imageEntry = archive.CreateEntry(@"thumbnail@2x.png");
                         using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
                         {
