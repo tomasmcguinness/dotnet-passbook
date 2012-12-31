@@ -187,20 +187,31 @@ namespace Passbook.Generator
                         jsonWriter.Formatting = Formatting.Indented;
                         jsonWriter.WriteStartObject();
 
-                        string hash = GetHashForBytes(request.Images[PassbookImage.Icon]);
-                        jsonWriter.WritePropertyName(@"icon.png");
-                        jsonWriter.WriteValue(hash.ToLower());
+                        string hash = null;
+                      
+                        if (request.Images.ContainsKey(PassbookImage.Icon))
+                        {
+                            hash = GetHashForBytes(request.Images[PassbookImage.Icon]);
+                            jsonWriter.WritePropertyName(@"icon.png");
+                            jsonWriter.WriteValue(hash.ToLower());
+                        }
 
-                        hash = GetHashForBytes(request.Images[PassbookImage.IconRetina]);
-                        jsonWriter.WritePropertyName(@"icon@2x.png");
-                        jsonWriter.WriteValue(hash.ToLower());
+                        if (request.Images.ContainsKey(PassbookImage.IconRetina))
+                        {
+                            hash = GetHashForBytes(request.Images[PassbookImage.IconRetina]);
+                            jsonWriter.WritePropertyName(@"icon@2x.png");
+                            jsonWriter.WriteValue(hash.ToLower());
+                        }
 
                         if (request.Images.ContainsKey(PassbookImage.Logo))
                         {
                             hash = GetHashForBytes(request.Images[PassbookImage.Logo]);
                             jsonWriter.WritePropertyName(@"logo.png");
                             jsonWriter.WriteValue(hash.ToLower());
+                        }
 
+                        if (request.Images.ContainsKey(PassbookImage.LogoRetina))
+                        {
                             hash = GetHashForBytes(request.Images[PassbookImage.LogoRetina]);
                             jsonWriter.WritePropertyName(@"logo@2x.png");
                             jsonWriter.WriteValue(hash.ToLower());
@@ -211,7 +222,10 @@ namespace Passbook.Generator
                             hash = GetHashForBytes(request.Images[PassbookImage.Background]);
                             jsonWriter.WritePropertyName(@"background.png");
                             jsonWriter.WriteValue(hash.ToLower());
+                        }
 
+                        if (request.Images.ContainsKey(PassbookImage.BackgroundRetina))
+                        {
                             hash = GetHashForBytes(request.Images[PassbookImage.BackgroundRetina]);
                             jsonWriter.WritePropertyName(@"background@2x.png");
                             jsonWriter.WriteValue(hash.ToLower());
@@ -222,7 +236,10 @@ namespace Passbook.Generator
                             hash = GetHashForBytes(request.Images[PassbookImage.Strip]);
                             jsonWriter.WritePropertyName(@"strip.png");
                             jsonWriter.WriteValue(hash.ToLower());
+                        }
 
+                        if (request.Images.ContainsKey(PassbookImage.StripRetina))
+                        {
                             hash = GetHashForBytes(request.Images[PassbookImage.StripRetina]);
                             jsonWriter.WritePropertyName(@"strip@2x.png");
                             jsonWriter.WriteValue(hash.ToLower());
@@ -233,7 +250,10 @@ namespace Passbook.Generator
                             hash = GetHashForBytes(request.Images[PassbookImage.Thumbnail]);
                             jsonWriter.WritePropertyName(@"thumbnail.png");
                             jsonWriter.WriteValue(hash.ToLower());
+                        }
 
+                        if (request.Images.ContainsKey(PassbookImage.ThumbnailRetina))
+                        {
                             hash = GetHashForBytes(request.Images[PassbookImage.ThumbnailRetina]);
                             jsonWriter.WritePropertyName(@"thumbnail@2x.png");
                             jsonWriter.WriteValue(hash.ToLower());
