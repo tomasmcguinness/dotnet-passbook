@@ -45,18 +45,26 @@ namespace Passbook.Generator
             {
                 using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update, true))
                 {
-                    ZipArchiveEntry imageEntry = archive.CreateEntry(@"icon.png");
-                    using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                    ZipArchiveEntry imageEntry = null;
+
+                    if (request.Images.ContainsKey(PassbookImage.Icon))
                     {
-                        writer.Write(request.Images[PassbookImage.Icon]);
-                        writer.Flush();
+                        imageEntry = archive.CreateEntry(@"icon.png");
+                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                        {
+                            writer.Write(request.Images[PassbookImage.Icon]);
+                            writer.Flush();
+                        }
                     }
 
-                    imageEntry = archive.CreateEntry(@"icon@2x.png");
-                    using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                    if (request.Images.ContainsKey(PassbookImage.IconRetina))
                     {
-                        writer.Write(request.Images[PassbookImage.IconRetina]);
-                        writer.Flush();
+                        imageEntry = archive.CreateEntry(@"icon@2x.png");
+                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                        {
+                            writer.Write(request.Images[PassbookImage.IconRetina]);
+                            writer.Flush();
+                        }
                     }
 
                     if (request.Images.ContainsKey(PassbookImage.Logo))
@@ -187,13 +195,21 @@ namespace Passbook.Generator
                         jsonWriter.Formatting = Formatting.Indented;
                         jsonWriter.WriteStartObject();
 
-                        string hash = GetHashForBytes(request.Images[PassbookImage.Icon]);
-                        jsonWriter.WritePropertyName(@"icon.png");
-                        jsonWriter.WriteValue(hash.ToLower());
+                        string hash = null;
 
-                        hash = GetHashForBytes(request.Images[PassbookImage.IconRetina]);
-                        jsonWriter.WritePropertyName(@"icon@2x.png");
-                        jsonWriter.WriteValue(hash.ToLower());
+                        if (request.Images.ContainsKey(PassbookImage.Icon))
+                        {
+                            hash = GetHashForBytes(request.Images[PassbookImage.Icon]);
+                            jsonWriter.WritePropertyName(@"icon.png");
+                            jsonWriter.WriteValue(hash.ToLower());
+                        }
+
+                        if (request.Images.ContainsKey(PassbookImage.IconRetina))
+                        {
+                            hash = GetHashForBytes(request.Images[PassbookImage.IconRetina]);
+                            jsonWriter.WritePropertyName(@"icon@2x.png");
+                            jsonWriter.WriteValue(hash.ToLower());
+                        }
 
                         if (request.Images.ContainsKey(PassbookImage.Logo))
                         {
