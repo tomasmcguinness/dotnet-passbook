@@ -136,7 +136,7 @@ Dotnet-passbook is also available to  download from NuGet.
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
 ##PassVerse	
-PassVerse is a service that I am building that will offer a simple way to design and generate Passbook passes. It will allow you to track usage and offer an API to push updates to your passes. You can sign up at [www.passverse.com](http://www.passverse.com). Use will be completely free during the beta period.
+If you don't want to build it yourself, PassVerse allows you to design and generate and update Passbook passes. It features a usage dashboard and a powerful rest API for generating and update passes. To get access to the private beta, sign up at [www.passverse.com](http://www.passverse.com).
 
 ##License
 
