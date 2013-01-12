@@ -21,5 +21,10 @@ namespace Passbook.Generator
       byte[] contents = File.ReadAllBytes(packagePathAndName);
       return contents;
     }
+
+    public string PackageDirectory
+    {
+      get { return Path.GetDirectoryName(this.packagePathAndName); }
+    }
   }
 }

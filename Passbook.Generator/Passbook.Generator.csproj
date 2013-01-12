@@ -11,6 +11,8 @@
     <AssemblyName>Passbook.Generator</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\PassVerse\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +41,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
@@ -48,20 +51,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BarCode.cs" />
-    <Compile Include="BarcodeType.cs" />
-    <Compile Include="Requests\CouponPassGeneratorRequest.cs" />
-    <Compile Include="Requests\StoreCardGeneratorRequest.cs" />
-    <Compile Include="Requests\EventPassGeneratorRequest.cs" />
+    <Compile Include="Exceptions\RequiredFieldValueMissingException.cs" />
+    <Compile Include="Fields\BarCode.cs" />
+    <Compile Include="Fields\BarcodeType.cs" />
+    <Compile Include="Fields\DateField.cs" />
+    <Compile Include="Fields\Field.cs" />
+    <Compile Include="Fields\NumberField.cs" />
+    <Compile Include="Fields\FieldNumberStyle.cs" />
+    <Compile Include="Fields\StandardField.cs" />
+    <Compile Include="Fields\FieldDateTimeStyle.cs" />
+    <Compile Include="Fields\FieldTextAlignment.cs" />
+    <Compile Include="Images\StringEnum.cs" />
+    <Compile Include="Images\PassbookImage.cs" />
+    <Compile Include="Location.cs" />
+    <Compile Include="PassStyle.cs" />
     <Compile Include="PassGenerator.cs" />
     <Compile Include="Pass.cs" />
     <Compile Include="PassGeneratorRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransitType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

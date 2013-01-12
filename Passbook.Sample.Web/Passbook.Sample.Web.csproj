@@ -20,6 +20,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -110,6 +112,7 @@
   <ItemGroup>
     <Compile Include="Controllers\BinaryFormatter.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\PassController.cs" />
     <Compile Include="Controllers\PassRegistrationController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
@@ -117,7 +120,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SampleRequests\BoardingPassGeneratorRequest.cs" />
+    <Compile Include="SampleRequests\CouponPassGeneratorRequest.cs" />
+    <Compile Include="SampleRequests\EventPassGeneratorRequest.cs" />
+    <Compile Include="Services\IWebServiceHandler.cs" />
+    <Compile Include="Services\PassRegistrationResult.cs" />
     <Compile Include="Services\SendEmptyPushNotification.cs" />
+    <Compile Include="Services\WebServiceHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -141,7 +150,9 @@
     <Content Include="Icons\Starbucks\icon.png" />
     <Content Include="Icons\Starbucks\logo%402x.png" />
     <Content Include="Icons\Starbucks\logo.png" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
@@ -197,6 +208,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
