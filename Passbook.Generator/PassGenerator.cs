@@ -14,6 +14,7 @@ using Org.BouncyCastle.Cms;
 using Org.BouncyCastle.Security;
 using Org.BouncyCastle.X509.Store;
 using Passbook.Generator.Fields;
+using Passbook.Generator.Exceptions;
 
 namespace Passbook.Generator
 {
@@ -300,29 +301,36 @@ namespace Passbook.Generator
                 throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
             }
 
-            Org.BouncyCastle.X509.X509Certificate cert = DotNetUtilities.FromX509Certificate(card);
-            Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
+            try
+            {
+                Org.BouncyCastle.X509.X509Certificate cert = DotNetUtilities.FromX509Certificate(card);
+                Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
 
-            X509Certificate2 appleCA = GetAppleCertificate(request);
-            Org.BouncyCastle.X509.X509Certificate appleCert = DotNetUtilities.FromX509Certificate(appleCA);
+                X509Certificate2 appleCA = GetAppleCertificate(request);
+                Org.BouncyCastle.X509.X509Certificate appleCert = DotNetUtilities.FromX509Certificate(appleCA);
 
-            ArrayList intermediateCerts = new ArrayList();
+                ArrayList intermediateCerts = new ArrayList();
 
-            intermediateCerts.Add(appleCert);
-            intermediateCerts.Add(cert);
+                intermediateCerts.Add(appleCert);
+                intermediateCerts.Add(cert);
 
-            Org.BouncyCastle.X509.Store.X509CollectionStoreParameters PP = new Org.BouncyCastle.X509.Store.X509CollectionStoreParameters(intermediateCerts);
-            Org.BouncyCastle.X509.Store.IX509Store st1 = Org.BouncyCastle.X509.Store.X509StoreFactory.Create("CERTIFICATE/COLLECTION", PP);
+                Org.BouncyCastle.X509.Store.X509CollectionStoreParameters PP = new Org.BouncyCastle.X509.Store.X509CollectionStoreParameters(intermediateCerts);
+                Org.BouncyCastle.X509.Store.IX509Store st1 = Org.BouncyCastle.X509.Store.X509StoreFactory.Create("CERTIFICATE/COLLECTION", PP);
 
-            CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
+                CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
 
-            generator.AddSigner(privateKey, cert, CmsSignedDataGenerator.DigestSha1);
-            generator.AddCertificates(st1);
+                generator.AddSigner(privateKey, cert, CmsSignedDataGenerator.DigestSha1);
+                generator.AddCertificates(st1);
 
-            CmsProcessable content = new CmsProcessableByteArray(manifestFile);
-            CmsSignedData signedData = generator.Generate(content, false);
+                CmsProcessable content = new CmsProcessableByteArray(manifestFile);
+                CmsSignedData signedData = generator.Generate(content, false);
 
-            signatureFile = signedData.GetEncoded();
+                signatureFile = signedData.GetEncoded();
+            }
+            catch (Exception exp)
+            {
+                throw new ManifestSigningException("Failed to sign manifest", exp);
+            }
         }
 
         private X509Certificate2 GetAppleCertificate(PassGeneratorRequest request)
