@@ -198,6 +198,14 @@ namespace Passbook.Generator
             Barcode.Encoding = encoding;
             Barcode.AlternateText = altText;
         }
+        public void AddBarCode(string message, BarcodeType type, string encoding)
+        {
+            Barcode = new BarCode();
+            Barcode.Type = type;
+            Barcode.Message = message;
+            Barcode.Encoding = encoding;
+            Barcode.AlternateText = null;
+        }
         public void AddLocation(double latitude, double longitude)
         {
             AddLocation(latitude, longitude, null);
@@ -251,7 +259,7 @@ namespace Passbook.Generator
 
             foreach (var location in Locations)
             {
-              location.Write(writer);
+                location.Write(writer);
             }
 
             writer.WriteEndArray();
@@ -287,6 +295,7 @@ namespace Passbook.Generator
                     writer.WritePropertyName("altText");
                     writer.WriteValue(request.Barcode.AlternateText);
                 }
+
                 writer.WriteEndObject();
             }
         }

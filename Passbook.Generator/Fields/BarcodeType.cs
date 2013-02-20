@@ -8,9 +8,9 @@ namespace Passbook.Generator.Fields
     public enum BarcodeType
     {
         None = 0,
-        PKBarcodeFormatQR,
+        PKBarcodeFormatQR = 1,
         PKBarcodeFormatPDF417,
         PKBarcodeFormatAztec,
-        PKBarcodeFormatText
-    }
+        PKBarcodeFormatText,
+    } 
 }
