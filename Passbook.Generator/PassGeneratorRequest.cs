@@ -19,6 +19,7 @@ namespace Passbook.Generator
             this.BackFields = new List<Field>();
             this.Images = new Dictionary<PassbookImage, byte[]>();
             this.Locations = new List<Location>();
+            this.AssociatedStoreIdentifiers = new List<String>();
         }
 
         #region Standard Keys
@@ -165,6 +166,12 @@ namespace Passbook.Generator
         /// On devices configured for development, there is UI in Settings to allow HTTP web services.
         /// </summary>
         public string WebServiceUrl { get; set; }
+
+        #endregion
+
+        #region Associated App Keys
+
+        public List<String> AssociatedStoreIdentifiers { get; set; }
 
         #endregion
 

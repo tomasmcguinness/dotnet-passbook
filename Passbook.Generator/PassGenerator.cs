@@ -280,6 +280,19 @@ namespace Passbook.Generator
                             jsonWriter.WriteValue(hash.ToLower());
                         }
 
+                        if (request.AssociatedStoreIdentifiers.Count > 0)
+                        {
+                            jsonWriter.WritePropertyName(@"associatedStoreIdentifiers");
+                            jsonWriter.WriteStartArray();
+
+                            foreach (string storeIdentifier in request.AssociatedStoreIdentifiers)
+                            {
+                                jsonWriter.WriteValue(storeIdentifier);
+                            }
+
+                            jsonWriter.WriteEndArray();
+                        }
+
                         hash = GetHashForBytes(passFile);
                         jsonWriter.WritePropertyName(@"pass.json");
                         jsonWriter.WriteValue(hash.ToLower());
