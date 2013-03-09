@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>dotnet-passbook</id>
+        <version>0.7.7</version>
+        <title>Passbook Generator</title>
+        <authors>Tomas McGuinness</authors>
+        <owners />
+        <licenseUrl>http://tomasmcguinness.mit-license.org/</licenseUrl>
+        <projectUrl>https://github.com/tomasmcguinness/dotnet-passbook</projectUrl>
+        <requireLicenseAcceptance>true</requireLicenseAcceptance>
+        <description>Generate pass files for Apple's iOS 6.0 passbook. This library allows you to build and sign a pkpass file.</description>
+        <summary>Generate pass files for Apple's iOS 6.0 passbook.</summary>
+        <releaseNotes>Added support for AssociatedStoreIdentifiers allowing you to link a pass to an existing iOS App using its Apple Identifier</releaseNotes>
+        <tags>PassBook</tags>
+        <dependencies>
+            <group targetFramework=".NETFramework4.5">
+                <dependency id="Newtonsoft.Json" version="4.5.10" />
+                <dependency id="BouncyCastle" version="1.7.0" />
+            </group>
+        </dependencies>
+    </metadata>
+    <files>
+        <file src="C:\Users\Tomas\Downloads\dotnet-passbook.0.7.6\lib\Passbook.Generator.dll" target="lib\Passbook.Generator.dll" />
+        <file src="C:\Users\Tomas\Downloads\dotnet-passbook.0.7.6\package\services\metadata\core-properties\041fff8ffc84486a8ec283fbddd5a67c.psmdcp" target="package\services\metadata\core-properties\041fff8ffc84486a8ec283fbddd5a67c.psmdcp" />
+        <file src="C:\Users\Tomas\Downloads\dotnet-passbook.0.7.6\_rels\.rels" target="_rels\.rels" />
+        <file src="C:\Users\Tomas\Downloads\dotnet-passbook.0.7.6\[Content_Types].xml" target="[Content_Types].xml" />
+    </files>
+</package>
