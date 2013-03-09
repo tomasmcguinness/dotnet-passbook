@@ -20,10 +20,4 @@
             </group>
         </dependencies>
     </metadata>
-    <files>
-        <file src="C:\Users\Tomas\Downloads\dotnet-passbook.0.7.6\lib\Passbook.Generator.dll" target="lib\Passbook.Generator.dll" />
-        <file src="C:\Users\Tomas\Downloads\dotnet-passbook.0.7.6\package\services\metadata\core-properties\041fff8ffc84486a8ec283fbddd5a67c.psmdcp" target="package\services\metadata\core-properties\041fff8ffc84486a8ec283fbddd5a67c.psmdcp" />
-        <file src="C:\Users\Tomas\Downloads\dotnet-passbook.0.7.6\_rels\.rels" target="_rels\.rels" />
-        <file src="C:\Users\Tomas\Downloads\dotnet-passbook.0.7.6\[Content_Types].xml" target="[Content_Types].xml" />
-    </files>
 </package>
