@@ -19,7 +19,7 @@ namespace Passbook.Generator
             this.BackFields = new List<Field>();
             this.Images = new Dictionary<PassbookImage, byte[]>();
             this.Locations = new List<Location>();
-            this.AssociatedStoreIdentifiers = new List<String>();
+            this.AssociatedStoreIdentifiers = new List<int>();
         }
 
         #region Standard Keys
@@ -171,7 +171,7 @@ namespace Passbook.Generator
 
         #region Associated App Keys
 
-        public List<String> AssociatedStoreIdentifiers { get; set; }
+        public List<int> AssociatedStoreIdentifiers { get; set; }
 
         #endregion
 
@@ -331,6 +331,19 @@ namespace Passbook.Generator
             {
                 writer.WritePropertyName("logoText");
                 writer.WriteValue(request.LogoText);
+            }
+
+            if (this.AssociatedStoreIdentifiers.Count > 0)
+            {
+                writer.WritePropertyName("associatedStoreIdentifiers");
+                writer.WriteStartArray();
+
+                foreach (int storeIdentifier in this.AssociatedStoreIdentifiers)
+                {
+                    writer.WriteValue(storeIdentifier);
+                }
+
+                writer.WriteEndArray();
             }
         }
 
