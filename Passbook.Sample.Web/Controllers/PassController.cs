@@ -86,7 +86,7 @@ namespace Passbook.Sample.Web.Controllers
             PassGenerator generator = new PassGenerator();
 
             CouponPassGeneratorRequest request = new CouponPassGeneratorRequest();
-            request.Identifier = "pass.tomsamcguinness.events";
+            request.Identifier = "pass.passverse.com.public";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
             request.SerialNumber = "121211";
@@ -96,6 +96,8 @@ namespace Passbook.Sample.Web.Controllers
             request.LogoText = "My Pass";
             request.BackgroundColor = "rgb(0,0,0)";
             request.ForegroundColor = "rgb(255,255,255)";
+
+            request.AssociatedStoreIdentifiers.Add(551768476);
 
             // override icon and icon retina
             request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon.png")));

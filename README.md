@@ -83,6 +83,10 @@ You can add a BarCode.
 
     request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
 
+To link the pass to an existing app, you can add the app's Apple ID to the AssociatedStoreIdentifiers array.
+
+	   request.AssociatedStoreIdentifiers.Add(551768478);
+
 Finally, generate the pass by passing the request into the instance of the Generator. This will create the signed manifest and package all the the image files into zip.
 
     byte[] generatedPass = generator.Generate(request);
