@@ -4,6 +4,10 @@ namespace Passbook.Generator.Fields
 {
     public class NumberField : Field
     {
+        public NumberField()
+            : base()
+        { }
+
         public NumberField(string key, string label, int value, FieldNumberStyle numberStyle)
             : base(key, label)
         {
