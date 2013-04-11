@@ -31,5 +31,10 @@ namespace Passbook.Generator.Fields
         {
             this.Value = value as string;
         }
+
+        public override bool HasValue
+        {
+            get { return !string.IsNullOrEmpty(Value); }
+        }
     }
 }

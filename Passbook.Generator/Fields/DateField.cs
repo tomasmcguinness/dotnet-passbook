@@ -44,5 +44,10 @@ namespace Passbook.Generator.Fields
         {
             this.Value = (DateTime)value;
         }
+
+        public override bool HasValue
+        {
+            get { return true; }
+        }
     }
 }

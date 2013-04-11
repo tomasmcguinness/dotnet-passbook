@@ -50,5 +50,10 @@ namespace Passbook.Generator.Fields
         {
             this.Value = (decimal)value;
         }
+
+        public override bool HasValue
+        {
+            get { return true; }
+        }
     }
 }
