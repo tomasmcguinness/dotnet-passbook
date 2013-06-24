@@ -143,7 +143,7 @@ All pull requests are welcomed! If you come across an issue you cannot fix, plea
 You can request features and see what work is being done by checking out the dotnet-passbook Trello board over at [https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62](https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62)
 
 ##PassVerse	
-If you don't want to build and manage Passes yourself, my platform PassVerse offers developers like yourself a powerful API for generating and updating passes. It managed the registration and update process for you, allowing you to focus on your own application. Sign up at [www.passverse.com](http://www.passverse.com).
+If you don't want to build and manage Passes yourself, my PassVerse platform offers developers like yourself, a powerful API for generating and updating passes. It manages the registration and update process for you, allowing you to focus on your own application. Sign up at [www.passverse.com](http://www.passverse.com).
 
 ##License
 
