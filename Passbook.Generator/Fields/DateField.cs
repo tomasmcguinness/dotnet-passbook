@@ -12,6 +12,13 @@ namespace Passbook.Generator.Fields
             this.TimeStyle = timeStyle;
         }
 
+        public DateField(string key, string label, FieldDateTimeStyle dateStyle, FieldDateTimeStyle timeStyle)
+            : base(key, label)
+        {
+            this.DateStyle = dateStyle;
+            this.TimeStyle = timeStyle;
+        }
+
         public DateTime Value { get; set; }
         public FieldDateTimeStyle DateStyle { get; set; }
         public FieldDateTimeStyle TimeStyle { get; set; }

@@ -27,7 +27,7 @@ namespace Passbook.Generator
         /// <summary>
         /// Required. Pass type identifier, as issued by Apple. The value must correspond with your signing certificate.
         /// </summary>
-        public string Identifier { get; set; }
+        public string PassTypeIdentifier { get; set; }
         /// <summary>
         /// Required. Version of the file format. The value must be 1.
         /// </summary>
@@ -310,7 +310,7 @@ namespace Passbook.Generator
         private void WriteStandardKeys(JsonWriter writer, PassGeneratorRequest request)
         {
             writer.WritePropertyName("passTypeIdentifier");
-            writer.WriteValue(request.Identifier);
+            writer.WriteValue(request.PassTypeIdentifier);
 
             writer.WritePropertyName("formatVersion");
             writer.WriteValue(request.FormatVersion);
