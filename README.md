@@ -136,6 +136,11 @@ Dotnet-passbook is also available to  download from NuGet.
 
 	Install-Package dotnet-passbook
 
+
+##iOS 7
+
+I haven't gotten around to adding the new iOS 7 features, but I'll start that on a new branch soon.
+
 ##Contribute
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
