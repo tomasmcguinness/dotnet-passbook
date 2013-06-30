@@ -435,5 +435,7 @@ namespace Passbook.Generator
         }
 
         #endregion
+
+        public bool IsValid { get { return true; } }
     }
 }

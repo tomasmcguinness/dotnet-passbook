@@ -34,10 +34,17 @@ namespace Passbook.Generator
                 throw new ArgumentNullException("request", "You must pass an instance of PassGeneratorRequest");
             }
 
-            CreatePackage(request);
-            ZipPackage(request);
+            if (request.IsValid)
+            {
+                CreatePackage(request);
+                ZipPackage(request);
 
-            return pkPassFile;
+                return pkPassFile;
+            }
+            else
+            {
+                throw new Exception("PassGeneratorRequest is not valid");
+            }
         }
 
         private void ZipPackage(PassGeneratorRequest request)

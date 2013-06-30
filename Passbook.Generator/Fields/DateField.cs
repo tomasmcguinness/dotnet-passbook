@@ -4,7 +4,18 @@ namespace Passbook.Generator.Fields
 {
     public class DateField : Field
     {
-        public DateField(string key, string label, DateTime value, FieldDateTimeStyle dateStyle, FieldDateTimeStyle timeStyle)
+        public DateField()
+            : base()
+        { }
+
+        public DateField(string key, string label, FieldDateTimeStyle dateStyle, FieldDateTimeStyle timeStyle)
+            : base(key, label)
+        {
+            this.DateStyle = dateStyle;
+            this.TimeStyle = timeStyle;
+        }
+
+        public DateField(string key, string label, FieldDateTimeStyle dateStyle, FieldDateTimeStyle timeStyle, DateTime value)
             : base(key, label)
         {
             this.Value = value;
