@@ -196,6 +196,7 @@ namespace Passbook.Generator
                 {
                     using (JsonWriter writer = new JsonTextWriter(sr))
                     {
+                        Trace.TraceInformation("Writing JSON...");
                         request.Write(writer);
                     }
 

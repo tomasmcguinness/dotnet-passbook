@@ -5,6 +5,7 @@ using Passbook.Generator.Fields;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Drawing;
+using System.Diagnostics;
 
 namespace Passbook.Generator
 {
@@ -233,16 +234,24 @@ namespace Passbook.Generator
 
             writer.WriteStartObject();
 
+            Trace.TraceInformation("Writing basic keys..");
             WriteStandardKeys(writer, this);
+            Trace.TraceInformation("Writing basic keys..");
             WriteLocationKeys(writer, this);
+            Trace.TraceInformation("Writing appearance keys..");
             WriteAppearanceKeys(writer, this);
 
             OpenStyleSpecificKey(writer, this);
 
+            Trace.TraceInformation("Writing header fields");
             WriteSection(writer, "headerFields", this.HeaderFields);
+            Trace.TraceInformation("Writing primary fields");
             WriteSection(writer, "primaryFields", this.PrimaryFields);
+            Trace.TraceInformation("Writing secondary fields");
             WriteSection(writer, "secondaryFields", this.SecondaryFields);
+            Trace.TraceInformation("Writing auxiliary fields");
             WriteSection(writer, "auxiliaryFields", this.AuxiliaryFields);
+            Trace.TraceInformation("Writing back fields");
             WriteSection(writer, "backFields", this.BackFields);
 
             if (this.Style == PassStyle.BoardingPass)
