@@ -23,7 +23,7 @@ namespace Passbook.Sample.Web.SampleRequests
         {
             this.AddPrimaryField(new StandardField("event-name", "Event", EventName) { TextAlignment = FieldTextAlignment.PKTextAlignmentRight });
             this.AddPrimaryField(new StandardField("event-style", "Event2", EventName) { TextAlignment = FieldTextAlignment.PKTextAlignmentRight });
-            this.AddSecondaryField(new DateField("doors-open", "Doors Open", DoorsOpen, FieldDateTimeStyle.PKDateStyleMedium, FieldDateTimeStyle.PKDateStyleShort));
+            this.AddSecondaryField(new DateField("doors-open", "Doors Open", FieldDateTimeStyle.PKDateStyleMedium, FieldDateTimeStyle.PKDateStyleShort, DoorsOpen));
             this.AddSecondaryField(new NumberField("seating-section", "Seating Section", SeatingSection, FieldNumberStyle.PKNumberStyleSpellOut) { TextAlignment = FieldTextAlignment.PKTextAlignmentRight });
         }
     }

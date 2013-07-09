@@ -18,7 +18,7 @@ namespace Passbook.Sample.Web.Controllers
             PassGenerator generator = new PassGenerator();
 
             EventPassGeneratorRequest request = new EventPassGeneratorRequest();
-            request.Identifier = "pass.tomsamcguinness.events";
+            request.PassTypeIdentifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
             request.SerialNumber = "121211";
@@ -48,7 +48,7 @@ namespace Passbook.Sample.Web.Controllers
             PassGenerator generator = new PassGenerator();
 
             BoardingCardGeneratorRequest request = new BoardingCardGeneratorRequest();
-            request.Identifier = "pass.tomsamcguinness.events";
+            request.PassTypeIdentifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
             request.SerialNumber = "121212111";
@@ -86,7 +86,7 @@ namespace Passbook.Sample.Web.Controllers
             PassGenerator generator = new PassGenerator();
 
             CouponPassGeneratorRequest request = new CouponPassGeneratorRequest();
-            request.Identifier = "pass.passverse.com.public";
+            request.PassTypeIdentifier = "pass.passverse.com.public";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
             request.SerialNumber = "121211";

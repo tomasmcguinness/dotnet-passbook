@@ -92,7 +92,7 @@ namespace Passbook.Sample.Web.Controllers
         public HttpResponseMessage GetPass(string version, string passTypeIdentifier, string serialNumber)
         {
             EventPassGeneratorRequest request = new EventPassGeneratorRequest();
-            request.Identifier = "pass.tomsamcguinness.events";
+            request.PassTypeIdentifier = "pass.tomsamcguinness.events";
             request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
             request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
             request.SerialNumber = "121212111";
