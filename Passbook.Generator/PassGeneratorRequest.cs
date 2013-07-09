@@ -19,7 +19,7 @@ namespace Passbook.Generator
             this.AuxiliaryFields = new List<Field>();
             this.BackFields = new List<Field>();
             this.Images = new Dictionary<PassbookImage, byte[]>();
-            this.Locations = new List<Location>();
+            this.RelevantLocations = new List<RelevantLocation>();
             this.AssociatedStoreIdentifiers = new List<int>();
         }
 
@@ -121,9 +121,11 @@ namespace Passbook.Generator
 
         #endregion
 
-        #region Location Keys
+        #region Relevance Keys
 
-        public List<Location> Locations { get; private set; }
+        public DateTime? RelevantDate { get; set; }
+
+        public List<RelevantLocation> RelevantLocations { get; private set; }
 
         #endregion
 
@@ -220,7 +222,7 @@ namespace Passbook.Generator
         }
         public void AddLocation(double latitude, double longitude, string relevantText)
         {
-            this.Locations.Add(new Location() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });
+            this.RelevantLocations.Add(new RelevantLocation() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });
         }
 
         public virtual void PopulateFields()
@@ -273,7 +275,7 @@ namespace Passbook.Generator
             writer.WritePropertyName("locations");
             writer.WriteStartArray();
 
-            foreach (var location in Locations)
+            foreach (var location in RelevantLocations)
             {
                 location.Write(writer);
             }

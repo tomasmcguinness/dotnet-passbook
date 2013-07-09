@@ -68,7 +68,7 @@
     <Compile Include="Fields\FieldTextAlignment.cs" />
     <Compile Include="Images\StringEnum.cs" />
     <Compile Include="Images\PassbookImage.cs" />
-    <Compile Include="Location.cs" />
+    <Compile Include="RelevantLocation.cs" />
     <Compile Include="PassStyle.cs" />
     <Compile Include="PassGenerator.cs" />
     <Compile Include="Pass.cs" />

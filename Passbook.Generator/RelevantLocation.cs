@@ -7,14 +7,9 @@ using System.Text;
 
 namespace Passbook.Generator
 {
-    public class Location
+    public class RelevantLocation
     {
-        public Location()
-        {
-            Latitude = double.MinValue;
-            Longitude = double.MinValue;
-        }
-
+        public double? Altitude { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
         public string RelevantText { get; set; }
@@ -24,8 +19,16 @@ namespace Passbook.Generator
             Validate();
 
             writer.WriteStartObject();
+
+            if (Altitude.HasValue)
+            {
+                writer.WritePropertyName("altitude");
+                writer.WriteValue(Altitude.Value);
+            }
+
             writer.WritePropertyName("latitude");
             writer.WriteValue(Latitude);
+
             writer.WritePropertyName("longitude");
             writer.WriteValue(Longitude);
 
@@ -42,12 +45,12 @@ namespace Passbook.Generator
         {
             if (Latitude == double.MinValue)
             {
-              throw new RequiredFieldValueMissingException("latitude");
+                throw new RequiredFieldValueMissingException("latitude");
             }
 
             if (Longitude == double.MinValue)
             {
-              throw new RequiredFieldValueMissingException("longitude");
+                throw new RequiredFieldValueMissingException("longitude");
             }
         }
     }
