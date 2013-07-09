@@ -49,6 +49,10 @@ namespace Passbook.Generator
         /// Required. Display name of the organization that originated and signed the pass.
         /// </summary>
         public string OrganizationName { get; set; }
+        /// <summary>
+        /// Optional. Groups related passes together e.g. all boarding cards for the same trip.
+        /// </summary>
+        public string GroupingIdentifier { get; set; }
 
         #endregion
 
@@ -123,9 +127,15 @@ namespace Passbook.Generator
 
         #region Relevance Keys
 
+        public Boolean IgnoresTimeZone { get; set; }
+
         public DateTime? RelevantDate { get; set; }
 
         public List<RelevantLocation> RelevantLocations { get; private set; }
+
+        public List<RelevantBeacon> RelevantBeacons { get; private set; }
+
+        public int? MaxDistance { get; set; }
 
         #endregion
 
@@ -175,6 +185,14 @@ namespace Passbook.Generator
         #region Associated App Keys
 
         public List<int> AssociatedStoreIdentifiers { get; set; }
+
+        public string AppLaunchURL { get; set; }
+
+        #endregion
+
+        #region User Info Keys
+
+        // TODO
 
         #endregion
 
