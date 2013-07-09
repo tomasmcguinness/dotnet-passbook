@@ -2,7 +2,7 @@
 A .Net Library for generating Passbook packages for iOS 6
 
 ##Why
-This library powers the Pass generation used by [http://www.passverse.com](http://www.passverse.com). It allows you to generate, sign and zip Passbook files for use with iOS 6's Passbook. If you don't want to build and manage Passes yourself, my PassVerse platform offers developers like yourself, a powerful API for generating and updating passes. It manages the registration and update process for you, allowing you to focus on your own application. Sign up for free at [http://www.passverse.com](http://www.passverse.com).
+This library powers the Pass generation for the [PassVerse passbook API](http://www.passverse.com). It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS 6 and iOS 7). If you don't want to build and manage Passes yourself, my PassVerse platform offers developers like yourself, a powerful API for generating and updating passes. It manages the registration and update process for you, allowing you to focus on your own application. You can sign up for free at [http://www.passverse.com](http://www.passverse.com).
 
 ## Requirements
 
@@ -139,7 +139,7 @@ Dotnet-passbook is also available to  download from NuGet.
 
 ##iOS 7
 
-I haven't gotten around to adding the new iOS 7 features, but I'll start that on a new branch soon.
+I've started adding some of the new iOS 7 specific fields on the branch iOS 7. Please send me any feedback you have if you find things don't work as expected!
 
 ##Contribute
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
