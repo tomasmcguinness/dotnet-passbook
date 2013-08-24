@@ -392,6 +392,8 @@ namespace Passbook.Generator
 
         private static X509Certificate2 GetCertificateFromBytes(byte[] bytes, string password)
         {
+            Trace.TraceInformation("Opening Certificate: [{0}] bytes with password [{1}]", bytes.Length, password);
+
             X509Certificate2 certificate = null;
 
             if (password == null)
@@ -400,7 +402,8 @@ namespace Passbook.Generator
             }
             else
             {
-                certificate = new X509Certificate2(bytes, password, X509KeyStorageFlags.Exportable);
+                X509KeyStorageFlags flags = X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable;
+                certificate = new X509Certificate2(bytes, password, flags);
             }
 
             return certificate;

@@ -184,22 +184,27 @@ namespace Passbook.Generator
         {
             this.HeaderFields.Add(field);
         }
+
         public void AddPrimaryField(Field field)
         {
             this.PrimaryFields.Add(field);
         }
+
         public void AddSecondaryField(Field field)
         {
             this.SecondaryFields.Add(field);
         }
+
         public void AddAuxiliaryField(Field field)
         {
             this.AuxiliaryFields.Add(field);
         }
+
         public void AddBackField(Field field)
         {
             this.BackFields.Add(field);
         }
+
         public void AddBarCode(string message, BarcodeType type, string encoding, string altText)
         {
             Barcode = new BarCode();
@@ -208,6 +213,7 @@ namespace Passbook.Generator
             Barcode.Encoding = encoding;
             Barcode.AlternateText = altText;
         }
+
         public void AddBarCode(string message, BarcodeType type, string encoding)
         {
             Barcode = new BarCode();
@@ -216,10 +222,12 @@ namespace Passbook.Generator
             Barcode.Encoding = encoding;
             Barcode.AlternateText = null;
         }
+
         public void AddLocation(double latitude, double longitude)
         {
             AddLocation(latitude, longitude, null);
         }
+
         public void AddLocation(double latitude, double longitude, string relevantText)
         {
             this.RelevantLocations.Add(new RelevantLocation() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });

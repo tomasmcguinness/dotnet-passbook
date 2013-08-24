@@ -21,7 +21,7 @@ namespace Passbook.Generator.Fields
         {
             if (Value == null)
             {
-                throw new RequiredFieldValueMissingException("value");
+                throw new RequiredFieldValueMissingException(Key);
             }
 
             writer.WriteValue(Value);
