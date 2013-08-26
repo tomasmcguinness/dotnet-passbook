@@ -283,7 +283,7 @@ namespace Passbook.Generator
             if (request.RelevantDate.HasValue)
             {
                 writer.WritePropertyName("relevantDate");
-                writer.WriteValue(request.RelevantDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+                writer.WriteValue(request.RelevantDate.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             }
 
             writer.WritePropertyName("locations");
