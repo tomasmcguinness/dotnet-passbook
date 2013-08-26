@@ -244,10 +244,10 @@ namespace Passbook.Generator
 
             writer.WriteStartObject();
 
-            Trace.TraceInformation("Writing basic keys..");
+            Trace.TraceInformation("Writing standard keys..");
             WriteStandardKeys(writer, this);
-            Trace.TraceInformation("Writing basic keys..");
-            WriteLocationKeys(writer, this);
+            Trace.TraceInformation("Writing relevance keys..");
+            WriteRelevanceKeys(writer, this);
             Trace.TraceInformation("Writing appearance keys..");
             WriteAppearanceKeys(writer, this);
 
@@ -278,8 +278,14 @@ namespace Passbook.Generator
             writer.WriteEndObject();
         }
 
-        private void WriteLocationKeys(JsonWriter writer, PassGeneratorRequest passGeneratorRequest)
+        private void WriteRelevanceKeys(JsonWriter writer, PassGeneratorRequest request)
         {
+            if (request.RelevantDate.HasValue)
+            {
+                writer.WritePropertyName("relevantDate");
+                writer.WriteValue(request.RelevantDate.Value.ToString("yyyy-MM-ddTHH:mm:ss"));
+            }
+
             writer.WritePropertyName("locations");
             writer.WriteStartArray();
 
