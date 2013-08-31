@@ -302,6 +302,8 @@ namespace Passbook.Generator
 
         private void SignManigestFile(PassGeneratorRequest request)
         {
+            Trace.TraceInformation("Signing the manifest file...");
+
             X509Certificate2 card = GetCertificate(request);
 
             if (card == null)
@@ -314,8 +316,12 @@ namespace Passbook.Generator
                 Org.BouncyCastle.X509.X509Certificate cert = DotNetUtilities.FromX509Certificate(card);
                 Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
 
+                Trace.TraceInformation("Fetching Apple Certificate for signing..");
+
                 X509Certificate2 appleCA = GetAppleCertificate(request);
                 Org.BouncyCastle.X509.X509Certificate appleCert = DotNetUtilities.FromX509Certificate(appleCA);
+
+                Trace.TraceInformation("Constructing the certificate chain..");
 
                 ArrayList intermediateCerts = new ArrayList();
 
@@ -330,38 +336,64 @@ namespace Passbook.Generator
                 generator.AddSigner(privateKey, cert, CmsSignedDataGenerator.DigestSha1);
                 generator.AddCertificates(st1);
 
+                Trace.TraceInformation("Processing the signature..");
+
                 CmsProcessable content = new CmsProcessableByteArray(manifestFile);
                 CmsSignedData signedData = generator.Generate(content, false);
 
                 signatureFile = signedData.GetEncoded();
+
+                Trace.TraceInformation("The file has been successfully signed!");
+
             }
             catch (Exception exp)
             {
+                Trace.TraceError("Failed to sign the manifest file: [{0}]", exp.Message);
                 throw new ManifestSigningException("Failed to sign manifest", exp);
             }
         }
 
         private X509Certificate2 GetAppleCertificate(PassGeneratorRequest request)
         {
-            if (request.AppleWWDRCACertificate == null)
+            Trace.TraceInformation("Fetching Apple Certificate...");
+
+            try
             {
-                return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority, StoreLocation.LocalMachine);
+                if (request.AppleWWDRCACertificate == null)
+                {
+                    return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority, StoreLocation.LocalMachine);
+                }
+                else
+                {
+                    return GetCertificateFromBytes(request.AppleWWDRCACertificate, null);
+                }
             }
-            else
+            catch (Exception exp)
             {
-                return GetCertificateFromBytes(request.AppleWWDRCACertificate, null);
+                Trace.TraceError("Failed to fetch Apple Certificate: [{0}]", exp.Message);
+                throw;
             }
         }
 
         public static X509Certificate2 GetCertificate(PassGeneratorRequest request)
         {
-            if (request.Certificate == null)
+            Trace.TraceInformation("Fetching Pass Certificate...");
+
+            try
             {
-                return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My, request.CertLocation);
+                if (request.Certificate == null)
+                {
+                    return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My, request.CertLocation);
+                }
+                else
+                {
+                    return GetCertificateFromBytes(request.Certificate, request.CertificatePassword);
+                }
             }
-            else
+            catch (Exception exp)
             {
-                return GetCertificateFromBytes(request.Certificate, request.CertificatePassword);
+                Trace.TraceError("Failed to fetch Pass Certificate: [{0}]", exp.Message);
+                throw;
             }
         }
 
@@ -402,8 +434,12 @@ namespace Passbook.Generator
             }
             else
             {
+<<<<<<< HEAD
                 X509KeyStorageFlags flags = X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable;
                 certificate = new X509Certificate2(bytes, password, flags);
+=======
+                certificate = new X509Certificate2(bytes, password, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
+>>>>>>> Updated Field exception. Fixed bug with Certs and updated ReadMe
             }
 
             return certificate;

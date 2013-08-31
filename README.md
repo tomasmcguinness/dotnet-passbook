@@ -1,8 +1,14 @@
 #dotnet-passbook
-A .Net Library for generating Passbook packages for iOS 6
+
+A .Net Library for generating Passbook packages for iOS 6 and (soon) iOS7
 
 ##Why
-This library powers the Pass generation for the [PassVerse passbook API](http://www.passverse.com). It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS 6 and iOS 7). If you don't want to build and manage Passes yourself, my PassVerse platform offers developers like yourself, a powerful API for generating and updating passes. It manages the registration and update process for you, allowing you to focus on your own application. You can sign up for free at [http://www.passverse.com](http://www.passverse.com).
+
+Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the [PassVerse Passbook API](http://www.passverse.com), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS 6 and iOS 7).
+
+## PassVerse
+
+[PassVerse](http://www.passverse.com) is a platform that allows you to manage and update Passbook passes using a simple REST API. It takes care of all the registration and device management required when updating passes. You can use PassVerse as SaaS or host your instance of the platform. This frees you up to develop your actual solution! 
 
 ## Requirements
 
@@ -142,9 +148,11 @@ Dotnet-passbook is also available to  download from NuGet.
 I've started adding some of the new iOS 7 specific fields on the branch iOS 7. Please send me any feedback you have if you find things don't work as expected!
 
 ##Contribute
+
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
 ##Progress
+
 You can request features and see what work is being done by checking out the dotnet-passbook Trello board over at [https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62](https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62)
 
 ##License
