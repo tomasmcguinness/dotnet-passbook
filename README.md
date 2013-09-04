@@ -8,7 +8,7 @@ Creating passes for Apple's Passbook is pretty simple, but requires the use of P
 
 ## PassVerse
 
-[PassVerse](http://www.passverse.com) is a platform that allows you to manage and update Passbook passes using a simple REST API. It takes care of all the registration and device management required when updating passes. You can use PassVerse as SaaS or host your instance of the platform. This frees you up to develop your actual solution! 
+The [PassVerse](http://www.passverse.com) platform takes care of all aspects of the Passbook ecosystem from the creation and generation of passes, to the registration and device management required for updating passes. If you need a complete Passbook solution, look no further. PassVerse is available to download or use OnDemand at [http://www.passverse.com].
 
 ## Requirements
 
@@ -110,7 +110,9 @@ To be able to update your pass, you must provide it with a callback. When genera
 
 There are several methods that the Pass will invoke when it's installed and updated. To see a reference implementation of this, look at the PassRegistrationController class in the Passbook.Sample.Web project.
 
-The method that is of most interest in the beginning is the Post method as this actually captures the PushToken for the passes. The UpdateController has a very simple mechanism for sending an update. At present, the device ID is hard-coded, but this should provide a working reference
+The method that is of most interest in the beginning is the Post method as this actually captures the PushToken for the passes. The UpdateController has a very simple mechanism for sending an update. At present, the device ID is hard-coded, but this should provide a working reference.
+
+If you need a complete implementation of the WebService, do take a look at my [PassVerse Platform](http://www.passverse.com) as it contains everything you need.
 
 ## Sample Web Application
 
