@@ -434,12 +434,8 @@ namespace Passbook.Generator
             }
             else
             {
-<<<<<<< HEAD
                 X509KeyStorageFlags flags = X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable;
                 certificate = new X509Certificate2(bytes, password, flags);
-=======
-                certificate = new X509Certificate2(bytes, password, X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.PersistKeySet | X509KeyStorageFlags.Exportable);
->>>>>>> Updated Field exception. Fixed bug with Certs and updated ReadMe
             }
 
             return certificate;
