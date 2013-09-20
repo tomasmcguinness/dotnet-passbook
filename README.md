@@ -8,7 +8,7 @@ Creating passes for Apple's Passbook is pretty simple, but requires the use of P
 
 ## PassVerse
 
-The [PassVerse](http://www.passverse.com) platform takes care of all aspects of the Passbook ecosystem from the creation and generation of passes, to the registration and device management required for updating passes. If you need a complete Passbook solution, look no further. You can download and host it yourself or use our hosted version [http://www.passverse.com].
+The [PassVerse](http://www.passverse.com) platform takes care of all aspects of the Passbook ecosystem from the creation and generation of passes, to the registration and device management required for updating passes. If you need a complete .Net Passbook solution, look no further. You can download and use it for free [http://www.passverse.com].
 
 ## Requirements
 
