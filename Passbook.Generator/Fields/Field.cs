@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Passbook.Generator.Exceptions;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Passbook.Generator.Fields
 {
@@ -63,12 +64,34 @@ namespace Passbook.Generator.Fields
                 writer.WriteValue(TextAlignment.ToString());
             }
 
+            if (AttributedValue != null)
+            {
+                writer.WritePropertyName("attributedValue");
+                writer.WriteValue(this.AttributedValue);
+            }
+
             WriteKeys(writer);
+
+            WriteDataDetectorTypes(writer);
 
             writer.WritePropertyName("value");
             WriteValue(writer);
 
             writer.WriteEndObject();
+        }
+
+        private void WriteDataDetectorTypes(JsonWriter writer)
+        {
+            if (this.DataDetectorTypes.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(this.DataDetectorTypes[0].ToString());
+
+                for (int i = 1; i < this.DataDetectorTypes.Count; i++)
+                {
+                    sb.AppendFormat(",{0}", this.DataDetectorTypes[i].ToString());
+                }
+            }
         }
 
         private void Validate()
