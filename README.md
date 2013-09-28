@@ -1,6 +1,6 @@
 #dotnet-passbook
 
-A .Net Library for generating Passbook packages for iOS 6 and (soon) iOS7
+A .Net Library for generating Passbook packages for iOS 6 and iOS7
 
 ##Why
 
@@ -12,7 +12,7 @@ The [PassVerse](http://www.passverse.com) management system handles all aspects 
 
 ## Requirements
 
-The solution requires .Net 4.5 and Visual Studio 2012.
+The solution requires .Net 4.5 and Visual Studio 2012 or higher.
 
 ##Certificates
 
@@ -112,7 +112,7 @@ There are several methods that the Pass will invoke when it's installed and upda
 
 The method that is of most interest in the beginning is the Post method as this actually captures the PushToken for the passes. The UpdateController has a very simple mechanism for sending an update. At present, the device ID is hard-coded, but this should provide a working reference.
 
-If you need a complete implementation of the WebService, do take a look at my [PassVerse Platform](http://www.passverse.com) as it contains everything you need.
+If you need a complete implementation of the WebService, do take a look at my [PassVerse management system](http://www.passverse.com) as it contains everything you need.
 
 ## Sample Web Application
 
@@ -147,7 +147,7 @@ Dotnet-passbook is also available to  download from NuGet.
 
 ##iOS 7
 
-I've started adding some of the new iOS 7 specific fields on the branch iOS 7. Please send me any feedback you have if you find things don't work as expected!
+This covers almost all of the new fields that were added for iOS7. I have not included the Companion App Keys yet.
 
 ##Contribute
 
