@@ -60,6 +60,7 @@
     <Compile Include="Exceptions\RequiredFieldValueMissingException.cs" />
     <Compile Include="Fields\BarCode.cs" />
     <Compile Include="Fields\BarcodeType.cs" />
+    <Compile Include="Fields\DataDeterctorType.cs" />
     <Compile Include="Fields\DateField.cs" />
     <Compile Include="Fields\Field.cs" />
     <Compile Include="Fields\NumberField.cs" />
@@ -69,6 +70,7 @@
     <Compile Include="Fields\FieldTextAlignment.cs" />
     <Compile Include="Images\StringEnum.cs" />
     <Compile Include="Images\PassbookImage.cs" />
+    <Compile Include="RelevantBeacon.cs" />
     <Compile Include="RelevantLocation.cs" />
     <Compile Include="PassStyle.cs" />
     <Compile Include="PassGenerator.cs" />

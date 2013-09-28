@@ -9,9 +9,24 @@ namespace Passbook.Generator
 {
     public class RelevantLocation
     {
+        /// <summary>
+        /// Optional. Altitude, in meters, of the location.
+        /// </summary>
         public double? Altitude { get; set; }
+
+        /// <summary>
+        /// Required. Latitude, in degrees, of the location.
+        /// </summary>
         public double Latitude { get; set; }
+
+        /// <summary>
+        /// Required. Longitude, in degrees, of the location.
+        /// </summary>
         public double Longitude { get; set; }
+
+        /// <summary>
+        /// Optional. Text displayed on the lock screen when the pass is currently relevant.
+        /// </summary>
         public string RelevantText { get; set; }
 
         public void Write(JsonWriter writer)
@@ -32,7 +47,7 @@ namespace Passbook.Generator
             writer.WritePropertyName("longitude");
             writer.WriteValue(Longitude);
 
-            if (!string.IsNullOrEmpty(RelevantText))
+            if (RelevantText != null)
             {
                 writer.WritePropertyName("relevantText");
                 writer.WriteValue(RelevantText);

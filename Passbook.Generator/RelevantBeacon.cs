@@ -9,7 +9,14 @@ namespace Passbook.Generator
 {
     public class RelevantBeacon
     {
+        /// <summary>
+        /// Required. Unique identifier of a Bluetooth Low Energy location beacon.
+        /// </summary>
         public string ProximityUUID { get; set; }
+
+        /// <summary>
+        /// Optional. Text displayed on the lock screen when the pass is currently relevant.
+        /// </summary>
         public string RelevantText { get; set; }
 
         public void Write(JsonWriter writer)

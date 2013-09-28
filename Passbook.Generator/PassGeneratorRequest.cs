@@ -49,10 +49,18 @@ namespace Passbook.Generator
         /// Required. Display name of the organization that originated and signed the pass.
         /// </summary>
         public string OrganizationName { get; set; }
-        /// <summary>
-        /// Optional. Groups related passes together e.g. all boarding cards for the same trip.
-        /// </summary>
-        public string GroupingIdentifier { get; set; }
+
+        #endregion
+
+        #region "Companion App Keys"
+
+        #endregion
+
+        #region "Expirate Keys"
+
+        public DateTime? expirateDate { get; set; }
+
+        public Boolean? Voided { get; set; }
 
         #endregion
 
@@ -71,39 +79,48 @@ namespace Passbook.Generator
         /// Optional. Foreground color of the pass, specified as a CSS-style RGB triple. For example, rgb(100, 10, 110).
         /// </summary>
         public string ForegroundColor { get; set; }
+
         /// <summary>
         /// Optional. Background color of the pass, specified as an CSS-style RGB triple. For example, rgb(23, 187, 82).
         /// </summary>
         public string BackgroundColor { get; set; }
+
         /// <summary>
         /// Optional. Color of the label text, specified as a CSS-style RGB triple. For example, rgb(255, 255, 255).
         /// If omitted, the label color is determined automatically.
         /// </summary>
         public string LabelColor { get; set; }
+
         /// <summary>
         /// Optional. Text displayed next to the logo on the pass.
         /// </summary>
         public string LogoText { get; set; }
+
         /// <summary>
         /// Optional. If true, the strip image is displayed without a shine effect. The default value is false.
         /// </summary>
-        public bool SuppressStripShine { get; set; }
+        public bool? SuppressStripShine { get; set; }
+
         /// <summary>
         /// Optional. Fields to be displayed prominently on the front of the pass.
         /// </summary>
         public List<Field> HeaderFields { get; private set; }
+
         /// <summary>
         /// Optional. Fields to be displayed prominently on the front of the pass.
         /// </summary>
         public List<Field> PrimaryFields { get; private set; }
+
         /// <summary>
         /// Optional. Fields to be displayed on the front of the pass.
         /// </summary>
         public List<Field> SecondaryFields { get; private set; }
+
         /// <summary>
         /// Optional. Additional fields to be displayed on the front of the pass.
         /// </summary>
         public List<Field> AuxiliaryFields { get; private set; }
+
         /// <summary>
         /// Optional. Information about fields that are displayed on the back of the pass.
         /// </summary>
@@ -118,23 +135,44 @@ namespace Passbook.Generator
         /// Required. Pass type.
         /// </summary>
         public PassStyle Style { get; set; }
+
         /// <summary>
         /// Required for boarding passes; otherwise not allowed. Type of transit.
         /// </summary>
         public TransitType TransitType { get; set; }
 
+        /// <summary>
+        /// Optional for event tickets and boarding passes; otherwise not allowed. Identifier used to group related passes
+        /// </summary>
+        public string GroupingIdentifier { get; set; }
+
         #endregion
 
         #region Relevance Keys
 
-        public Boolean IgnoresTimeZone { get; set; }
+        /// <summary>
+        /// Optional. Always display the time and date in the given time zone, not in the user’s current time zone. The default value is false
+        /// </summary>
+        public Boolean? IgnoresTimeZone { get; set; }
 
+        /// <summary>
+        /// Optional. Date and time when the pass becomes relevant. For example, the start time of a movie.
+        /// </summary>
         public DateTime? RelevantDate { get; set; }
 
+        /// <summary>
+        /// Optional. Locations where the passisrelevant. For example, the location of your store.
+        /// </summary>
         public List<RelevantLocation> RelevantLocations { get; private set; }
 
+        /// <summary>
+        /// Optional. Beacons marking locations where the pass is relevant.
+        /// </summary>
         public List<RelevantBeacon> RelevantBeacons { get; private set; }
 
+        /// <summary>
+        /// Optional. Maximum distance in meters from a relevant latitude and longitude that the pass is relevant
+        /// </summary>
         public int? MaxDistance { get; set; }
 
         #endregion
@@ -410,10 +448,16 @@ namespace Passbook.Generator
                 writer.WriteValue(ConvertColor(request.LabelColor));
             }
 
-            if (request.SuppressStripShine)
+            if (request.SuppressStripShine.HasValue)
             {
                 writer.WritePropertyName("suppressStripShine");
-                writer.WriteValue(true);
+                writer.WriteValue(request.SuppressStripShine.Value);
+            }
+
+            if (request.GroupingIdentifier != null)
+            {
+                writer.WritePropertyName("groupingIdentifier");
+                writer.WriteValue(request.GroupingIdentifier);
             }
         }
 

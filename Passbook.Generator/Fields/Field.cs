@@ -1,18 +1,22 @@
 ﻿using System;
 using Newtonsoft.Json;
 using Passbook.Generator.Exceptions;
+using System.Collections.Generic;
 
 namespace Passbook.Generator.Fields
 {
     public abstract class Field
     {
         public Field()
-        { }
+        {
+            this.DataDetectorTypes = new List<DataDeterctorType>();
+        }
 
         public Field(string key, string label)
         {
             this.Key = key;
             this.Label = label;
+            this.DataDetectorTypes = new List<DataDeterctorType>();
         }
 
         public Field(string key, string label, string changeMessage, FieldTextAlignment textAligment)
@@ -21,12 +25,16 @@ namespace Passbook.Generator.Fields
             this.Label = label;
             this.ChangeMessage = changeMessage;
             this.TextAlignment = textAligment;
+            this.DataDetectorTypes = new List<DataDeterctorType>();
         }
 
         public string Key { get; set; }
         public string Label { get; set; }
         public string ChangeMessage { get; set; }
         public FieldTextAlignment TextAlignment { get; set; }
+        public string AttributedValue { get; set; }
+
+        public List<DataDeterctorType> DataDetectorTypes { get; private set; }
 
         public void Write(JsonWriter writer)
         {
