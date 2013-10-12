@@ -289,6 +289,11 @@ namespace Passbook.Generator
             this.RelevantLocations.Add(new RelevantLocation() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });
         }
 
+        public void AddBeacon(string proximityUUID, string relevantText)
+        {
+            this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText });
+        }
+
         public virtual void PopulateFields()
         {
             // NO OP.
@@ -348,6 +353,11 @@ namespace Passbook.Generator
             foreach (var location in RelevantLocations)
             {
                 location.Write(writer);
+            }
+
+            foreach (var beacon in RelevantBeacons)
+            {
+                beacon.Write(writer);
             }
 
             writer.WriteEndArray();
