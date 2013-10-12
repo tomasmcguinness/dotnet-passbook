@@ -8,7 +8,7 @@ Creating passes for Apple's Passbook is pretty simple, but requires the use of P
 
 ## PassVerse Management System
 
-The [PassVerse](http://www.passverse.com) management system handles all aspects of Passbook for you, including pass creation, pass registration and the sending of updates. If you want to add Passbook support to your application, PassVerse offers a API that your application can invoke the generate and update passes. It's free to download and use and takes a few minutes to set-up. [Download it now from PassVerse.com ](http://www.passverse.com/downloads).
+The [PassVerse](http://www.passverse.com) management system handles all aspects of Passbook for you. If you want to add Passbook support to your application, look no further. It's free to download and use and takes a few minutes to set-up. A REST based API makes integration very simple and PassVerse will take care of the creation and updating of passes. [Download it now from PassVerse.com ](http://www.passverse.com/downloads).
 
 ## Requirements
 
