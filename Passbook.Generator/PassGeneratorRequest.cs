@@ -20,6 +20,7 @@ namespace Passbook.Generator
             this.BackFields = new List<Field>();
             this.Images = new Dictionary<PassbookImage, byte[]>();
             this.RelevantLocations = new List<RelevantLocation>();
+            this.RelevantBeacons = new List<RelevantBeacon>();
             this.AssociatedStoreIdentifiers = new List<int>();
         }
 
@@ -56,9 +57,9 @@ namespace Passbook.Generator
 
         #endregion
 
-        #region "Expirate Keys"
+        #region "Expiration Keys"
 
-        public DateTime? expirateDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
 
         public Boolean? Voided { get; set; }
 
@@ -311,7 +312,10 @@ namespace Passbook.Generator
             WriteRelevanceKeys(writer, this);
             Trace.TraceInformation("Writing appearance keys..");
             WriteAppearanceKeys(writer, this);
+            Trace.TraceInformation("Writing expiration keys..");
+            WriteExpirationKeys(writer, this);
 
+            Trace.TraceInformation("Opening style section..");
             OpenStyleSpecificKey(writer, this);
 
             Trace.TraceInformation("Writing header fields");
@@ -331,6 +335,7 @@ namespace Passbook.Generator
                 writer.WriteValue(this.TransitType.ToString());
             }
 
+            Trace.TraceInformation("Closing style section..");
             CloseStyleSpecificKey(writer);
 
             WriteBarcode(writer, this);
@@ -347,20 +352,31 @@ namespace Passbook.Generator
                 writer.WriteValue(request.RelevantDate.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             }
 
-            writer.WritePropertyName("locations");
-            writer.WriteStartArray();
-
-            foreach (var location in RelevantLocations)
+            if (RelevantLocations.Count > 0)
             {
-                location.Write(writer);
+                writer.WritePropertyName("locations");
+                writer.WriteStartArray();
+
+                foreach (var location in RelevantLocations)
+                {
+                    location.Write(writer);
+                }
+
+                writer.WriteEndArray();
             }
 
-            foreach (var beacon in RelevantBeacons)
+            if (RelevantBeacons.Count > 0)
             {
-                beacon.Write(writer);
-            }
+                writer.WritePropertyName("beacons");
+                writer.WriteStartArray();
 
-            writer.WriteEndArray();
+                foreach (var beacon in RelevantBeacons)
+                {
+                    beacon.Write(writer);
+                }
+
+                writer.WriteEndArray();
+            }
         }
 
         private void WriteUrls(JsonWriter writer, PassGeneratorRequest request)
@@ -468,6 +484,21 @@ namespace Passbook.Generator
             {
                 writer.WritePropertyName("groupingIdentifier");
                 writer.WriteValue(request.GroupingIdentifier);
+            }
+        }
+
+        private void WriteExpirationKeys(JsonWriter writer, PassGeneratorRequest request)
+        {
+            if (request.ExpirationDate.HasValue)
+            {
+                writer.WritePropertyName("expirationDate");
+                writer.WriteValue(request.ExpirationDate.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+            }
+
+            if (request.Voided.HasValue)
+            {
+                writer.WritePropertyName("voided");
+                writer.WriteValue(request.Voided.Value);
             }
         }
 
