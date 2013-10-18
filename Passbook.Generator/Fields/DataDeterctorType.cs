@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Passbook.Generator.Fields
 {
-    public enum DataDeterctorType
+    public enum DataDetectorType
     {
         PKDataDetectorTypePhoneNumber,
         PKDataDetectorTypeLink,

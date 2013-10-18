@@ -15,6 +15,14 @@ namespace Passbook.Generator.Fields
             this.Value = value;
         }
 
+        public StandardField(string key, string label, string value, string attributedValue, DataDetectorType defaultDetector)
+            : base(key, label)
+        {
+            this.Value = value;
+            this.AttributedValue = attributedValue;
+            this.DataDetectorTypes.Add(defaultDetector);
+        }
+
         public string Value { get; set; }
 
         protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
