@@ -39,7 +39,7 @@ namespace Passbook.Generator
 
         private void Validate()
         {
-            if (!String.IsNullOrEmpty(ProximityUUID))
+            if (String.IsNullOrEmpty(ProximityUUID))
             {
                 throw new RequiredFieldValueMissingException("ProximityUUID");
             }
