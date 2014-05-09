@@ -352,6 +352,12 @@ namespace Passbook.Generator
                 writer.WriteValue(request.RelevantDate.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             }
 
+            if (request.MaxDistance.HasValue)
+            {
+                writer.WritePropertyName("maxDistance");
+                writer.WriteValue(request.MaxDistance.Value.ToString());
+            }
+
             if (RelevantLocations.Count > 0)
             {
                 writer.WritePropertyName("locations");
