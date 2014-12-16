@@ -20,9 +20,13 @@ namespace Passbook.Generator
         Strip,
         [StringValue("strip@2x.png")]
         StripRetina,
-        [StringValue("thumbnail@2x.png")]
+        [StringValue("thumbnail.png")]
         Thumbnail,
         [StringValue("thumbnail@2x.png")]
-        ThumbnailRetina
+        ThumbnailRetina,
+        [StringValue("footer.png")]
+        Footer,
+        [StringValue("footer@2x.png")]
+        FooterRetina
     }
 }
