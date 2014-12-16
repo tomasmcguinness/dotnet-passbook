@@ -8,3 +8,6 @@ TestResults
 # visual studio user files
 *.suo
 *.user
+
+# nuget packages/dependencies
+packages/
