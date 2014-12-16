@@ -155,6 +155,26 @@ namespace Passbook.Generator
                         }
                     }
 
+                    if (request.Images.ContainsKey(PassbookImage.Footer))
+                    {
+                        imageEntry = archive.CreateEntry(@"footer.png");
+                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                        {
+                            writer.Write(request.Images[PassbookImage.Footer]);
+                            writer.Flush();
+                        }
+                    }
+
+                    if (request.Images.ContainsKey(PassbookImage.FooterRetina))
+                    {
+                        imageEntry = archive.CreateEntry(@"footer@2x.png");
+                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+                        {
+                            writer.Write(request.Images[PassbookImage.FooterRetina]);
+                            writer.Flush();
+                        }
+                    }
+
                     ZipArchiveEntry PassJSONEntry = archive.CreateEntry(@"pass.json");
                     using (BinaryWriter writer = new BinaryWriter(PassJSONEntry.Open()))
                     {
@@ -285,6 +305,20 @@ namespace Passbook.Generator
                         {
                             hash = GetHashForBytes(request.Images[PassbookImage.ThumbnailRetina]);
                             jsonWriter.WritePropertyName(@"thumbnail@2x.png");
+                            jsonWriter.WriteValue(hash.ToLower());
+                        }
+
+                        if (request.Images.ContainsKey(PassbookImage.Footer))
+                        {
+                            hash = GetHashForBytes(request.Images[PassbookImage.Footer]);
+                            jsonWriter.WritePropertyName(@"footer.png");
+                            jsonWriter.WriteValue(hash.ToLower());
+                        }
+
+                        if (request.Images.ContainsKey(PassbookImage.FooterRetina))
+                        {
+                            hash = GetHashForBytes(request.Images[PassbookImage.FooterRetina]);
+                            jsonWriter.WritePropertyName(@"footer@2x.png");
                             jsonWriter.WriteValue(hash.ToLower());
                         }
 

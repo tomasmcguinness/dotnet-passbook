@@ -4,3 +4,10 @@ obj
 
 # mstest test results
 TestResults
+
+# visual studio user files
+*.suo
+*.user
+
+# nuget packages/dependencies
+packages/

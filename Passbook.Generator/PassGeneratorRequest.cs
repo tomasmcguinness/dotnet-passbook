@@ -498,7 +498,7 @@ namespace Passbook.Generator
             if (request.ExpirationDate.HasValue)
             {
                 writer.WritePropertyName("expirationDate");
-                writer.WriteValue(request.ExpirationDate.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+                writer.WriteValue(request.ExpirationDate.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
             }
 
             if (request.Voided.HasValue)
