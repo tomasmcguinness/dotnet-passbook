@@ -308,6 +308,20 @@ namespace Passbook.Generator
                             jsonWriter.WriteValue(hash.ToLower());
                         }
 
+                        if (request.Images.ContainsKey(PassbookImage.Footer))
+                        {
+                            hash = GetHashForBytes(request.Images[PassbookImage.Footer]);
+                            jsonWriter.WritePropertyName(@"footer.png");
+                            jsonWriter.WriteValue(hash.ToLower());
+                        }
+
+                        if (request.Images.ContainsKey(PassbookImage.FooterRetina))
+                        {
+                            hash = GetHashForBytes(request.Images[PassbookImage.FooterRetina]);
+                            jsonWriter.WritePropertyName(@"footer@2x.png");
+                            jsonWriter.WriteValue(hash.ToLower());
+                        }
+
                         hash = GetHashForBytes(passFile);
                         jsonWriter.WritePropertyName(@"pass.json");
                         jsonWriter.WriteValue(hash.ToLower());
