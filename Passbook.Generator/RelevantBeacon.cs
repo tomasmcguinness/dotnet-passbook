@@ -18,6 +18,8 @@ namespace Passbook.Generator
         /// Optional. Text displayed on the lock screen when the pass is currently relevant.
         /// </summary>
         public string RelevantText { get; set; }
+        public int? Major { get; set; }
+        public int? Minor{ get; set; }
 
         public void Write(JsonWriter writer)
         {
@@ -32,6 +34,18 @@ namespace Passbook.Generator
             {
                 writer.WritePropertyName("relevantText");
                 writer.WriteValue(RelevantText);
+            }
+
+            if (Minor.HasValue)
+            {
+                writer.WritePropertyName("minor");
+                writer.WriteValue(Minor);
+            }
+
+            if (Major.HasValue)
+            {
+                writer.WritePropertyName("major");
+                writer.WriteValue(Major);
             }
 
             writer.WriteEndObject();
