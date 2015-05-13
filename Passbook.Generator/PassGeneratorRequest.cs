@@ -290,9 +290,19 @@ namespace Passbook.Generator
             this.RelevantLocations.Add(new RelevantLocation() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });
         }
 
-        public void AddBeacon(string proximityUUID, string relevantText, int? major = null, int? minor = null)
+        public void AddBeacon(string proximityUUID, string relevantText)
         {
-            this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major, Minor = minor});
+            this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText });
+        }
+
+        public void AddBeacon(string proximityUUID, string relevantText, int major)
+        {
+            this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major });
+        }
+
+        public void AddBeacon(string proximityUUID, string relevantText, int major, int minor)
+        {
+            this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major, Minor = minor });
         }
 
         public virtual void PopulateFields()
