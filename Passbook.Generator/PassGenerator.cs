@@ -331,14 +331,19 @@ namespace Passbook.Generator
                 throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
             }
 
+            X509Certificate2 appleCA = GetAppleCertificate(request);
+            if (appleCA == null)
+            {
+                throw new FileNotFoundException("Apple Certficate could not be found. Please downloaad from http://www.apple.com/certificateauthority/ and install into your LOCAL MACHINE certificate store.");
+            }
+
             try
             {
                 Org.BouncyCastle.X509.X509Certificate cert = DotNetUtilities.FromX509Certificate(card);
                 Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
 
                 Trace.TraceInformation("Fetching Apple Certificate for signing..");
-
-                X509Certificate2 appleCA = GetAppleCertificate(request);
+                
                 Org.BouncyCastle.X509.X509Certificate appleCert = DotNetUtilities.FromX509Certificate(appleCA);
 
                 Trace.TraceInformation("Constructing the certificate chain..");
