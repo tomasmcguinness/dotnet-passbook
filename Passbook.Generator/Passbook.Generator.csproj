@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="Exceptions\ManifestSigningException.cs" />
     <Compile Include="Exceptions\RequiredFieldValueMissingException.cs" />
+    <Compile Include="Extensions\DataDetectorTypeExtensions.cs" />
     <Compile Include="Fields\BarCode.cs" />
     <Compile Include="Fields\BarcodeType.cs" />
     <Compile Include="Fields\DataDeterctorType.cs" />
