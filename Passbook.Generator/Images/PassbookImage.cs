@@ -2,31 +2,55 @@
 
 namespace Passbook.Generator
 {
+	public static class PassbookImageExtensions
+	{
+		public static string ToFilename(this PassbookImage passbookImage)
+		{
+			switch (passbookImage)
+			{
+			case PassbookImage.Icon:
+				return "icon.png";
+			case PassbookImage.IconRetina:
+				return "icon@2x.png";
+			case PassbookImage.Logo:
+				return "logo.png";
+			case PassbookImage.LogoRetina:
+				return "logo@2x.png";
+			case PassbookImage.Background:
+				return "background.png";
+			case PassbookImage.BackgroundRetina:
+				return "background@2x.png";
+			case PassbookImage.Strip:
+				return "strip.png";
+			case PassbookImage.StripRetina:
+				return "strip@2x.png";
+			case PassbookImage.Thumbnail:
+				return "thumbnail.png";
+			case PassbookImage.ThumbnailRetina:
+				return "thumbnail@2x.png";
+			case PassbookImage.Footer:
+				return "footer.png";
+			case PassbookImage.FooterRetina:
+				return "footer@2x.png";
+			default:
+				throw new NotImplementedException("Unknown PassbookImage type.");
+			}
+		}
+	}
+
     public enum PassbookImage
     {
-        [StringValue("background.png")]
         Background,
-        [StringValue("background@2x.png")]
         BackgroundRetina,
-        [StringValue("icon.png")]
         Icon,
-        [StringValue("icon@2x.png")]
         IconRetina,
-        [StringValue("logo.png")]
         Logo,
-        [StringValue("logo@2x.png")]
         LogoRetina,
-        [StringValue("strip.png")]
         Strip,
-        [StringValue("strip@2x.png")]
         StripRetina,
-        [StringValue("thumbnail.png")]
         Thumbnail,
-        [StringValue("thumbnail@2x.png")]
         ThumbnailRetina,
-        [StringValue("footer.png")]
         Footer,
-        [StringValue("footer@2x.png")]
         FooterRetina
     }
 }

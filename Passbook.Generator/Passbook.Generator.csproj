@@ -77,7 +77,6 @@
     <Compile Include="Fields\StandardField.cs" />
     <Compile Include="Fields\FieldDateTimeStyle.cs" />
     <Compile Include="Fields\FieldTextAlignment.cs" />
-    <Compile Include="Images\StringEnum.cs" />
     <Compile Include="Images\PassbookImage.cs" />
     <Compile Include="RelevantBeacon.cs" />
     <Compile Include="RelevantLocation.cs" />

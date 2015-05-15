@@ -51,127 +51,18 @@ namespace Passbook.Generator
             {
                 using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update, true))
                 {
-                    ZipArchiveEntry imageEntry = null;
+					ZipArchiveEntry imageEntry = null;
 
-                    if (request.Images.ContainsKey(PassbookImage.Icon))
-                    {
-                        imageEntry = archive.CreateEntry(@"icon.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.Icon]);
-                            writer.Flush();
-                        }
-                    }
+					foreach (KeyValuePair<PassbookImage, byte[]> image in request.Images)
+					{	
+						imageEntry = archive.CreateEntry(image.Key.ToFilename());
 
-                    if (request.Images.ContainsKey(PassbookImage.IconRetina))
-                    {
-                        imageEntry = archive.CreateEntry(@"icon@2x.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.IconRetina]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.Logo))
-                    {
-                        imageEntry = archive.CreateEntry(@"logo.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.Logo]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.LogoRetina))
-                    {
-                        imageEntry = archive.CreateEntry(@"logo@2x.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.LogoRetina]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.Background))
-                    {
-                        imageEntry = archive.CreateEntry(@"background.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.Background]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.BackgroundRetina))
-                    {
-                        imageEntry = archive.CreateEntry(@"background@2x.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.BackgroundRetina]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.Strip))
-                    {
-                        imageEntry = archive.CreateEntry(@"strip.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.Strip]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.StripRetina))
-                    {
-                        imageEntry = archive.CreateEntry(@"strip@2x.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.StripRetina]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.Thumbnail))
-                    {
-                        imageEntry = archive.CreateEntry(@"thumbnail.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.Thumbnail]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.ThumbnailRetina))
-                    {
-                        imageEntry = archive.CreateEntry(@"thumbnail@2x.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.ThumbnailRetina]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.Footer))
-                    {
-                        imageEntry = archive.CreateEntry(@"footer.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.Footer]);
-                            writer.Flush();
-                        }
-                    }
-
-                    if (request.Images.ContainsKey(PassbookImage.FooterRetina))
-                    {
-                        imageEntry = archive.CreateEntry(@"footer@2x.png");
-                        using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
-                        {
-                            writer.Write(request.Images[PassbookImage.FooterRetina]);
-                            writer.Flush();
-                        }
-                    }
+						using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
+						{
+							writer.Write(image.Value);
+							writer.Flush();
+						}
+					}
 
                     ZipArchiveEntry PassJSONEntry = archive.CreateEntry(@"pass.json");
                     using (BinaryWriter writer = new BinaryWriter(PassJSONEntry.Open()))
@@ -236,75 +127,12 @@ namespace Passbook.Generator
 
                         string hash = null;
 
-                        if (request.Images.ContainsKey(PassbookImage.Icon))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.Icon]);
-                            jsonWriter.WritePropertyName(@"icon.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
-
-                        if (request.Images.ContainsKey(PassbookImage.IconRetina))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.IconRetina]);
-                            jsonWriter.WritePropertyName(@"icon@2x.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
-
-                        if (request.Images.ContainsKey(PassbookImage.Logo))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.Logo]);
-                            jsonWriter.WritePropertyName(@"logo.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
-
-                        if (request.Images.ContainsKey(PassbookImage.LogoRetina))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.LogoRetina]);
-                            jsonWriter.WritePropertyName(@"logo@2x.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
-
-                        if (request.Images.ContainsKey(PassbookImage.Background))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.Background]);
-                            jsonWriter.WritePropertyName(@"background.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
-
-                        if (request.Images.ContainsKey(PassbookImage.BackgroundRetina))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.BackgroundRetina]);
-                            jsonWriter.WritePropertyName(@"background@2x.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
-
-                        if (request.Images.ContainsKey(PassbookImage.Strip))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.Strip]);
-                            jsonWriter.WritePropertyName(@"strip.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
-
-                        if (request.Images.ContainsKey(PassbookImage.StripRetina))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.StripRetina]);
-                            jsonWriter.WritePropertyName(@"strip@2x.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
-
-                        if (request.Images.ContainsKey(PassbookImage.Thumbnail))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.Thumbnail]);
-                            jsonWriter.WritePropertyName(@"thumbnail.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
-
-                        if (request.Images.ContainsKey(PassbookImage.ThumbnailRetina))
-                        {
-                            hash = GetHashForBytes(request.Images[PassbookImage.ThumbnailRetina]);
-                            jsonWriter.WritePropertyName(@"thumbnail@2x.png");
-                            jsonWriter.WriteValue(hash.ToLower());
-                        }
+						foreach (KeyValuePair<PassbookImage, byte[]> image in request.Images)
+						{
+							hash = GetHashForBytes(image.Value);
+							jsonWriter.WritePropertyName(image.Key.ToFilename());
+							jsonWriter.WriteValue(hash.ToLower());
+						}
 
                         hash = GetHashForBytes(passFile);
                         jsonWriter.WritePropertyName(@"pass.json");
