@@ -518,34 +518,13 @@ namespace Passbook.Generator
             }
         }
 
-        private void OpenStyleSpecificKey(JsonWriter writer, PassGeneratorRequest request)
-        {
-            switch (request.Style)
-            {
-                case PassStyle.EventTicket:
-                    writer.WritePropertyName("eventTicket");
-                    writer.WriteStartObject();
-                    break;
-                case PassStyle.StoreCard:
-                    writer.WritePropertyName("storeCard");
-                    writer.WriteStartObject();
-                    break;
-                case PassStyle.BoardingPass:
-                    writer.WritePropertyName("boardingPass");
-                    writer.WriteStartObject();
-                    break;
-                case PassStyle.Generic:
-                    writer.WritePropertyName("generic");
-                    writer.WriteStartObject();
-                    break;
-                case PassStyle.Coupon:
-                    writer.WritePropertyName("coupon");
-                    writer.WriteStartObject();
-                    break;
-                default:
-                    throw new InvalidOperationException("Unsupported pass style specified");
-            }
-        }
+		private void OpenStyleSpecificKey(JsonWriter writer, PassGeneratorRequest request)
+		{
+			String key = request.Style.ToString();
+
+			writer.WritePropertyName(Char.ToLowerInvariant(key[0]) + key.Substring(1));
+			writer.WriteStartObject();
+		}
 
         private void CloseStyleSpecificKey(JsonWriter writer)
         {
