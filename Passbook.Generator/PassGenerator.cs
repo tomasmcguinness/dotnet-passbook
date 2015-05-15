@@ -466,16 +466,18 @@ namespace Passbook.Generator
             return certificate;
         }
 
-        private string GetHashForBytes(byte[] bytes)
-        {
-            SHA1CryptoServiceProvider oSHA1Hasher = new SHA1CryptoServiceProvider();
-            byte[] hashBytes;
+		private string GetHashForBytes(byte[] bytes)
+		{
+			using (SHA1CryptoServiceProvider oSHA1Hasher = new SHA1CryptoServiceProvider())
+			{
+				byte[] hashBytes;
 
-            hashBytes = oSHA1Hasher.ComputeHash(bytes);
+				hashBytes = oSHA1Hasher.ComputeHash(bytes);
 
-            string hash = System.BitConverter.ToString(hashBytes);
-            hash = hash.Replace("-", "");
-            return hash;
-        }
+				string hash = System.BitConverter.ToString(hashBytes);
+				hash = hash.Replace("-", "");
+				return hash;
+			}
+		}
     }
 }
