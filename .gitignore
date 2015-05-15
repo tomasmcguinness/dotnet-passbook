@@ -12,5 +12,3 @@ TestResults
 *.suo
 *.csproj.user
 
-packages/*
-!package/repositories.config
