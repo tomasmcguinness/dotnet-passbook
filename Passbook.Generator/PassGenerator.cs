@@ -10,11 +10,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Cms;
-using Org.BouncyCastle.Security;
-using Org.BouncyCastle.X509.Store;
 using Passbook.Generator.Fields;
 using Passbook.Generator.Exceptions;
+using System.Security.Cryptography.Pkcs;
 
 namespace Passbook.Generator
 {
@@ -316,67 +314,55 @@ namespace Passbook.Generator
                     manifestFile = ms.ToArray();
                 }
 
-                SignManigestFile(request);
+				SignManifestFile(request);
             }
         }
 
-        private void SignManigestFile(PassGeneratorRequest request)
-        {
-            Trace.TraceInformation("Signing the manifest file...");
+		private void SignManifestFile(PassGeneratorRequest request)
+		{
+			Trace.TraceInformation("Signing the manifest file...");
 
-            X509Certificate2 card = GetCertificate(request);
+			X509Certificate2 card = GetCertificate(request);
 
-            if (card == null)
-            {
-                throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
-            }
+			if (card == null)
+				throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
 
-            X509Certificate2 appleCA = GetAppleCertificate(request);
-            if (appleCA == null)
-            {
-                throw new FileNotFoundException("Apple Certficate could not be found. Please downloaad from http://www.apple.com/certificateauthority/ and install into your LOCAL MACHINE certificate store.");
-            }
+			X509Certificate2 appleCA = GetAppleCertificate(request);
 
-            try
-            {
-                Org.BouncyCastle.X509.X509Certificate cert = DotNetUtilities.FromX509Certificate(card);
-                Org.BouncyCastle.Crypto.AsymmetricKeyParameter privateKey = DotNetUtilities.GetKeyPair(card.PrivateKey).Private;
+			if (appleCA == null)
+				throw new FileNotFoundException("Apple Certificate could not be found. Please download it from http://www.apple.com/certificateauthority/ and install it into your LOCAL MACHINE certificate store.");
 
-                Trace.TraceInformation("Fetching Apple Certificate for signing..");
-                
-                Org.BouncyCastle.X509.X509Certificate appleCert = DotNetUtilities.FromX509Certificate(appleCA);
+			try
+			{
+				ContentInfo contentInfo = new ContentInfo(manifestFile);
 
-                Trace.TraceInformation("Constructing the certificate chain..");
+				SignedCms signing = new SignedCms(contentInfo, true);
 
-                ArrayList intermediateCerts = new ArrayList();
+				CmsSigner signer = new CmsSigner(SubjectIdentifierType.SubjectKeyIdentifier, card)
+				{
+					IncludeOption = X509IncludeOption.None
+				};
 
-                intermediateCerts.Add(appleCert);
-                intermediateCerts.Add(cert);
+				Trace.TraceInformation("Fetching Apple Certificate for signing..");
+				Trace.TraceInformation("Constructing the certificate chain..");
+				signer.Certificates.Add(appleCA);
+				signer.Certificates.Add(card);
 
-                Org.BouncyCastle.X509.Store.X509CollectionStoreParameters PP = new Org.BouncyCastle.X509.Store.X509CollectionStoreParameters(intermediateCerts);
-                Org.BouncyCastle.X509.Store.IX509Store st1 = Org.BouncyCastle.X509.Store.X509StoreFactory.Create("CERTIFICATE/COLLECTION", PP);
+				signer.SignedAttributes.Add(new Pkcs9SigningTime());
 
-                CmsSignedDataGenerator generator = new CmsSignedDataGenerator();
+				Trace.TraceInformation("Processing the signature..");
+				signing.ComputeSignature(signer);
 
-                generator.AddSigner(privateKey, cert, CmsSignedDataGenerator.DigestSha1);
-                generator.AddCertificates(st1);
+				signatureFile = signing.Encode();
 
-                Trace.TraceInformation("Processing the signature..");
-
-                CmsProcessable content = new CmsProcessableByteArray(manifestFile);
-                CmsSignedData signedData = generator.Generate(content, false);
-
-                signatureFile = signedData.GetEncoded();
-
-                Trace.TraceInformation("The file has been successfully signed!");
-
-            }
-            catch (Exception exp)
-            {
-                Trace.TraceError("Failed to sign the manifest file: [{0}]", exp.Message);
-                throw new ManifestSigningException("Failed to sign manifest", exp);
-            }
-        }
+				Trace.TraceInformation("The file has been successfully signed!");
+			}
+			catch (Exception exp)
+			{
+				Trace.TraceError("Failed to sign the manifest file: [{0}]", exp.Message);
+				throw new ManifestSigningException("Failed to sign manifest", exp);
+			}
+		}
 
         private X509Certificate2 GetAppleCertificate(PassGeneratorRequest request)
         {
