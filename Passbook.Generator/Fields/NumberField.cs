@@ -20,8 +20,14 @@ namespace Passbook.Generator.Fields
 		{
 		}
 
-        public string CurrencyCode { get; set; }
-        public FieldNumberStyle NumberStyle { get; set; }
+		/// <summary>
+		/// ISO 4217 currency code for the field’s value.
+		/// </summary>
+		public string CurrencyCode { get; set; }
+		/// <summary>
+		/// Style of number to display. Must be one of <see cref="FieldNumberStyle" />
+		/// </summary>
+		public FieldNumberStyle NumberStyle { get; set; }
         public decimal Value { get; set; }
 
         protected override void WriteKeys(Newtonsoft.Json.JsonWriter writer)
