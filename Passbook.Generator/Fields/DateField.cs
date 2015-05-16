@@ -26,7 +26,8 @@ namespace Passbook.Generator.Fields
         public DateTime Value { get; set; }
         public FieldDateTimeStyle DateStyle { get; set; }
         public FieldDateTimeStyle TimeStyle { get; set; }
-        public bool IsRelative { get; set; }
+        public bool? IsRelative { get; set; }
+		public bool? IgnoresTimeZone { get; set; }
 
         protected override void WriteKeys(Newtonsoft.Json.JsonWriter writer)
         {
@@ -42,8 +43,17 @@ namespace Passbook.Generator.Fields
                 writer.WriteValue(TimeStyle.ToString());
             }
 
-            writer.WritePropertyName("isRelative");
-            writer.WriteValue(IsRelative);
+			if (IsRelative.HasValue) 
+			{
+				writer.WritePropertyName ("isRelative");
+				writer.WriteValue(IsRelative.Value);
+			}
+
+			if (IgnoresTimeZone.HasValue) 
+			{
+				writer.WritePropertyName ("ignoresTimeZone");
+				writer.WriteValue (IgnoresTimeZone.Value);
+			}
         }
 
         protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
