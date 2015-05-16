@@ -8,13 +8,6 @@ namespace Passbook.Generator.Fields
             : base()
         { }
 
-        public NumberField(string key, string label, int value, FieldNumberStyle numberStyle)
-            : base(key, label)
-        {
-            this.Value = (decimal)value;
-            this.NumberStyle = numberStyle;
-        }
-
         public NumberField(string key, string label, decimal value, FieldNumberStyle numberStyle)
             : base(key, label)
         {
@@ -22,13 +15,18 @@ namespace Passbook.Generator.Fields
             this.NumberStyle = numberStyle;
         }
 
+		public NumberField(string key, string label, int value, FieldNumberStyle numberStyle)
+			: this(key, label, (decimal)value, numberStyle)
+		{
+		}
+
         public string CurrencyCode { get; set; }
         public FieldNumberStyle NumberStyle { get; set; }
         public decimal Value { get; set; }
 
         protected override void WriteKeys(Newtonsoft.Json.JsonWriter writer)
         {
-            if (CurrencyCode != null)
+			if (!string.IsNullOrEmpty(CurrencyCode))
             {
                 writer.WritePropertyName("currencyCode");
                 writer.WriteValue(CurrencyCode);
