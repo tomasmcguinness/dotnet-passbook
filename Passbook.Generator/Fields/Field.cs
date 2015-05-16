@@ -62,7 +62,7 @@ namespace Passbook.Generator.Fields
                 writer.WriteValue(TextAlignment.ToString());
             }
 
-            if (AttributedValue != null)
+			if (!string.IsNullOrEmpty(AttributedValue))
             {
                 writer.WritePropertyName("attributedValue");
                 writer.WriteValue(this.AttributedValue);
