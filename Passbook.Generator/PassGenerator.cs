@@ -28,9 +28,7 @@ namespace Passbook.Generator
         public byte[] Generate(PassGeneratorRequest request)
         {
             if (request == null)
-            {
                 throw new ArgumentNullException("request", "You must pass an instance of PassGeneratorRequest");
-            }
 
             if (request.IsValid)
             {
@@ -40,9 +38,7 @@ namespace Passbook.Generator
                 return pkPassFile;
             }
             else
-            {
                 throw new Exception("PassGeneratorRequest is not valid");
-            }
         }
 
         private void ZipPackage(PassGeneratorRequest request)
@@ -199,13 +195,9 @@ namespace Passbook.Generator
             try
             {
                 if (request.AppleWWDRCACertificate == null)
-                {
                     return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority, StoreLocation.LocalMachine);
-                }
                 else
-                {
                     return GetCertificateFromBytes(request.AppleWWDRCACertificate, null);
-                }
             }
             catch (Exception exp)
             {
@@ -221,13 +213,9 @@ namespace Passbook.Generator
             try
             {
                 if (request.Certificate == null)
-                {
                     return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My, request.CertLocation);
-                }
                 else
-                {
                     return GetCertificateFromBytes(request.Certificate, request.CertificatePassword);
-                }
             }
             catch (Exception exp)
             {
@@ -241,21 +229,12 @@ namespace Passbook.Generator
             X509Store store = new X509Store(storeName, storeLocation);
             store.Open(OpenFlags.ReadOnly);
 
-            X509Certificate2Collection certs = store.Certificates;
+			X509Certificate2Collection certs = store.Certificates.Find(X509FindType.FindByThumbprint, thumbPrint, true);
 
             if (certs.Count > 0)
             {
-                for (int i = 0; i < certs.Count; i++)
-                {
-                    X509Certificate2 cert = certs[i];
-
-                    Debug.WriteLine(cert.Thumbprint);
-
-                    if (string.Compare(cert.Thumbprint, thumbPrint, true) == 0)
-                    {
-                        return certs[i];
-                    }
-                }
+				Debug.WriteLine(certs[0].Thumbprint);
+				return certs[0];
             }
 
             return null;
@@ -268,9 +247,7 @@ namespace Passbook.Generator
             X509Certificate2 certificate = null;
 
             if (password == null)
-            {
                 certificate = new X509Certificate2(bytes);
-            }
             else
             {
                 X509KeyStorageFlags flags = X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable;
