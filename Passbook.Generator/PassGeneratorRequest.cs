@@ -107,6 +107,9 @@ namespace Passbook.Generator
 			this.RelevantLocations = new List<RelevantLocation>();
 			this.RelevantBeacons = new List<RelevantBeacon>();
 			this.AssociatedStoreIdentifiers = new List<int>();
+			this.Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+
+			this.UserInfo = null;
 		}
 
 		public void LoadTemplate(string template, TemplateModel parameters)
@@ -369,12 +372,15 @@ namespace Passbook.Generator
 
 		#region User Info Keys
 
-		// TODO
+		public Object UserInfo { get; set; }
 
 		#endregion
 
-		#region Helpers
+		#region Localization
+		public Dictionary<string, Dictionary<string, string>> Localizations { get; set; }
+		#endregion
 
+		#region Helpers
 		public void AddHeaderField(Field field)
 		{
 			this.HeaderFields.Add(field);
@@ -447,6 +453,19 @@ namespace Passbook.Generator
 			this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major, Minor = minor });
 		}
 
+		public void AddLocalization(string languageCode, string key, string value)
+		{
+			Dictionary<string, string> values;
+
+			if (!Localizations.TryGetValue(languageCode, out values))
+			{
+				values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+				Localizations.Add(languageCode, values);
+			}
+
+			values[key] = value;
+		}
+
 		public virtual void PopulateFields()
 		{
 			// NO OP.
@@ -460,6 +479,8 @@ namespace Passbook.Generator
 
 			Trace.TraceInformation("Writing standard keys..");
 			WriteStandardKeys(writer);
+			Trace.TraceInformation("Writing user information..");
+			WriteUserInfo(writer);
 			Trace.TraceInformation("Writing relevance keys..");
 			WriteRelevanceKeys(writer);
 			Trace.TraceInformation("Writing appearance keys..");
@@ -609,6 +630,15 @@ namespace Passbook.Generator
 				}
 
 				writer.WriteEndArray();
+			}
+		}
+
+		private void WriteUserInfo(JsonWriter writer)
+		{
+			if (UserInfo != null) 
+			{
+				writer.WritePropertyName("userInfo");
+				writer.WriteRawValue(JsonConvert.SerializeObject (UserInfo));
 			}
 		}
 

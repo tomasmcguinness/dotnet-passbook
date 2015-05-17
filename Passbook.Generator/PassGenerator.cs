@@ -21,6 +21,7 @@ namespace Passbook.Generator
         private byte[] passFile = null;
         private byte[] signatureFile = null;
         private byte[] manifestFile = null;
+		private Dictionary<string, byte[]> localizationFiles = null;
         private byte[] pkPassFile = null;
 
         private const string APPLE_CERTIFICATE_THUMBPRINT = "‎0950b6cd3d2f37ea246a1aaa20dfaadbd6fe1f75";
@@ -28,9 +29,7 @@ namespace Passbook.Generator
         public byte[] Generate(PassGeneratorRequest request)
         {
             if (request == null)
-            {
                 throw new ArgumentNullException("request", "You must pass an instance of PassGeneratorRequest");
-            }
 
             if (request.IsValid)
             {
@@ -40,9 +39,7 @@ namespace Passbook.Generator
                 return pkPassFile;
             }
             else
-            {
                 throw new Exception("PassGeneratorRequest is not valid");
-            }
         }
 
         private void ZipPackage(PassGeneratorRequest request)
@@ -51,15 +48,24 @@ namespace Passbook.Generator
             {
                 using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update, true))
                 {
-					ZipArchiveEntry imageEntry = null;
-
 					foreach (KeyValuePair<PassbookImage, byte[]> image in request.Images)
 					{	
-						imageEntry = archive.CreateEntry(image.Key.ToFilename());
+						ZipArchiveEntry imageEntry = archive.CreateEntry(image.Key.ToFilename());
 
 						using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
 						{
 							writer.Write(image.Value);
+							writer.Flush();
+						}
+					}
+
+					foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
+					{
+						ZipArchiveEntry localizationEntry = archive.CreateEntry(string.Format ("{0}.lproj/pass.strings", localization.Key.ToLower()));
+
+						using (BinaryWriter writer = new BinaryWriter(localizationEntry.Open()))
+						{
+							writer.Write(localization.Value);
 							writer.Flush();
 						}
 					}
@@ -94,6 +100,7 @@ namespace Passbook.Generator
         private void CreatePackage(PassGeneratorRequest request)
         {
             CreatePassFile(request);
+			GenerateLocalizationFiles(request);
             GenerateManifestFile(request);
         }
 
@@ -114,6 +121,28 @@ namespace Passbook.Generator
             }
         }
 
+		private void GenerateLocalizationFiles(PassGeneratorRequest request)
+		{
+			localizationFiles = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+
+			foreach (KeyValuePair<string, Dictionary<string, string>> localization in request.Localizations)
+			{
+				using (MemoryStream ms = new MemoryStream ()) 
+				{
+					using (StreamWriter sr = new StreamWriter (ms, Encoding.UTF8)) 
+					{
+						foreach (KeyValuePair<string, string> value in localization.Value)
+						{
+							sr.WriteLine("\"{0}\" = \"{1}\"\n", value.Key, value.Value);					
+						}
+
+						sr.Flush();
+						localizationFiles.Add(localization.Key, ms.ToArray());
+					}
+				}
+			}
+		}
+
         private void GenerateManifestFile(PassGeneratorRequest request)
         {
             using (MemoryStream ms = new MemoryStream())
@@ -127,16 +156,23 @@ namespace Passbook.Generator
 
                         string hash = null;
 
+						hash = GetHashForBytes(passFile);
+						jsonWriter.WritePropertyName(@"pass.json");
+						jsonWriter.WriteValue(hash);
+
 						foreach (KeyValuePair<PassbookImage, byte[]> image in request.Images)
 						{
 							hash = GetHashForBytes(image.Value);
 							jsonWriter.WritePropertyName(image.Key.ToFilename());
-							jsonWriter.WriteValue(hash.ToLower());
+							jsonWriter.WriteValue(hash);
 						}
 
-                        hash = GetHashForBytes(passFile);
-                        jsonWriter.WritePropertyName(@"pass.json");
-                        jsonWriter.WriteValue(hash.ToLower());
+						foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
+						{
+							hash = GetHashForBytes(localization.Value);
+							jsonWriter.WritePropertyName(string.Format("{0}.lproj/pass.strings", localization.Key.ToLower()));
+							jsonWriter.WriteValue(hash);
+						}
                     }
 
                     manifestFile = ms.ToArray();
@@ -199,13 +235,9 @@ namespace Passbook.Generator
             try
             {
                 if (request.AppleWWDRCACertificate == null)
-                {
                     return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority, StoreLocation.LocalMachine);
-                }
                 else
-                {
                     return GetCertificateFromBytes(request.AppleWWDRCACertificate, null);
-                }
             }
             catch (Exception exp)
             {
@@ -221,13 +253,9 @@ namespace Passbook.Generator
             try
             {
                 if (request.Certificate == null)
-                {
                     return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My, request.CertLocation);
-                }
                 else
-                {
                     return GetCertificateFromBytes(request.Certificate, request.CertificatePassword);
-                }
             }
             catch (Exception exp)
             {
@@ -241,21 +269,12 @@ namespace Passbook.Generator
             X509Store store = new X509Store(storeName, storeLocation);
             store.Open(OpenFlags.ReadOnly);
 
-            X509Certificate2Collection certs = store.Certificates;
+			X509Certificate2Collection certs = store.Certificates.Find(X509FindType.FindByThumbprint, thumbPrint, true);
 
             if (certs.Count > 0)
             {
-                for (int i = 0; i < certs.Count; i++)
-                {
-                    X509Certificate2 cert = certs[i];
-
-                    Debug.WriteLine(cert.Thumbprint);
-
-                    if (string.Compare(cert.Thumbprint, thumbPrint, true) == 0)
-                    {
-                        return certs[i];
-                    }
-                }
+				Debug.WriteLine(certs[0].Thumbprint);
+				return certs[0];
             }
 
             return null;
@@ -268,9 +287,7 @@ namespace Passbook.Generator
             X509Certificate2 certificate = null;
 
             if (password == null)
-            {
                 certificate = new X509Certificate2(bytes);
-            }
             else
             {
                 X509KeyStorageFlags flags = X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable;
@@ -282,15 +299,9 @@ namespace Passbook.Generator
 
 		private string GetHashForBytes(byte[] bytes)
 		{
-			using (SHA1CryptoServiceProvider oSHA1Hasher = new SHA1CryptoServiceProvider())
+			using (SHA1CryptoServiceProvider hasher = new SHA1CryptoServiceProvider())
 			{
-				byte[] hashBytes;
-
-				hashBytes = oSHA1Hasher.ComputeHash(bytes);
-
-				string hash = System.BitConverter.ToString(hashBytes);
-				hash = hash.Replace("-", "");
-				return hash;
+				return System.BitConverter.ToString(hasher.ComputeHash(bytes)).Replace("-", string.Empty).ToLower();
 			}
 		}
     }
