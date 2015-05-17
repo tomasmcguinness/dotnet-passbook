@@ -34,6 +34,8 @@ namespace Passbook.Generator
             this.RelevantBeacons = new List<RelevantBeacon>();
             this.AssociatedStoreIdentifiers = new List<int>();
 			this.Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+
+			this.UserInfo = null;
         }
 
         #region Standard Keys
@@ -243,7 +245,7 @@ namespace Passbook.Generator
 
         #region User Info Keys
 
-        // TODO
+		public Object UserInfo { get; set; }
 
         #endregion
 
@@ -350,6 +352,8 @@ namespace Passbook.Generator
 
             Trace.TraceInformation("Writing standard keys..");
 			WriteStandardKeys(writer);
+			Trace.TraceInformation("Writing user information..");
+			WriteUserInfo(writer);
             Trace.TraceInformation("Writing relevance keys..");
             WriteRelevanceKeys(writer);
             Trace.TraceInformation("Writing appearance keys..");
@@ -501,6 +505,15 @@ namespace Passbook.Generator
                 writer.WriteEndArray();
             }
         }
+
+		private void WriteUserInfo(JsonWriter writer)
+		{
+			if (UserInfo != null) 
+			{
+				writer.WritePropertyName("userInfo");
+				writer.WriteRawValue(JsonConvert.SerializeObject (UserInfo));
+			}
+		}
 
         private void WriteAppearanceKeys(JsonWriter writer)
         {
