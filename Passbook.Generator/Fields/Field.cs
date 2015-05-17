@@ -90,7 +90,7 @@ namespace Passbook.Generator.Fields
 		/// <para>The default value is all data detectors. Provide an empty array to use no data detectors.</para>
 		/// <para>Data detectors are applied only to back fields.</para>
 		/// </summary>
-		public DataDetectorTypes DataDetectorTypes { get; protected set; }
+		public DataDetectorTypes DataDetectorTypes { get; internal set; }
 
         public void Write(JsonWriter writer)
         {
