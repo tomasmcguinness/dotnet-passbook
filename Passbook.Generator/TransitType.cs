@@ -7,7 +7,7 @@ namespace Passbook.Generator
         PKTransitTypeAir,
         PKTransitTypeBoat,
         PKTransitTypeBus,
-        PKTransitTypeGenetic,
+        PKTransitTypeGeneric,
         PKTransitTypeTrain
     }
 }

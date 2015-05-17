@@ -6,11 +6,23 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Drawing;
 using System.Diagnostics;
+using Passbook.Generator.Configuration;
 
 namespace Passbook.Generator
 {
     public class PassGeneratorRequest
     {
+		private static string ConvertColor(string color)
+		{
+			if (!String.IsNullOrEmpty(color) && color.Substring(0, 1) == "#")
+			{
+				Color c = ColorTranslator.FromHtml(color);
+				return string.Format("rgb({0},{1},{2})", c.R, c.G, c.B);
+			}
+			else
+				return color;
+		}
+
         public PassGeneratorRequest()
         {
             this.HeaderFields = new List<Field>();
@@ -264,21 +276,25 @@ namespace Passbook.Generator
 
         public void AddBarCode(string message, BarcodeType type, string encoding, string altText)
         {
-            Barcode = new BarCode();
-            Barcode.Type = type;
-            Barcode.Message = message;
-            Barcode.Encoding = encoding;
-            Barcode.AlternateText = altText;
-        }
+			Barcode = new BarCode()
+			{
+				Type = type,
+				Message = message,
+				Encoding = encoding,
+				AlternateText = altText
+			};       
+		}
 
         public void AddBarCode(string message, BarcodeType type, string encoding)
         {
-            Barcode = new BarCode();
-            Barcode.Type = type;
-            Barcode.Message = message;
-            Barcode.Encoding = encoding;
-            Barcode.AlternateText = null;
-        }
+			Barcode = new BarCode() 
+			{
+				Type = type,
+				Message = message,
+				Encoding = encoding,
+				AlternateText = null
+			};
+		}
 
         public void AddLocation(double latitude, double longitude)
         {
@@ -317,16 +333,16 @@ namespace Passbook.Generator
             writer.WriteStartObject();
 
             Trace.TraceInformation("Writing standard keys..");
-            WriteStandardKeys(writer, this);
+			WriteStandardKeys(writer);
             Trace.TraceInformation("Writing relevance keys..");
-            WriteRelevanceKeys(writer, this);
+            WriteRelevanceKeys(writer);
             Trace.TraceInformation("Writing appearance keys..");
-            WriteAppearanceKeys(writer, this);
+            WriteAppearanceKeys(writer);
             Trace.TraceInformation("Writing expiration keys..");
-            WriteExpirationKeys(writer, this);
+            WriteExpirationKeys(writer);
 
             Trace.TraceInformation("Opening style section..");
-            OpenStyleSpecificKey(writer, this);
+            OpenStyleSpecificKey(writer);
 
             Trace.TraceInformation("Writing header fields");
             WriteSection(writer, "headerFields", this.HeaderFields);
@@ -348,24 +364,24 @@ namespace Passbook.Generator
             Trace.TraceInformation("Closing style section..");
             CloseStyleSpecificKey(writer);
 
-            WriteBarcode(writer, this);
-            WriteUrls(writer, this);
+            WriteBarcode(writer);
+            WriteUrls(writer);
 
             writer.WriteEndObject();
         }
 
-        private void WriteRelevanceKeys(JsonWriter writer, PassGeneratorRequest request)
+        private void WriteRelevanceKeys(JsonWriter writer)
         {
-            if (request.RelevantDate.HasValue)
+            if (RelevantDate.HasValue)
             {
                 writer.WritePropertyName("relevantDate");
-                writer.WriteValue(request.RelevantDate.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
+                writer.WriteValue(RelevantDate.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
             }
 
-            if (request.MaxDistance.HasValue)
+            if (MaxDistance.HasValue)
             {
                 writer.WritePropertyName("maxDistance");
-                writer.WriteValue(request.MaxDistance.Value.ToString());
+                writer.WriteValue(MaxDistance.Value.ToString());
             }
 
             if (RelevantLocations.Count > 0)
@@ -395,73 +411,73 @@ namespace Passbook.Generator
             }
         }
 
-        private void WriteUrls(JsonWriter writer, PassGeneratorRequest request)
+        private void WriteUrls(JsonWriter writer)
         {
-            if (!string.IsNullOrEmpty(request.AuthenticationToken))
+            if (!string.IsNullOrEmpty(AuthenticationToken))
             {
                 writer.WritePropertyName("authenticationToken");
-                writer.WriteValue(request.AuthenticationToken);
+                writer.WriteValue(AuthenticationToken);
                 writer.WritePropertyName("webServiceURL");
-                writer.WriteValue(request.WebServiceUrl);
+                writer.WriteValue(WebServiceUrl);
             }
         }
 
-        private void WriteBarcode(JsonWriter writer, PassGeneratorRequest request)
+        private void WriteBarcode(JsonWriter writer)
         {
-            if (Barcode != null)
+			if (Barcode != null)
             {
                 writer.WritePropertyName("barcode");
 
                 writer.WriteStartObject();
                 writer.WritePropertyName("format");
-                writer.WriteValue(request.Barcode.Type.ToString());
+                writer.WriteValue(Barcode.Type.ToString());
                 writer.WritePropertyName("message");
-                writer.WriteValue(request.Barcode.Message);
+                writer.WriteValue(Barcode.Message);
                 writer.WritePropertyName("messageEncoding");
-                writer.WriteValue(request.Barcode.Encoding);
+                writer.WriteValue(Barcode.Encoding);
 
-                if (request.Barcode.AlternateText != null)
+				if (!String.IsNullOrEmpty(Barcode.AlternateText))
                 {
                     writer.WritePropertyName("altText");
-                    writer.WriteValue(request.Barcode.AlternateText);
+                    writer.WriteValue(Barcode.AlternateText);
                 }
 
                 writer.WriteEndObject();
             }
         }
 
-        private void WriteStandardKeys(JsonWriter writer, PassGeneratorRequest request)
+        private void WriteStandardKeys(JsonWriter writer)
         {
             writer.WritePropertyName("passTypeIdentifier");
-            writer.WriteValue(request.PassTypeIdentifier);
+            writer.WriteValue(PassTypeIdentifier);
 
             writer.WritePropertyName("formatVersion");
-            writer.WriteValue(request.FormatVersion);
+            writer.WriteValue(FormatVersion);
 
             writer.WritePropertyName("serialNumber");
-            writer.WriteValue(request.SerialNumber);
+            writer.WriteValue(SerialNumber);
 
             writer.WritePropertyName("description");
-            writer.WriteValue(request.Description);
+            writer.WriteValue(Description);
 
             writer.WritePropertyName("organizationName");
-            writer.WriteValue(request.OrganizationName);
+            writer.WriteValue(OrganizationName);
 
             writer.WritePropertyName("teamIdentifier");
-            writer.WriteValue(request.TeamIdentifier);
+            writer.WriteValue(TeamIdentifier);
 
-            if (request.LogoText != null)
+			if (!String.IsNullOrEmpty(LogoText))
             {
                 writer.WritePropertyName("logoText");
-                writer.WriteValue(request.LogoText);
+                writer.WriteValue(LogoText);
             }
 
-            if (this.AssociatedStoreIdentifiers.Count > 0)
+			if (AssociatedStoreIdentifiers.Count > 0)
             {
                 writer.WritePropertyName("associatedStoreIdentifiers");
                 writer.WriteStartArray();
 
-                foreach (int storeIdentifier in this.AssociatedStoreIdentifiers)
+				foreach (int storeIdentifier in AssociatedStoreIdentifiers)
                 {
                     writer.WriteValue(storeIdentifier);
                 }
@@ -470,68 +486,68 @@ namespace Passbook.Generator
             }
         }
 
-        private void WriteAppearanceKeys(JsonWriter writer, PassGeneratorRequest request)
+        private void WriteAppearanceKeys(JsonWriter writer)
         {
-            if (request.ForegroundColor != null)
+			if (!String.IsNullOrEmpty(ForegroundColor))
             {
                 writer.WritePropertyName("foregroundColor");
-                writer.WriteValue(ConvertColor(request.ForegroundColor));
+                writer.WriteValue(ConvertColor(ForegroundColor));
             }
 
-            if (request.BackgroundColor != null)
+			if (!String.IsNullOrEmpty(BackgroundColor))
             {
                 writer.WritePropertyName("backgroundColor");
-                writer.WriteValue(ConvertColor(request.BackgroundColor));
+                writer.WriteValue(ConvertColor(BackgroundColor));
             }
 
-            if (request.LabelColor != null)
+			if (!String.IsNullOrEmpty(LabelColor))
             {
                 writer.WritePropertyName("labelColor");
-                writer.WriteValue(ConvertColor(request.LabelColor));
+                writer.WriteValue(ConvertColor(LabelColor));
             }
 
-            if (request.SuppressStripShine.HasValue)
+            if (SuppressStripShine.HasValue)
             {
                 writer.WritePropertyName("suppressStripShine");
-                writer.WriteValue(request.SuppressStripShine.Value);
+                writer.WriteValue(SuppressStripShine.Value);
             }
 
-            if (request.GroupingIdentifier != null)
+			if (!String.IsNullOrEmpty(GroupingIdentifier))
             {
                 writer.WritePropertyName("groupingIdentifier");
-                writer.WriteValue(request.GroupingIdentifier);
+                writer.WriteValue(GroupingIdentifier);
             }
         }
 
-        private void WriteExpirationKeys(JsonWriter writer, PassGeneratorRequest request)
+        private void WriteExpirationKeys(JsonWriter writer)
         {
-            if (request.ExpirationDate.HasValue)
+            if (ExpirationDate.HasValue)
             {
                 writer.WritePropertyName("expirationDate");
-                writer.WriteValue(request.ExpirationDate.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
+                writer.WriteValue(ExpirationDate.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
             }
 
-            if (request.Voided.HasValue)
+            if (Voided.HasValue)
             {
                 writer.WritePropertyName("voided");
-                writer.WriteValue(request.Voided.Value);
+                writer.WriteValue(Voided.Value);
             }
         }
 
-		private void OpenStyleSpecificKey(JsonWriter writer, PassGeneratorRequest request)
+		private void OpenStyleSpecificKey(JsonWriter writer)
 		{
-			String key = request.Style.ToString();
+			String key = Style.ToString();
 
 			writer.WritePropertyName(Char.ToLowerInvariant(key[0]) + key.Substring(1));
 			writer.WriteStartObject();
 		}
 
-        private void CloseStyleSpecificKey(JsonWriter writer)
+        private static void CloseStyleSpecificKey(JsonWriter writer)
         {
             writer.WriteEndObject();
         }
 
-        private void WriteSection(JsonWriter writer, string sectionName, List<Field> fields)
+        private static void WriteSection(JsonWriter writer, string sectionName, List<Field> fields)
         {
             writer.WritePropertyName(sectionName);
             writer.WriteStartArray();
@@ -543,20 +559,6 @@ namespace Passbook.Generator
 
             writer.WriteEndArray();
         }
-
-        private string ConvertColor(string colour)
-        {
-            if (colour != null && colour.Length > 0 && colour.Substring(0, 1) == "#")
-            {
-                Color c = ColorTranslator.FromHtml(colour);
-                return string.Format("rgb({0},{1},{2})", c.R, c.G, c.B);
-            }
-            else
-            {
-                return colour;
-            }
-        }
-
         #endregion
 
         public bool IsValid { get { return true; } }
