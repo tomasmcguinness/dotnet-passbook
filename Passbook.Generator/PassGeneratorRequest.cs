@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Drawing;
 using System.Diagnostics;
-using Passbook.Generator.Configuration;
 
 namespace Passbook.Generator
 {
