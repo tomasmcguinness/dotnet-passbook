@@ -33,6 +33,7 @@ namespace Passbook.Generator
             this.RelevantLocations = new List<RelevantLocation>();
             this.RelevantBeacons = new List<RelevantBeacon>();
             this.AssociatedStoreIdentifiers = new List<int>();
+			this.Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
         }
 
         #region Standard Keys
@@ -246,8 +247,11 @@ namespace Passbook.Generator
 
         #endregion
 
-        #region Helpers
+		#region Localization
+		public Dictionary<string, Dictionary<string, string>> Localizations { get; set; }
+		#endregion
 
+        #region Helpers
         public void AddHeaderField(Field field)
         {
             this.HeaderFields.Add(field);
@@ -319,6 +323,19 @@ namespace Passbook.Generator
         {
             this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major, Minor = minor });
         }
+
+		public void AddLocalization(string languageCode, string key, string value)
+		{
+			Dictionary<string, string> values;
+
+			if (!Localizations.TryGetValue(languageCode, out values))
+			{
+				values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+				Localizations.Add(languageCode, values);
+			}
+
+			values[key] = value;
+		}
 
         public virtual void PopulateFields()
         {

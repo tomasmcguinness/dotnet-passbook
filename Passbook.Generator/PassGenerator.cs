@@ -21,6 +21,7 @@ namespace Passbook.Generator
         private byte[] passFile = null;
         private byte[] signatureFile = null;
         private byte[] manifestFile = null;
+		private Dictionary<string, byte[]> localizationFiles = null;
         private byte[] pkPassFile = null;
 
         private const string APPLE_CERTIFICATE_THUMBPRINT = "‎0950b6cd3d2f37ea246a1aaa20dfaadbd6fe1f75";
@@ -47,15 +48,24 @@ namespace Passbook.Generator
             {
                 using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update, true))
                 {
-					ZipArchiveEntry imageEntry = null;
-
 					foreach (KeyValuePair<PassbookImage, byte[]> image in request.Images)
 					{	
-						imageEntry = archive.CreateEntry(image.Key.ToFilename());
+						ZipArchiveEntry imageEntry = archive.CreateEntry(image.Key.ToFilename());
 
 						using (BinaryWriter writer = new BinaryWriter(imageEntry.Open()))
 						{
 							writer.Write(image.Value);
+							writer.Flush();
+						}
+					}
+
+					foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
+					{
+						ZipArchiveEntry localizationEntry = archive.CreateEntry(string.Format ("{0}.lproj/pass.strings", localization.Key.ToLower()));
+
+						using (BinaryWriter writer = new BinaryWriter(localizationEntry.Open()))
+						{
+							writer.Write(localization.Value);
 							writer.Flush();
 						}
 					}
@@ -90,6 +100,7 @@ namespace Passbook.Generator
         private void CreatePackage(PassGeneratorRequest request)
         {
             CreatePassFile(request);
+			GenerateLocalizationFiles(request);
             GenerateManifestFile(request);
         }
 
@@ -110,6 +121,28 @@ namespace Passbook.Generator
             }
         }
 
+		private void GenerateLocalizationFiles(PassGeneratorRequest request)
+		{
+			localizationFiles = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+
+			foreach (KeyValuePair<string, Dictionary<string, string>> localization in request.Localizations)
+			{
+				using (MemoryStream ms = new MemoryStream ()) 
+				{
+					using (StreamWriter sr = new StreamWriter (ms, Encoding.UTF8)) 
+					{
+						foreach (KeyValuePair<string, string> value in localization.Value)
+						{
+							sr.WriteLine("\"{0}\" = \"{1}\"\n", value.Key, value.Value);					
+						}
+
+						sr.Flush();
+						localizationFiles.Add(localization.Key, ms.ToArray());
+					}
+				}
+			}
+		}
+
         private void GenerateManifestFile(PassGeneratorRequest request)
         {
             using (MemoryStream ms = new MemoryStream())
@@ -123,16 +156,23 @@ namespace Passbook.Generator
 
                         string hash = null;
 
+						hash = GetHashForBytes(passFile);
+						jsonWriter.WritePropertyName(@"pass.json");
+						jsonWriter.WriteValue(hash);
+
 						foreach (KeyValuePair<PassbookImage, byte[]> image in request.Images)
 						{
 							hash = GetHashForBytes(image.Value);
 							jsonWriter.WritePropertyName(image.Key.ToFilename());
-							jsonWriter.WriteValue(hash.ToLower());
+							jsonWriter.WriteValue(hash);
 						}
 
-                        hash = GetHashForBytes(passFile);
-                        jsonWriter.WritePropertyName(@"pass.json");
-                        jsonWriter.WriteValue(hash.ToLower());
+						foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
+						{
+							hash = GetHashForBytes(localization.Value);
+							jsonWriter.WritePropertyName(string.Format("{0}.lproj/pass.strings", localization.Key.ToLower()));
+							jsonWriter.WriteValue(hash);
+						}
                     }
 
                     manifestFile = ms.ToArray();
@@ -259,15 +299,9 @@ namespace Passbook.Generator
 
 		private string GetHashForBytes(byte[] bytes)
 		{
-			using (SHA1CryptoServiceProvider oSHA1Hasher = new SHA1CryptoServiceProvider())
+			using (SHA1CryptoServiceProvider hasher = new SHA1CryptoServiceProvider())
 			{
-				byte[] hashBytes;
-
-				hashBytes = oSHA1Hasher.ComputeHash(bytes);
-
-				string hash = System.BitConverter.ToString(hashBytes);
-				hash = hash.Replace("-", "");
-				return hash;
+				return System.BitConverter.ToString(hasher.ComputeHash(bytes)).Replace("-", string.Empty).ToLower();
 			}
 		}
     }
