@@ -90,7 +90,7 @@ namespace Passbook.Generator.Fields
 		/// <para>The default value is all data detectors. Provide an empty array to use no data detectors.</para>
 		/// <para>Data detectors are applied only to back fields.</para>
 		/// </summary>
-		public DataDetectorTypes DataDetectorTypes { get; protected set; }
+		public DataDetectorTypes DataDetectorTypes { get; internal set; }
 
         public void Write(JsonWriter writer)
         {
@@ -143,7 +143,9 @@ namespace Passbook.Generator.Fields
 				writer.WriteStartArray();
 
 				foreach (Enum value in Enum.GetValues(typeof(DataDetectorTypes)))
-					if (value.CompareTo(DataDetectorTypes.PKDataDetectorNone) != 0 && DataDetectorTypes.HasFlag(value))
+					if (value.CompareTo(DataDetectorTypes.PKDataDetectorNone) != 0 &&
+						value.CompareTo(DataDetectorTypes.PKDataDetectorAll) != 0 &&
+						DataDetectorTypes.HasFlag(value))
 						writer.WriteValue(value.ToString());
 
 				writer.WriteEndArray();

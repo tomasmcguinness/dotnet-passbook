@@ -63,6 +63,9 @@
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\ManifestSigningException.cs" />
@@ -86,6 +89,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TransitType.cs" />
     <Compile Include="Fields\DataDetectorType.cs" />
+    <Compile Include="Configuration\PassbookGenerator.cs" />
+    <Compile Include="Configuration\StoreIdentifier.cs" />
+    <Compile Include="Configuration\Template.cs" />
+    <Compile Include="Configuration\ConfigurationProperty.cs" />
+    <Compile Include="Configuration\Field.cs" />
+    <Compile Include="Configuration\TemplateModel.cs" />
+    <Compile Include="Configuration\Image.cs" />
+    <Compile Include="Configuration\Localization.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -100,4 +111,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <Folder Include="Configuration\" />
+  </ItemGroup>
 </Project>

@@ -112,6 +112,8 @@ namespace Passbook.Generator
                 {
                     using (JsonWriter writer = new JsonTextWriter(sr))
                     {
+						writer.Formatting = Formatting.Indented;
+
                         Trace.TraceInformation("Writing JSON...");
                         request.Write(writer);
                     }
@@ -133,7 +135,7 @@ namespace Passbook.Generator
 					{
 						foreach (KeyValuePair<string, string> value in localization.Value)
 						{
-							sr.WriteLine("\"{0}\" = \"{1}\"\n", value.Key, value.Value);					
+							sr.WriteLine("\"{0}\" = \"{1}\";\n", value.Key, value.Value);					
 						}
 
 						sr.Flush();
