@@ -135,7 +135,7 @@ namespace Passbook.Generator
 					{
 						foreach (KeyValuePair<string, string> value in localization.Value)
 						{
-							sr.WriteLine("\"{0}\" = \"{1}\"\n", value.Key, value.Value);					
+							sr.WriteLine("\"{0}\" = \"{1}\";\n", value.Key, value.Value);					
 						}
 
 						sr.Flush();
