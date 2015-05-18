@@ -152,8 +152,7 @@ namespace Passbook.Generator
 			this.TeamIdentifier = templateConfig.TeamIdentifier.Value;
 
 			// Associated App Keys
-			if (templateConfig.AppLaunchURL != null)
-				this.AppLaunchURL = templateConfig.AppLaunchURL.Value;
+			this.AppLaunchURL = templateConfig.AppLaunchURL.Value;
 
 			this.AssociatedStoreIdentifiers.AddRange(templateConfig.AssociatedStoreIdentifiers.OfType<ConfigurationProperty<int>>().Select(s => s.Value));
 
