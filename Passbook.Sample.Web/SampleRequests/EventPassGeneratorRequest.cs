@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Dynamic;
+using Passbook.Generator.Configuration;
 
 namespace Passbook.Sample.Web.SampleRequests
 {
@@ -13,6 +15,12 @@ namespace Passbook.Sample.Web.SampleRequests
         public EventPassGeneratorRequest()
         {
             this.Style = PassStyle.EventTicket;
+
+			Passbook.Generator.Configuration.TemplateModel model = new Passbook.Generator.Configuration.TemplateModel();
+
+			model.AddField("AuxField1", FieldAttribute.Value, "Aux Value 1");
+		
+			LoadTemplate ("test", model);
         }
 
         public string EventName { get; set; }
