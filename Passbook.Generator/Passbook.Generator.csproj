@@ -96,6 +96,7 @@
     <Compile Include="Configuration\Field.cs" />
     <Compile Include="Configuration\TemplateModel.cs" />
     <Compile Include="Configuration\Image.cs" />
+    <Compile Include="Configuration\Localization.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

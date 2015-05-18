@@ -286,6 +286,15 @@ namespace Passbook.Generator.Configuration
 			set { this ["images"] = value; }
 		}
 		#endregion
+
+		#region Localizations
+		[ConfigurationProperty("localizations", IsDefaultCollection = false)]
+		public LanguageCollection Localizations
+		{
+			get { return (LanguageCollection)this["localizations"]; }
+			set { this["localizations"] = value; }
+		}
+		#endregion
 	}
 }
 
