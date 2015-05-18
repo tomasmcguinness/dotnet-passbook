@@ -31,9 +31,9 @@ namespace Passbook.Generator.Configuration
 		}
 
 		[ConfigurationProperty("fileName", DefaultValue = null, IsRequired = true, IsKey = false)]
-		public ConfigurationProperty<String> FileName
+		public string FileName
 		{
-			get { return (ConfigurationProperty<String>)this["fileName"]; }
+			get { return (string)this["fileName"]; }
 			set	{ this["fileName"] = value; }
 		}
 	}
