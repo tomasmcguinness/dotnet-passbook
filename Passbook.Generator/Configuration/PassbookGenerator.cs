@@ -5,11 +5,11 @@ namespace Passbook.Generator.Configuration
 {
 	public sealed class PassbookGeneratorSection : ConfigurationSection
 	{
-		[ConfigurationProperty("appleCertificate", DefaultValue = null, IsRequired = true, IsKey = false)]
-		public string AppleCertificate
+		[ConfigurationProperty("appleWWDRCACertificate", DefaultValue = null, IsRequired = true, IsKey = false)]
+		public string AppleWWDRCACertificate
 		{
-			get { return this["appleCertificate"] as String; }
-			set	{ this["appleCertificate"] = value; }
+			get { return this["appleWWDRCACertificate"] as String; }
+			set	{ this["appleWWDRCACertificate"] = value; }
 		}
 
 		[ConfigurationProperty("templates", IsDefaultCollection = false)]
