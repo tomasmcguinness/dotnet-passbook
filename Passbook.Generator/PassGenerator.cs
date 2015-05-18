@@ -112,6 +112,8 @@ namespace Passbook.Generator
                 {
                     using (JsonWriter writer = new JsonTextWriter(sr))
                     {
+						writer.Formatting = Formatting.Indented;
+
                         Trace.TraceInformation("Writing JSON...");
                         request.Write(writer);
                     }
