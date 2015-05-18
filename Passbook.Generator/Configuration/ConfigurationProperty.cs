@@ -15,7 +15,11 @@ namespace Passbook.Generator.Configuration
 		protected override void DeserializeElement(XmlReader reader, bool s) 
 		{
 			String content = reader.ReadElementContentAsString();
-			Value = (T)Convert.ChangeType(content, typeof(T));
+
+			if (!String.IsNullOrEmpty(content))
+				Value = (T)Convert.ChangeType(content, typeof(T));
+			else
+				Value = default(T);
 		}
 	}
 }
