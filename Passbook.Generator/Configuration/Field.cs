@@ -182,7 +182,7 @@ namespace Passbook.Generator.Configuration
 		/// <summary>
 		/// Required. Value of the field.
 		/// </summary>
-		[ConfigurationProperty("value", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("value", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public ConfigurationProperty<String> Value
 		{
 			get { return (ConfigurationProperty<String>)this["value"]; }
@@ -195,7 +195,7 @@ namespace Passbook.Generator.Configuration
 		///	This key does not affect how relevance is calculated.
 		///	Available in iOS 7.0.
 		/// </summary>
-		[ConfigurationProperty("ignoresTimeZone", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("ignoresTimeZone", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public bool? IgnoresTimeZone
 		{
 			get 
@@ -220,7 +220,7 @@ namespace Passbook.Generator.Configuration
 		/// Optional. If true, the label’s value is displayed as a relative date; otherwise, it is displayed as an absolute date. The default value is false.
 		/// This does not affect how relevance is calculated.
 		/// </summary>
-		[ConfigurationProperty("isRelative", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("isRelative", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public bool? IsRelative
 		{
 			get 
@@ -244,7 +244,7 @@ namespace Passbook.Generator.Configuration
 		/// <summary>
 		/// ISO 4217 currency code for the field’s value.
 		/// </summary>
-		[ConfigurationProperty("currencyCode", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("currencyCode", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public ConfigurationProperty<String> CurrencyCode
 		{
 			get { return (ConfigurationProperty<String>)this["currencyCode"]; }
