@@ -174,6 +174,14 @@ namespace Passbook.Generator
 			this.HeaderFields.AddRange(TemplateFields(templateConfig.HeaderFields, parameters));
 			this.PrimaryFields.AddRange(TemplateFields(templateConfig.PrimaryFields, parameters));
 			this.SecondaryFields.AddRange(TemplateFields(templateConfig.SecondaryFields, parameters));
+
+			// Images
+			foreach (ImageElement image in templateConfig.Images)
+			{
+				String imagePath = TemplateModel.MapPath(image.FileName);
+				if (File.Exists(imagePath))
+					this.Images.Add(image.Type, File.ReadAllBytes(imagePath));
+			}
 		}
 
 		#region Standard Keys
