@@ -7,6 +7,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Drawing;
 using System.Diagnostics;
 using Passbook.Generator.Configuration;
+using System.IO;
 
 namespace Passbook.Generator
 {
@@ -120,6 +121,10 @@ namespace Passbook.Generator
 			if (section == null)
 				throw new System.Configuration.ConfigurationErrorsException("\"passbookGenerator\" section could not be loaded.");
 
+			String path = TemplateModel.MapPath(section.AppleWWDRCACertificate);
+			if (File.Exists(path))
+				this.AppleWWDRCACertificate = File.ReadAllBytes(path);
+
 			TemplateElement templateConfig = section
 				.Templates
 				.OfType<TemplateElement>()
@@ -127,6 +132,13 @@ namespace Passbook.Generator
 
 			if (templateConfig == null)
 				throw new System.Configuration.ConfigurationErrorsException(String.Format("Configuration for template \"{0}\" could not be loaded.", template));
+
+			// Certificates
+			this.CertificatePassword = templateConfig.CertificatePassword;
+
+			path = TemplateModel.MapPath(templateConfig.Certificate);
+			if (File.Exists(path))
+				this.Certificate = File.ReadAllBytes(path);
 
 			this.Style = templateConfig.PassStyle;
 
