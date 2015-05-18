@@ -182,6 +182,23 @@ namespace Passbook.Generator
 				if (File.Exists(imagePath))
 					this.Images.Add(image.Type, File.ReadAllBytes(imagePath));
 			}
+
+			// Localization
+			foreach (LanguageElement localization in templateConfig.Localizations)
+			{
+				Dictionary<string, string> values;
+
+				if (!Localizations.TryGetValue(localization.Code, out values))
+				{
+					values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+					Localizations.Add(localization.Code, values);
+				}
+
+				foreach (LocalizedEntry entry in localization.Localizations)
+				{
+					values[entry.Key] = entry.Value;					
+				}
+			}
 		}
 
 		#region Standard Keys
