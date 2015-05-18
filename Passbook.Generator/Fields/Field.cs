@@ -143,7 +143,9 @@ namespace Passbook.Generator.Fields
 				writer.WriteStartArray();
 
 				foreach (Enum value in Enum.GetValues(typeof(DataDetectorTypes)))
-					if (value.CompareTo(DataDetectorTypes.PKDataDetectorNone) != 0 && DataDetectorTypes.HasFlag(value))
+					if (value.CompareTo(DataDetectorTypes.PKDataDetectorNone) != 0 &&
+						value.CompareTo(DataDetectorTypes.PKDataDetectorAll) != 0 &&
+						DataDetectorTypes.HasFlag(value))
 						writer.WriteValue(value.ToString());
 
 				writer.WriteEndArray();
