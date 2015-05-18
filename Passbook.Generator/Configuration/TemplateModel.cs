@@ -68,7 +68,7 @@ namespace Passbook.Generator.Configuration
 			Object value;
 
 			if (mData.TryGetValue(FieldName(key, fieldAttribute), out value))
-				return (T)value;
+				return (T)Convert.ChangeType(value, typeof(T));
 
 			return defaultValue;
 		}
