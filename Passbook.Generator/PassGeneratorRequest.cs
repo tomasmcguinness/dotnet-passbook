@@ -41,10 +41,10 @@ namespace Passbook.Generator
 				case FieldType.Date:
 					DateField dateField = new DateField ();
 
-					if (dateField.DateStyle != FieldDateTimeStyle.Unspecified)
+					if (fieldElement.DateStyle != FieldDateTimeStyle.Unspecified)
 						dateField.DateStyle = fieldElement.DateStyle;
 
-					if (dateField.TimeStyle != FieldDateTimeStyle.Unspecified)
+					if (fieldElement.TimeStyle != FieldDateTimeStyle.Unspecified)
 						dateField.TimeStyle = fieldElement.TimeStyle;
 
 					if (fieldElement.IgnoresTimeZone.HasValue)
