@@ -176,12 +176,18 @@ namespace Passbook.Generator
 			this.PrimaryFields.AddRange(TemplateFields(templateConfig.PrimaryFields, parameters));
 			this.SecondaryFields.AddRange(TemplateFields(templateConfig.SecondaryFields, parameters));
 
-			// Images
+			// Template Images
 			foreach (ImageElement image in templateConfig.Images)
 			{
 				String imagePath = TemplateModel.MapPath(image.FileName);
 				if (File.Exists(imagePath))
-					this.Images.Add(image.Type, File.ReadAllBytes(imagePath));
+					this.Images[image.Type] = File.ReadAllBytes(imagePath);
+			}
+
+			// Model Images (Overwriting template images)
+			foreach (KeyValuePair<PassbookImage, byte[]> image in parameters.GetImages())
+			{
+				this.Images[image.Key] = image.Value;
 			}
 
 			// Localization
