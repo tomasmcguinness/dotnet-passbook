@@ -47,7 +47,12 @@ namespace Passbook.Generator.Fields
 
         protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
         {
-            writer.WriteValue(Value);
+			// Non-fractional (PassWallet for Android requires this)
+			if ((decimal)((int)Value) == Value)
+				writer.WriteValue((int)Value);
+			// Fractional
+			else
+				writer.WriteValue(Value);
         }
 
         public override void SetValue(object value)
