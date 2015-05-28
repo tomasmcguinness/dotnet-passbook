@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Formatting;
-using System.Text;
 using System.Threading.Tasks;
+using System.Net;
 
 namespace Passbook.Sample.Web.Controllers
 {
@@ -11,7 +9,7 @@ namespace Passbook.Sample.Web.Controllers
     {
         public override bool CanReadType(Type type)
         {
-            return true;
+            return false;
         }
 
         public override bool CanWriteType(Type type)
@@ -19,18 +17,13 @@ namespace Passbook.Sample.Web.Controllers
             return type == typeof(Byte[]);
         }
 
-        public override System.Threading.Tasks.Task<object> ReadFromStreamAsync(Type type, System.IO.Stream stream, System.Net.Http.Headers.HttpContentHeaders contentHeaders, IFormatterLogger formatterLogger)
+        public override Task WriteToStreamAsync(Type type, object value, System.IO.Stream writeStream, System.Net.Http.HttpContent content, TransportContext transportContext, System.Threading.CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-        }
-
-        public override System.Threading.Tasks.Task WriteToStreamAsync(Type type, object value, System.IO.Stream stream, System.Net.Http.Headers.HttpContentHeaders contentHeaders, System.Net.TransportContext transportContext)
-        {
-            var task = Task.Factory.StartNew(() =>
+            Task task = Task.Factory.StartNew(() =>
                 {
-                    var array = value as byte[];
-                    stream.Write(array, 0, array.Length);
-                    stream.Flush();
+                    Byte[] array = value as Byte[];
+                    writeStream.Write(array, 0, array.Length);
+                    writeStream.Flush();
                 });
 
             return task;
