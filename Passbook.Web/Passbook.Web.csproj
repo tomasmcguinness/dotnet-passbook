@@ -53,6 +53,7 @@
     <Compile Include="PassProvider.cs" />
     <Compile Include="Exceptions\PassProviderException.cs" />
     <Compile Include="Serialization\ApiResult.cs" />
+    <Compile Include="Extensions\PassbookContentResult.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -61,5 +62,6 @@
   <ItemGroup>
     <Folder Include="Serialization\" />
     <Folder Include="Exceptions\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>

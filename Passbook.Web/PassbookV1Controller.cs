@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Globalization;
+using Passbook.Web.Extensions;
 
 namespace Passbook.Web
 {
@@ -241,9 +242,7 @@ namespace Passbook.Web
 				byte[] pass = provider.GetPass(passTypeIdentifier, serialNumber);
 
 				if (pass != null)
-				{
-					//return new PassbookContentResult(pass);
-				}
+					return new PassbookContentResult(pass);
 
 				Trace.TraceError("GetPass: No pass available for [{0}, {1}]", passTypeIdentifier, serialNumber);	
 
