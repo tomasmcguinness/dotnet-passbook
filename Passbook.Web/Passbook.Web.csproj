@@ -54,6 +54,8 @@
     <Compile Include="Exceptions\PassProviderException.cs" />
     <Compile Include="Serialization\ApiResult.cs" />
     <Compile Include="Extensions\PassbookContentResult.cs" />
+    <Compile Include="PassbookController.cs" />
+    <Compile Include="PassbookBaseController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
@@ -63,5 +65,11 @@
     <Folder Include="Serialization\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Passbook.Generator\Passbook.Generator.csproj">
+      <Project>{CEC0A9CE-3250-410F-9469-38EEF0F9C8B6}</Project>
+      <Name>Passbook.Generator</Name>
+    </ProjectReference>
   </ItemGroup>
 </Project>
