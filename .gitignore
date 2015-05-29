@@ -4,3 +4,11 @@ obj
 
 # mstest test results
 TestResults
+
+# Xamarin Studio / Mono ignores
+*.userprefs
+
+# Visual Studio ignores
+*.suo
+*.csproj.user
+
