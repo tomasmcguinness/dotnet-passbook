@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 using System.Globalization;
 using Passbook.Web.Extensions;
+using Passbook.Generator;
 
 namespace Passbook.Web
 {
@@ -19,68 +20,10 @@ namespace Passbook.Web
 	/// (https://developer.apple.com/library/ios/documentation/PassKit/Reference/PassKit_WebService/WebService.html)
 	/// </summary>
 	[RoutePrefix("api/passbook/v1")]
-	public class PassbookV1Controller : System.Web.Http.ApiController, IDisposable
+    public class PassbookV1Controller : PassbookBaseController
 	{
-		private string mAuthorizationKey;
-		private IEnumerable<PassProvider> mProviders;
-
-		private string GenerateAuthorizationToken(string passTypeIdentifier, string serialNumber)
+        public PassbookV1Controller(): base()
 		{
-			using (System.Security.Cryptography.SHA1CryptoServiceProvider hasher = new System.Security.Cryptography.SHA1CryptoServiceProvider())
-			{
-				byte[] data = Encoding.UTF8.GetBytes(passTypeIdentifier.ToLower() + serialNumber.ToLower() + mAuthorizationKey);
-				return System.BitConverter.ToString(hasher.ComputeHash(data)).Replace("-", string.Empty).ToLower();
-			}
-		}
-
-		private bool ValidateAuthorization(string authorizationToken, string passTypeIdentifier, string serialNumber)
-		{
-			String generatedToken = GenerateAuthorizationToken(passTypeIdentifier, serialNumber);
-			return String.Equals(authorizationToken, generatedToken, StringComparison.OrdinalIgnoreCase);
-		}
-
-		private void ValidateAuthorization(AuthenticationHeaderValue authenticationHeader, string passTypeIdentifier, string serialNumber)
-		{
-			if (authenticationHeader != null &&
-				String.Equals(authenticationHeader.Scheme, "ApplePass", StringComparison.OrdinalIgnoreCase) &&
-				!String.IsNullOrEmpty(authenticationHeader.Parameter) &&
-				!String.IsNullOrEmpty(passTypeIdentifier) && 
-				!String.IsNullOrEmpty(serialNumber))
-			{
-				if (ValidateAuthorization(authenticationHeader.Parameter, passTypeIdentifier.ToLower(), serialNumber))
-					return;
-			}
-
-			// Authorization token could not be validated
-			throw new HttpResponseException(new HttpResponseMessage(HttpStatusCode.Forbidden)
-			{
-				Content = new StringContent("Access Denied", Encoding.UTF8, "text/plain")
-			});
-		}
-
-		private PassProvider GetProvider(String passTypeIdentifier)
-		{
-			PassProvider provider = mProviders.FirstOrDefault(p => p.SupportsPassType(passTypeIdentifier));
-
-			if (provider == null)
-				throw new Exceptions.PassProviderException(String.Format("No PassProvider available for \"{0}\".", passTypeIdentifier));
-
-			return provider;
-		}
-
-		public PassbookV1Controller()
-		{
-			mAuthorizationKey = System.Configuration.ConfigurationManager.AppSettings["AuthorizationKey"];
-
-			if (String.IsNullOrEmpty(mAuthorizationKey))
-				throw new System.Configuration.ConfigurationErrorsException("AuthorizationKey is not configured in appSettings.");
-
-			mProviders = AppDomain.CurrentDomain.GetAssemblies()
-				.SelectMany(a => 
-					a.GetTypes()
-					.Where(t => !t.IsAbstract && t.IsClass && t.IsSubclassOf(typeof(PassProvider))))
-				.Select(t => Activator.CreateInstance (t) as PassProvider);	
-
 		}
 
 		/// <summary>
@@ -239,10 +182,11 @@ namespace Passbook.Web
 
 			try
 			{
-				byte[] pass = provider.GetPass(passTypeIdentifier, serialNumber);
+                IHttpActionResult result = GeneratePass(provider.GetPass(passTypeIdentifier, serialNumber));
 
-				if (pass != null)
-					return new PassbookContentResult(pass);
+                if (result != null)
+                    return result;
+                
 
 				Trace.TraceError("GetPass: No pass available for [{0}, {1}]", passTypeIdentifier, serialNumber);	
 
@@ -304,17 +248,6 @@ namespace Passbook.Web
 				Trace.TraceError("Log: {0}", ex.Message);
 				return Content<Serialization.ApiResult>(HttpStatusCode.InternalServerError, new Serialization.ApiResult(ex.Message));
 			}
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				foreach (PassProvider provider in mProviders)
-					provider.Dispose();
-			}
-
-			base.Dispose(disposing);
 		}
 	}
 }
