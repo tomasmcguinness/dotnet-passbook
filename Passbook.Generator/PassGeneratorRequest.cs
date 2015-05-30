@@ -140,10 +140,14 @@ namespace Passbook.Generator
 
 			// Certificates
 			this.CertificatePassword = templateConfig.CertificatePassword;
+            this.CertThumbprint = templateConfig.CertificateThumbprint;
 
 			path = TemplateModel.MapPath(templateConfig.Certificate);
 			if (File.Exists(path))
 				this.Certificate = File.ReadAllBytes(path);
+
+            if (String.IsNullOrEmpty(this.CertThumbprint) && this.Certificate == null)
+                throw new System.Configuration.ConfigurationErrorsException("Either Certificate or CertificateThumbprint is not configured correctly.");
 
 			// Standard Keys
 			this.Description = templateConfig.Description.Value;
