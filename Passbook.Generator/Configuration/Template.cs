@@ -97,7 +97,7 @@ namespace Passbook.Generator.Configuration
 		/// <summary>
 		/// Required. Pass type identifier, as issued by Apple. The value must correspond with your signing certificate.
 		/// </summary>
-		[ConfigurationProperty("passTypeIdentifier", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("passTypeIdentifier", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public ConfigurationProperty<String> PassTypeIdentifier
 		{
 			get { return (ConfigurationProperty<String>)this["passTypeIdentifier"]; }
@@ -107,7 +107,7 @@ namespace Passbook.Generator.Configuration
 		/// <summary>
 		/// Required. Team identifier of the organization that originated and signed the pass, as issued by Apple.
 		/// </summary>
-		[ConfigurationProperty("teamIdentifier", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("teamIdentifier", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public ConfigurationProperty<String> TeamIdentifier
 		{
 			get { return (ConfigurationProperty<String>)this["teamIdentifier"]; }

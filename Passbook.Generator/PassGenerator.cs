@@ -23,8 +23,11 @@ namespace Passbook.Generator
         private byte[] manifestFile = null;
 		private Dictionary<string, byte[]> localizationFiles = null;
         private byte[] pkPassFile = null;
+        private X509Certificate2 appleCert = null;
+        private X509Certificate2 passCert = null;
 
         private const string APPLE_CERTIFICATE_THUMBPRINT = "‎0950b6cd3d2f37ea246a1aaa20dfaadbd6fe1f75";
+        private const string passTypePrefix = "Pass Type ID: ";
 
         public byte[] Generate(PassGeneratorRequest request)
         {
@@ -99,9 +102,57 @@ namespace Passbook.Generator
 
         private void CreatePackage(PassGeneratorRequest request)
         {
+            ValidateCertificates(request);
             CreatePassFile(request);
 			GenerateLocalizationFiles(request);
             GenerateManifestFile(request);
+        }
+
+        private void ValidateCertificates(PassGeneratorRequest request)
+        {
+            passCert = GetCertificate(request);
+
+            if (passCert == null)
+                throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
+            
+            appleCert = GetCertificate(request);
+
+            if (appleCert == null)
+                throw new FileNotFoundException("Apple Certificate could not be found. Please download it from http://www.apple.com/certificateauthority/ and install it into your PERSONAL or LOCAL MACHINE certificate store.");
+
+            string passTypeIdentifier = passCert.GetNameInfo(X509NameType.SimpleName, false);
+
+            if (passTypeIdentifier.StartsWith(passTypePrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                passTypeIdentifier = passTypeIdentifier.Substring(passTypePrefix.Length);
+
+                if (!string.IsNullOrEmpty(passTypeIdentifier) && !string.Equals(request.PassTypeIdentifier, passTypeIdentifier, StringComparison.Ordinal))
+                {
+                    if (!string.IsNullOrEmpty(request.PassTypeIdentifier))
+                        Trace.TraceWarning("Configured passTypeIdentifier {0} does not match pass certificate {1}, correcting.", request.PassTypeIdentifier, passTypeIdentifier);
+
+                    request.PassTypeIdentifier = passTypeIdentifier;
+                }
+            }
+
+            Dictionary<string, string> nameParts =
+            passCert.SubjectName.Name
+                .Split(new string[] { ", "}, StringSplitOptions.RemoveEmptyEntries)
+                .ToDictionary(k => k.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries)[0],
+                    e => e.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries)[1]);
+
+            string teamIdentifier;
+
+            if (nameParts.TryGetValue("OU", out teamIdentifier))
+            {
+                if (!string.IsNullOrEmpty(teamIdentifier) && !string.Equals(request.TeamIdentifier, teamIdentifier, StringComparison.Ordinal))
+                {
+                    if (!string.IsNullOrEmpty(request.TeamIdentifier))
+                        Trace.TraceWarning("Configured teamidentifier {0} does not match pass certificate {1}, correcting.", request.TeamIdentifier, teamIdentifier);
+
+                    request.TeamIdentifier = teamIdentifier;
+                }
+            }
         }
 
         private void CreatePassFile(PassGeneratorRequest request)
@@ -188,31 +239,21 @@ namespace Passbook.Generator
 		{
 			Trace.TraceInformation("Signing the manifest file...");
 
-			X509Certificate2 card = GetCertificate(request);
-
-			if (card == null)
-				throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
-
-			X509Certificate2 appleCA = GetAppleCertificate(request);
-
-			if (appleCA == null)
-				throw new FileNotFoundException("Apple Certificate could not be found. Please download it from http://www.apple.com/certificateauthority/ and install it into your LOCAL MACHINE certificate store.");
-
 			try
 			{
 				ContentInfo contentInfo = new ContentInfo(manifestFile);
 
 				SignedCms signing = new SignedCms(contentInfo, true);
 
-				CmsSigner signer = new CmsSigner(SubjectIdentifierType.SubjectKeyIdentifier, card)
+				CmsSigner signer = new CmsSigner(SubjectIdentifierType.SubjectKeyIdentifier, passCert)
 				{
 					IncludeOption = X509IncludeOption.None
 				};
 
 				Trace.TraceInformation("Fetching Apple Certificate for signing..");
 				Trace.TraceInformation("Constructing the certificate chain..");
-				signer.Certificates.Add(appleCA);
-				signer.Certificates.Add(card);
+				signer.Certificates.Add(appleCert);
+				signer.Certificates.Add(passCert);
 
 				signer.SignedAttributes.Add(new Pkcs9SigningTime());
 
@@ -248,7 +289,7 @@ namespace Passbook.Generator
             }
         }
 
-        public static X509Certificate2 GetCertificate(PassGeneratorRequest request)
+        private static X509Certificate2 GetCertificate(PassGeneratorRequest request)
         {
             Trace.TraceInformation("Fetching Pass Certificate...");
 
