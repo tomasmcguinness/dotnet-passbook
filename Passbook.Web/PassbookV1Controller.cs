@@ -182,12 +182,11 @@ namespace Passbook.Web
 
 			try
 			{
-                IHttpActionResult result = GeneratePass(provider.GetPass(passTypeIdentifier, serialNumber));
+                IHttpActionResult result = GeneratePass(provider, serialNumber);
 
                 if (result != null)
                     return result;
                 
-
 				Trace.TraceError("GetPass: No pass available for [{0}, {1}]", passTypeIdentifier, serialNumber);	
 
 				return Content<Serialization.ApiResult>(HttpStatusCode.NoContent, new Serialization.ApiResult("No pass available."));

@@ -84,15 +84,17 @@ namespace Passbook.Web
                 .Select(t => Activator.CreateInstance (t) as PassProvider);
         }
 
-        protected IHttpActionResult GeneratePass(PassGeneratorRequest request)
+        protected IHttpActionResult GeneratePass(PassProvider provider, string serialNumber)
         {
+            PassGeneratorRequest request = provider.GetPass(serialNumber);
+
             if (request != null)
             {
                 // Passbook webService is configured, enable it in the generated pass
                 if (!string.IsNullOrEmpty(mServiceUrl))
                 {
                     request.WebServiceUrl = mServiceUrl;
-                    request.AuthenticationToken = GenerateAuthorizationToken(request.PassTypeIdentifier, request.SerialNumber);
+                    request.AuthenticationToken = GenerateAuthorizationToken(provider.PassTypeIdentifier, request.SerialNumber);
                 }
 
                 PassGenerator passGenerator = new PassGenerator();

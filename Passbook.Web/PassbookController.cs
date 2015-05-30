@@ -55,7 +55,7 @@ namespace Passbook.Web
 
             try
             {
-                IHttpActionResult result = GeneratePass(provider.GetPass(passTypeIdentifier, serialNumber));
+                IHttpActionResult result = GeneratePass(provider, serialNumber);
 
                 if (result != null)
                     return result;
