@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44300</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -82,16 +82,16 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controllers\BinaryFormatter.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LogController.cs" />
     <Compile Include="Controllers\PassController.cs" />
-    <Compile Include="Controllers\PassRegistrationController.cs" />
     <Compile Include="Controllers\UpdateController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\BoardingPassProvider.cs" />
+    <Compile Include="Providers\CouponPassProvider.cs" />
     <Compile Include="SampleRequests\BoardingPassGeneratorRequest.cs" />
     <Compile Include="SampleRequests\CouponPassGeneratorRequest.cs" />
     <Compile Include="SampleRequests\EventPassGeneratorRequest.cs" />
@@ -99,6 +99,7 @@
     <Compile Include="Services\PassRegistrationResult.cs" />
     <Compile Include="Services\SendEmptyPushNotification.cs" />
     <Compile Include="Services\WebServiceHandler.cs" />
+    <Compile Include="Providers\EventPassProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -122,6 +123,8 @@
     <Content Include="Icons\Starbucks\icon.png" />
     <Content Include="Icons\Starbucks\logo%402x.png" />
     <Content Include="Icons\Starbucks\logo.png" />
+    <Content Include="js\jquery-1.11.3.min.js" />
+    <Content Include="js\jquery.qrcode.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -136,7 +139,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
@@ -193,5 +195,12 @@
       <Project>{B126FA22-2CF9-4A01-8F73-2BCA3C048CAD}</Project>
       <Name>Passbook.Web</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Data\AppleWWDRCA.cer" />
+    <Content Include="Views\Pass\EventTicket.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Pass\BoardingCard.cshtml" />
+    <Content Include="Views\Pass\Coupon.cshtml" />
   </ItemGroup>
 </Project>
