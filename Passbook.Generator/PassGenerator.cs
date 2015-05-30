@@ -115,7 +115,7 @@ namespace Passbook.Generator
             if (passCert == null)
                 throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
             
-            appleCert = GetCertificate(request);
+            appleCert = GetAppleCertificate(request);
 
             if (appleCert == null)
                 throw new FileNotFoundException("Apple Certificate could not be found. Please download it from http://www.apple.com/certificateauthority/ and install it into your PERSONAL or LOCAL MACHINE certificate store.");
