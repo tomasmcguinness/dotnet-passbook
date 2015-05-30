@@ -236,7 +236,10 @@ namespace Passbook.Web
 		public IHttpActionResult Log(Serialization.DeviceLogs deviceLogs)
 		{
 			try
-			{				
+			{
+                foreach (String logMessage in deviceLogs.logs)
+                    Debug.WriteLine(logMessage);
+
 				string log = string.Join("\r\n", deviceLogs.logs);
 
 				Trace.TraceInformation("Device logs\n{0}", log);
