@@ -237,7 +237,7 @@ namespace Passbook.Generator
             try
             {
                 if (request.AppleWWDRCACertificate == null)
-                    return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority, StoreLocation.LocalMachine);
+                    return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority);
                 else
                     return GetCertificateFromBytes(request.AppleWWDRCACertificate, null);
             }
@@ -255,7 +255,7 @@ namespace Passbook.Generator
             try
             {
                 if (request.Certificate == null)
-                    return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My, request.CertLocation);
+                    return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My);
                 else
                     return GetCertificateFromBytes(request.Certificate, request.CertificatePassword);
             }
@@ -266,17 +266,20 @@ namespace Passbook.Generator
             }
         }
 
-        private static X509Certificate2 GetSpecifiedCertificateFromCertStore(string thumbPrint, StoreName storeName, StoreLocation storeLocation)
+        private static X509Certificate2 GetSpecifiedCertificateFromCertStore(string thumbPrint, StoreName storeName)
         {
-            X509Store store = new X509Store(storeName, storeLocation);
-            store.Open(OpenFlags.ReadOnly);
-
-			X509Certificate2Collection certs = store.Certificates.Find(X509FindType.FindByThumbprint, thumbPrint, true);
-
-            if (certs.Count > 0)
+            foreach (StoreLocation storeLocation in Enum.GetValues(typeof(StoreLocation)))
             {
-				Debug.WriteLine(certs[0].Thumbprint);
-				return certs[0];
+                X509Store store = new X509Store(storeName, storeLocation);
+                store.Open(OpenFlags.ReadOnly);
+
+			    X509Certificate2Collection certs = store.Certificates.Find(X509FindType.FindByThumbprint, thumbPrint, false);
+
+                if (certs.Count > 0)
+                {
+				    Debug.WriteLine(certs[0].Thumbprint);
+				    return certs[0];
+                }
             }
 
             return null;
