@@ -49,19 +49,26 @@ namespace Passbook.Generator.Configuration
 		}
 
 		#region Certificate Keys
-		[ConfigurationProperty("certificate", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("certificate", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public string Certificate
 		{
 			get { return (string)this["certificate"]; }
 			set	{ this["certificate"] = value; }
 		}
 
-		[ConfigurationProperty("certificatePassword", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("certificatePassword", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public string CertificatePassword
 		{
 			get { return (string)this["certificatePassword"]; }
 			set	{ this["certificatePassword"] = value; }
 		}
+
+        [ConfigurationProperty("certificateThumbprint", DefaultValue = null, IsRequired = false, IsKey = false)]
+        public string CertificateThumbprint
+        {
+            get { return (string)this["certificateThumbprint"]; }
+            set { this["certificateThumbprint"] = value; }
+        }
 		#endregion
 
 		#region Standard Keys
@@ -90,7 +97,7 @@ namespace Passbook.Generator.Configuration
 		/// <summary>
 		/// Required. Pass type identifier, as issued by Apple. The value must correspond with your signing certificate.
 		/// </summary>
-		[ConfigurationProperty("passTypeIdentifier", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("passTypeIdentifier", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public ConfigurationProperty<String> PassTypeIdentifier
 		{
 			get { return (ConfigurationProperty<String>)this["passTypeIdentifier"]; }
@@ -100,7 +107,7 @@ namespace Passbook.Generator.Configuration
 		/// <summary>
 		/// Required. Team identifier of the organization that originated and signed the pass, as issued by Apple.
 		/// </summary>
-		[ConfigurationProperty("teamIdentifier", DefaultValue = null, IsRequired = true, IsKey = false)]
+		[ConfigurationProperty("teamIdentifier", DefaultValue = null, IsRequired = false, IsKey = false)]
 		public ConfigurationProperty<String> TeamIdentifier
 		{
 			get { return (ConfigurationProperty<String>)this["teamIdentifier"]; }
