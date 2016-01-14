@@ -1,5 +1,10 @@
 #dotnet-passbook
 
+[![No Maintenance At This Time]
+(http://unmaintained.tech/badge.svg)]
+(http://unmaintained.tech)
+
+
 A .Net Library for generating Passbook packages for iOS 6 and iOS7
 
 ##Why
