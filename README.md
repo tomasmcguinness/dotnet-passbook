@@ -7,6 +7,8 @@
 
 A .Net Library for generating Passbook packages for iOS 6 and iOS7
 
+(I'm not working on dotnet-passbook at this time, but will be returning to it soon to update to iOS 9)
+
 ##Why
 
 Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the [PassVerse](http://www.passverse.com), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS 6 and iOS 7).
