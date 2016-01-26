@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
     <metadata>
         <id>dotnet-passbook</id>
-        <version>0.7.7</version>
+        <version>0.9.8</version>
         <title>Passbook Generator</title>
         <authors>Tomas McGuinness</authors>
         <owners />
@@ -12,7 +12,7 @@
         <description>Generate pass files for Apple's iOS 6.0 passbook. This library allows you to build and sign a pkpass file.</description>
         <summary>Generate pass files for Apple's iOS 6.0 passbook.</summary>
         <releaseNotes>Added support for AssociatedStoreIdentifiers allowing you to link a pass to an existing iOS App using its Apple Identifier</releaseNotes>
-        <tags>PassBook</tags>
+        <tags>PassBook Wallet</tags>
         <dependencies>
             <group targetFramework=".NETFramework4.5">
                 <dependency id="Newtonsoft.Json" version="4.5.10" />
