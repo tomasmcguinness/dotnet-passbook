@@ -11,6 +11,6 @@ TestResults
 # Visual Studio ignores
 *.suo
 *.csproj.user
-
+.vs/
 
 *.user
