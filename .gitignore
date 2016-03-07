@@ -12,3 +12,5 @@ TestResults
 *.suo
 *.csproj.user
 
+
+*.user

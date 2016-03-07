@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Coupon";
+}
+
+<h2>Generate Coupon</h2>
+<div id="qrcode"></div>
+
+<script type="text/javascript">
+    $("#qrcode").qrcode(
+     { width: 125,
+       height: 125,
+       text: "@Request.Url.GetLeftPart(UriPartial.Authority)/api/passbook/download/pass.tomsamcguinness.coupon/123456/20151231/66bf42d1101f72cae8b114040dde06c4f9cfddba"
+     });
+</script>
+
+<a href="@Request.Url.GetLeftPart(UriPartial.Authority)/api/passbook/download/pass.tomsamcguinness.coupon/123456/20151231/66bf42d1101f72cae8b114040dde06c4f9cfddba">Coupon</a>
+
+

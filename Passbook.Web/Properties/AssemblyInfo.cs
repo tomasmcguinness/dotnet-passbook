@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Passbook.Generator")]
+[assembly: AssemblyTitle("Passbook.Web")]
 [assembly: AssemblyDescription("A Passbook file generator for .Net")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ColdBear Ltd")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a8d7d752-fcc8-4c56-ac57-360120eb3d23")]
+[assembly: Guid("d13d85ab-e341-41f9-92e5-8e5a14b63ba7")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,3 +34,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("0.9.8")]
 [assembly: AssemblyFileVersion("0.9.8")]
+
