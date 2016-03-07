@@ -10,17 +10,16 @@ namespace Passbook.Generator.Fields
         { }
 
         public StandardField(string key, string label, string value)
-            : base(key, label)
+			: base(key, label)
         {
             this.Value = value;
         }
 
-        public StandardField(string key, string label, string value, string attributedValue, DataDetectorType defaultDetector)
-            : base(key, label)
+		public StandardField(string key, string label, string value, string attributedValue, DataDetectorTypes dataDetectorTypes)
+			: this(key, label, value)
         {
-            this.Value = value;
             this.AttributedValue = attributedValue;
-            this.DataDetectorTypes.Add(defaultDetector);
+			this.DataDetectorTypes = DataDetectorTypes.PKDataDetectorAll;
         }
 
         public string Value { get; set; }
@@ -28,9 +27,7 @@ namespace Passbook.Generator.Fields
         protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
         {
             if (Value == null)
-            {
                 throw new RequiredFieldValueMissingException(Key);
-            }
 
             writer.WriteValue(Value);
         }
