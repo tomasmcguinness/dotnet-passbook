@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -26,7 +26,7 @@ namespace Passbook.Generator
         private X509Certificate2 appleCert = null;
         private X509Certificate2 passCert = null;
 
-        private const string APPLE_CERTIFICATE_THUMBPRINT = "‎‎ff6797793a3cd798dc5b2abef56f73edc9f83a64";
+        private const string APPLE_CERTIFICATE_THUMBPRINT = "FF6797793A3CD798DC5B2ABEF56F73EDC9F83A64";
         private const string passTypePrefix = "Pass Type ID: ";
 
         public byte[] Generate(PassGeneratorRequest request)
