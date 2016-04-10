@@ -1,4 +1,4 @@
-using System;
+'using System;
 using System.Linq;
 using Newtonsoft.Json;
 using Passbook.Generator.Fields;
@@ -727,7 +727,7 @@ namespace Passbook.Generator
 			if (ExpirationDate.HasValue)
 			{
 				writer.WritePropertyName("expirationDate");
-				writer.WriteValue(ExpirationDate.Value.ToString("o"));
+				writer.WriteValue(ExpirationDate.Value.ToString("yyyy-MM-ddTHH:mm:sszzz"));
 			}
 
 			if (Voided.HasValue)
