@@ -87,7 +87,9 @@ namespace Passbook.Generator
                 field.DataDetectorTypes = fieldElement.DataDetectorTypes;
 
                 if (field.TextAlignment != FieldTextAlignment.Unspecified)
+                {
                     field.TextAlignment = fieldElement.TextAlignment;
+                }
 
                 field.Label = model.GetField(key, FieldAttribute.Label, fieldElement.Label.Value);
                 field.AttributedValue = model.GetField(key, FieldAttribute.AttributedValue, fieldElement.AttributedValue.Value);
@@ -109,21 +111,25 @@ namespace Passbook.Generator
             this.RelevantBeacons = new List<RelevantBeacon>();
             this.AssociatedStoreIdentifiers = new List<int>();
             this.Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
-
+            this.Barcodes = new List<BarCode>();
             this.UserInfo = null;
         }
 
         public void LoadTemplate(string template, TemplateModel parameters)
         {
-            PassbookGeneratorSection section =
-                System.Configuration.ConfigurationManager.GetSection("passbookGenerator") as PassbookGeneratorSection;
+            PassbookGeneratorSection section = System.Configuration.ConfigurationManager.GetSection("passbookGenerator") as PassbookGeneratorSection;
 
             if (section == null)
+            {
                 throw new System.Configuration.ConfigurationErrorsException("\"passbookGenerator\" section could not be loaded.");
+            }
 
             String path = TemplateModel.MapPath(section.AppleWWDRCACertificate);
+
             if (File.Exists(path))
+            {
                 this.AppleWWDRCACertificate = File.ReadAllBytes(path);
+            }
 
             TemplateElement templateConfig = section
                 .Templates
@@ -131,23 +137,32 @@ namespace Passbook.Generator
                 .FirstOrDefault(t => String.Equals(t.Name, template, StringComparison.OrdinalIgnoreCase));
 
             if (templateConfig == null)
+            {
                 throw new System.Configuration.ConfigurationErrorsException(String.Format("Configuration for template \"{0}\" could not be loaded.", template));
+            }
 
             this.Style = templateConfig.PassStyle;
 
             if (this.Style == PassStyle.BoardingPass)
+            {
                 this.TransitType = templateConfig.TransitType;
+            }
 
             // Certificates
             this.CertificatePassword = templateConfig.CertificatePassword;
             this.CertThumbprint = templateConfig.CertificateThumbprint;
 
             path = TemplateModel.MapPath(templateConfig.Certificate);
+
             if (File.Exists(path))
+            {
                 this.Certificate = File.ReadAllBytes(path);
+            }
 
             if (String.IsNullOrEmpty(this.CertThumbprint) && this.Certificate == null)
+            {
                 throw new System.Configuration.ConfigurationErrorsException("Either Certificate or CertificateThumbprint is not configured correctly.");
+            }
 
             // Standard Keys
             this.Description = templateConfig.Description.Value;
@@ -157,7 +172,9 @@ namespace Passbook.Generator
 
             // Associated App Keys
             if (templateConfig.AppLaunchURL != null && !String.IsNullOrEmpty(templateConfig.AppLaunchURL.Value))
+            {
                 this.AppLaunchURL = templateConfig.AppLaunchURL.Value;
+            }
 
             this.AssociatedStoreIdentifiers.AddRange(templateConfig.AssociatedStoreIdentifiers.OfType<ConfigurationProperty<int>>().Select(s => s.Value));
 
@@ -184,8 +201,11 @@ namespace Passbook.Generator
             foreach (ImageElement image in templateConfig.Images)
             {
                 String imagePath = TemplateModel.MapPath(image.FileName);
+
                 if (File.Exists(imagePath))
+                {
                     this.Images[image.Type] = File.ReadAllBytes(imagePath);
+                }
             }
 
             // Model Images (Overwriting template images)
@@ -241,11 +261,7 @@ namespace Passbook.Generator
 
         #endregion
 
-        #region "Companion App Keys"
-
-        #endregion
-
-        #region "Expiration Keys"
+        #region Expiration Keys
 
         public DateTime? ExpirationDate { get; set; }
 
@@ -417,9 +433,15 @@ namespace Passbook.Generator
 
         #endregion
 
-        #region User Info Keys
+        #region Companion App Keys
 
-        public Object UserInfo { get; set; }
+        public string UserInfo { get; set; }
+
+        #endregion
+
+        #region Barcodes
+
+        public List<BarCode> Barcodes { get; set; }
 
         #endregion
 
