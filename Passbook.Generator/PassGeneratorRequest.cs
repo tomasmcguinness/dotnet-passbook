@@ -278,14 +278,19 @@ namespace Passbook.Generator
             BackFields.Add(field);
         }
 
-        public void AddBarCode(BarcodeType type, string message, string encoding, string alternateText)
+        public void AddBarcode(BarcodeType type, string message, string encoding, string alternateText)
         {
             Barcodes.Add(new Barcode(type, message, encoding, alternateText));
         }
 
-        public void AddBarCode(BarcodeType type, string message, string encoding)
+        public void AddBarcode(BarcodeType type, string message, string encoding)
         {
             Barcodes.Add(new Barcode(type, message, encoding));
+        }
+
+        public void SetBarcode(BarcodeType type, string message, string encoding, string alternateText = null)
+        {
+            Barcode = new Barcode(type, message, encoding, alternateText);
         }
 
         public void AddLocation(double latitude, double longitude)

@@ -2,11 +2,9 @@
 
 A .Net Library for generating Passbook packages for iOS Wallet (formerly Passbook)
 
-I'm currently working on iOS 10 changes, which are in the branch iOS-10.
-
 ##Why
 
-Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the [PassVerse](http://www.passverse.com), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS 6 and iOS 7).
+Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the [PassVerse](http://www.passverse.com), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS, starting at version 6).
 
 ## Looking for a full Passbook solution?
 
@@ -91,7 +89,9 @@ You can now provide more pass specific information. The Style must be set and th
 
 You can add a BarCode.
 
-    request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
+    request.AddBarCode(BarcodeType.PKBarcodeFormatPDF417, "01927847623423234234", "ISO-8859-1", "01927847623423234234");
+
+Starting with iOS 9, multiple barcodes are now supported. This helper method supports this new feature. If you wanted to support iOS 8 and earlier, you can use the method SetBarcode().
 
 To link the pass to an existing app, you can add the app's Apple ID to the AssociatedStoreIdentifiers array.
 
@@ -149,9 +149,10 @@ Dotnet-passbook is also available to  download from NuGet.
 	Install-Package dotnet-passbook
 
 
-##iOS 7
+##iOS 10
 
-This covers almost all of the new fields that were added for iOS7. I have not included the Companion App Keys yet.
+This library covers almost all of the fields in Passbook, but the NFC fields are omitted. These are for use in Apple Pay and require special
+certificates, which I don't have.
 
 ##Contribute
 
