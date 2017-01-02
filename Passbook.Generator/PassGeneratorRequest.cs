@@ -8,95 +8,12 @@ using System.Drawing;
 using System.Diagnostics;
 using Passbook.Generator.Configuration;
 using System.IO;
+using System.Configuration;
 
 namespace Passbook.Generator
 {
     public class PassGeneratorRequest
     {
-        private static string ConvertColor(string color)
-        {
-            if (!String.IsNullOrEmpty(color) && color.Substring(0, 1) == "#")
-            {
-                Color c = ColorTranslator.FromHtml(color);
-                return string.Format("rgb({0},{1},{2})", c.R, c.G, c.B);
-            }
-            else
-                return color;
-        }
-
-        private static IEnumerable<Field> TemplateFields(FieldCollection templateFields, TemplateModel model)
-        {
-            foreach (FieldElement fieldElement in templateFields)
-            {
-                String key = fieldElement.Key;
-                Field field = null;
-
-                switch (fieldElement.Type)
-                {
-                    case FieldType.Standard:
-                        StandardField standardField = new StandardField();
-                        standardField.Value = model.GetField(key, FieldAttribute.Value, fieldElement.Value.Value);
-
-                        field = standardField;
-                        break;
-                    case FieldType.Date:
-                        DateField dateField = new DateField();
-
-                        if (fieldElement.DateStyle != FieldDateTimeStyle.Unspecified)
-                            dateField.DateStyle = fieldElement.DateStyle;
-
-                        if (fieldElement.TimeStyle != FieldDateTimeStyle.Unspecified)
-                            dateField.TimeStyle = fieldElement.TimeStyle;
-
-                        if (fieldElement.IgnoresTimeZone.HasValue)
-                            dateField.IgnoresTimeZone = fieldElement.IgnoresTimeZone.Value;
-
-                        if (fieldElement.IsRelative.HasValue)
-                            dateField.IsRelative = fieldElement.IsRelative.Value;
-
-                        DateTime dateValue;
-
-                        if (!DateTime.TryParse(fieldElement.Value.Value, out dateValue))
-                            dateValue = DateTime.MinValue;
-
-                        dateField.Value = model.GetField<DateTime>(key, FieldAttribute.Value, dateValue);
-
-                        field = dateField;
-                        break;
-                    case FieldType.Number:
-                        NumberField numberField = new NumberField();
-
-                        if (fieldElement.NumberStyle != FieldNumberStyle.Unspecified)
-                            numberField.NumberStyle = fieldElement.NumberStyle;
-
-                        numberField.CurrencyCode = model.GetField(key, FieldAttribute.CurrencyCode, fieldElement.CurrencyCode.Value);
-
-                        Decimal decimalValue;
-
-                        if (!Decimal.TryParse(fieldElement.Value.Value, out decimalValue))
-                            decimalValue = 0;
-
-                        numberField.Value = model.GetField<Decimal>(key, FieldAttribute.Value, decimalValue);
-
-                        field = numberField;
-                        break;
-                }
-
-                field.Key = fieldElement.Key;
-
-                field.DataDetectorTypes = fieldElement.DataDetectorTypes;
-
-                if (field.TextAlignment != FieldTextAlignment.Unspecified)
-                    field.TextAlignment = fieldElement.TextAlignment;
-
-                field.Label = model.GetField(key, FieldAttribute.Label, fieldElement.Label.Value);
-                field.AttributedValue = model.GetField(key, FieldAttribute.AttributedValue, fieldElement.AttributedValue.Value);
-                field.ChangeMessage = model.GetField(key, FieldAttribute.ChangeMessage, fieldElement.ChangeMessage.Value);
-
-                yield return field;
-            }
-        }
-
         public PassGeneratorRequest()
         {
             this.HeaderFields = new List<Field>();
@@ -109,107 +26,8 @@ namespace Passbook.Generator
             this.RelevantBeacons = new List<RelevantBeacon>();
             this.AssociatedStoreIdentifiers = new List<int>();
             this.Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
-
+            this.Barcodes = new List<Barcode>();
             this.UserInfo = null;
-        }
-
-        public void LoadTemplate(string template, TemplateModel parameters)
-        {
-            PassbookGeneratorSection section =
-                System.Configuration.ConfigurationManager.GetSection("passbookGenerator") as PassbookGeneratorSection;
-
-            if (section == null)
-                throw new System.Configuration.ConfigurationErrorsException("\"passbookGenerator\" section could not be loaded.");
-
-            String path = TemplateModel.MapPath(section.AppleWWDRCACertificate);
-            if (File.Exists(path))
-                this.AppleWWDRCACertificate = File.ReadAllBytes(path);
-
-            TemplateElement templateConfig = section
-                .Templates
-                .OfType<TemplateElement>()
-                .FirstOrDefault(t => String.Equals(t.Name, template, StringComparison.OrdinalIgnoreCase));
-
-            if (templateConfig == null)
-                throw new System.Configuration.ConfigurationErrorsException(String.Format("Configuration for template \"{0}\" could not be loaded.", template));
-
-            this.Style = templateConfig.PassStyle;
-
-            if (this.Style == PassStyle.BoardingPass)
-                this.TransitType = templateConfig.TransitType;
-
-            // Certificates
-            this.CertificatePassword = templateConfig.CertificatePassword;
-            this.CertThumbprint = templateConfig.CertificateThumbprint;
-
-            path = TemplateModel.MapPath(templateConfig.Certificate);
-            if (File.Exists(path))
-                this.Certificate = File.ReadAllBytes(path);
-
-            if (String.IsNullOrEmpty(this.CertThumbprint) && this.Certificate == null)
-                throw new System.Configuration.ConfigurationErrorsException("Either Certificate or CertificateThumbprint is not configured correctly.");
-
-            // Standard Keys
-            this.Description = templateConfig.Description.Value;
-            this.OrganizationName = templateConfig.OrganizationName.Value;
-            this.PassTypeIdentifier = templateConfig.PassTypeIdentifier.Value;
-            this.TeamIdentifier = templateConfig.TeamIdentifier.Value;
-
-            // Associated App Keys
-            if (templateConfig.AppLaunchURL != null && !String.IsNullOrEmpty(templateConfig.AppLaunchURL.Value))
-                this.AppLaunchURL = templateConfig.AppLaunchURL.Value;
-
-            this.AssociatedStoreIdentifiers.AddRange(templateConfig.AssociatedStoreIdentifiers.OfType<ConfigurationProperty<int>>().Select(s => s.Value));
-
-            // Visual Appearance Keys
-            this.BackgroundColor = templateConfig.BackgroundColor.Value;
-            this.ForegroundColor = templateConfig.ForegroundColor.Value;
-            this.GroupingIdentifier = templateConfig.GroupingIdentifier.Value;
-            this.LabelColor = templateConfig.LabelColor.Value;
-            this.LogoText = templateConfig.LogoText.Value;
-            this.SuppressStripShine = templateConfig.SuppressStripShine.Value;
-
-            // Web Service Keys
-            this.AuthenticationToken = templateConfig.AuthenticationToken.Value;
-            this.WebServiceUrl = templateConfig.WebServiceURL.Value;
-
-            // Fields
-            this.AuxiliaryFields.AddRange(TemplateFields(templateConfig.AuxiliaryFields, parameters));
-            this.BackFields.AddRange(TemplateFields(templateConfig.BackFields, parameters));
-            this.HeaderFields.AddRange(TemplateFields(templateConfig.HeaderFields, parameters));
-            this.PrimaryFields.AddRange(TemplateFields(templateConfig.PrimaryFields, parameters));
-            this.SecondaryFields.AddRange(TemplateFields(templateConfig.SecondaryFields, parameters));
-
-            // Template Images
-            foreach (ImageElement image in templateConfig.Images)
-            {
-                String imagePath = TemplateModel.MapPath(image.FileName);
-                if (File.Exists(imagePath))
-                    this.Images[image.Type] = File.ReadAllBytes(imagePath);
-            }
-
-            // Model Images (Overwriting template images)
-            foreach (KeyValuePair<PassbookImage, byte[]> image in parameters.GetImages())
-            {
-                this.Images[image.Key] = image.Value;
-            }
-
-            // Localization
-            foreach (LanguageElement localization in templateConfig.Localizations)
-            {
-                Dictionary<string, string> values;
-
-                if (!Localizations.TryGetValue(localization.Code, out values))
-                {
-                    values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                    Localizations.Add(localization.Code, values);
-                }
-
-                foreach (LocalizedEntry entry in localization.Localizations)
-                {
-                    values[entry.Key] = entry.Value;
-                }
-            }
         }
 
         #region Standard Keys
@@ -241,11 +59,11 @@ namespace Passbook.Generator
 
         #endregion
 
-        #region "Companion App Keys"
+        #region Companion App Keys
 
         #endregion
 
-        #region "Expiration Keys"
+        #region Expiration Keys
 
         public DateTime? ExpirationDate { get; set; }
 
@@ -318,7 +136,7 @@ namespace Passbook.Generator
         /// <summary>
         /// Optional. Information specific to barcodes.
         /// </summary>
-        public BarCode Barcode { get; private set; }
+        public Barcode Barcode { get; private set; }
 
         /// <summary>
         /// Required. Pass type.
@@ -417,6 +235,12 @@ namespace Passbook.Generator
 
         #endregion
 
+        #region Barcodes
+
+        public List<Barcode> Barcodes { get; private set; }
+
+        #endregion
+
         #region User Info Keys
 
         public Object UserInfo { get; set; }
@@ -428,51 +252,40 @@ namespace Passbook.Generator
         #endregion
 
         #region Helpers
+
         public void AddHeaderField(Field field)
         {
-            this.HeaderFields.Add(field);
+            HeaderFields.Add(field);
         }
 
         public void AddPrimaryField(Field field)
         {
-            this.PrimaryFields.Add(field);
+            PrimaryFields.Add(field);
         }
 
         public void AddSecondaryField(Field field)
         {
-            this.SecondaryFields.Add(field);
+            SecondaryFields.Add(field);
         }
 
         public void AddAuxiliaryField(Field field)
         {
-            this.AuxiliaryFields.Add(field);
+            AuxiliaryFields.Add(field);
         }
 
         public void AddBackField(Field field)
         {
-            this.BackFields.Add(field);
+            BackFields.Add(field);
         }
 
-        public void AddBarCode(string message, BarcodeType type, string encoding, string altText)
+        public void AddBarCode(BarcodeType type, string message, string encoding, string alternateText)
         {
-            Barcode = new BarCode()
-            {
-                Type = type,
-                Message = message,
-                Encoding = encoding,
-                AlternateText = altText
-            };
+            Barcodes.Add(new Barcode(type, message, encoding, alternateText));
         }
 
-        public void AddBarCode(string message, BarcodeType type, string encoding)
+        public void AddBarCode(BarcodeType type, string message, string encoding)
         {
-            Barcode = new BarCode()
-            {
-                Type = type,
-                Message = message,
-                Encoding = encoding,
-                AlternateText = null
-            };
+            Barcodes.Add(new Barcode(type, message, encoding));
         }
 
         public void AddLocation(double latitude, double longitude)
@@ -482,22 +295,22 @@ namespace Passbook.Generator
 
         public void AddLocation(double latitude, double longitude, string relevantText)
         {
-            this.RelevantLocations.Add(new RelevantLocation() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });
+            RelevantLocations.Add(new RelevantLocation() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });
         }
 
         public void AddBeacon(string proximityUUID, string relevantText)
         {
-            this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText });
+            RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText });
         }
 
         public void AddBeacon(string proximityUUID, string relevantText, int major)
         {
-            this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major });
+            RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major });
         }
 
         public void AddBeacon(string proximityUUID, string relevantText, int major, int minor)
         {
-            this.RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major, Minor = minor });
+            RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major, Minor = minor });
         }
 
         public void AddLocalization(string languageCode, string key, string value)
@@ -534,6 +347,8 @@ namespace Passbook.Generator
             WriteAppearanceKeys(writer);
             Trace.TraceInformation("Writing expiration keys..");
             WriteExpirationKeys(writer);
+            Trace.TraceInformation("Writing barcode keys..");
+            WriteBarcodes(writer);
 
             Trace.TraceInformation("Opening style section..");
             OpenStyleSpecificKey(writer);
@@ -621,22 +436,23 @@ namespace Passbook.Generator
             if (Barcode != null)
             {
                 writer.WritePropertyName("barcode");
+                Barcode.Write(writer);
+            }
+        }
 
-                writer.WriteStartObject();
-                writer.WritePropertyName("format");
-                writer.WriteValue(Barcode.Type.ToString());
-                writer.WritePropertyName("message");
-                writer.WriteValue(Barcode.Message);
-                writer.WritePropertyName("messageEncoding");
-                writer.WriteValue(Barcode.Encoding);
+        private void WriteBarcodes(JsonWriter writer)
+        {
+            if (Barcodes.Count > 0)
+            {
+                writer.WritePropertyName("barcodes");
+                writer.WriteStartArray();
 
-                if (!String.IsNullOrEmpty(Barcode.AlternateText))
+                foreach (var barcode in Barcodes)
                 {
-                    writer.WritePropertyName("altText");
-                    writer.WriteValue(Barcode.AlternateText);
+                    barcode.Write(writer);
                 }
 
-                writer.WriteEndObject();
+                writer.WriteEndArray();
             }
         }
 
@@ -765,5 +581,189 @@ namespace Passbook.Generator
         #endregion
 
         public bool IsValid { get { return true; } }
+
+        private static string ConvertColor(string color)
+        {
+            if (!String.IsNullOrEmpty(color) && color.Substring(0, 1) == "#")
+            {
+                Color c = ColorTranslator.FromHtml(color);
+                return string.Format("rgb({0},{1},{2})", c.R, c.G, c.B);
+            }
+            else
+                return color;
+        }
+
+        public void LoadTemplate(string template, TemplateModel parameters)
+        {
+            PassbookGeneratorSection section = ConfigurationManager.GetSection("passbookGenerator") as PassbookGeneratorSection;
+
+            if (section == null)
+                throw new System.Configuration.ConfigurationErrorsException("\"passbookGenerator\" section could not be loaded.");
+
+            String path = TemplateModel.MapPath(section.AppleWWDRCACertificate);
+            if (File.Exists(path))
+                this.AppleWWDRCACertificate = File.ReadAllBytes(path);
+
+            TemplateElement templateConfig = section
+                .Templates
+                .OfType<TemplateElement>()
+                .FirstOrDefault(t => String.Equals(t.Name, template, StringComparison.OrdinalIgnoreCase));
+
+            if (templateConfig == null)
+                throw new System.Configuration.ConfigurationErrorsException(String.Format("Configuration for template \"{0}\" could not be loaded.", template));
+
+            this.Style = templateConfig.PassStyle;
+
+            if (this.Style == PassStyle.BoardingPass)
+                this.TransitType = templateConfig.TransitType;
+
+            // Certificates
+            this.CertificatePassword = templateConfig.CertificatePassword;
+            this.CertThumbprint = templateConfig.CertificateThumbprint;
+
+            path = TemplateModel.MapPath(templateConfig.Certificate);
+            if (File.Exists(path))
+                this.Certificate = File.ReadAllBytes(path);
+
+            if (String.IsNullOrEmpty(this.CertThumbprint) && this.Certificate == null)
+            {
+                throw new System.Configuration.ConfigurationErrorsException("Either Certificate or CertificateThumbprint is not configured correctly.");
+            }
+
+            // Standard Keys
+            this.Description = templateConfig.Description.Value;
+            this.OrganizationName = templateConfig.OrganizationName.Value;
+            this.PassTypeIdentifier = templateConfig.PassTypeIdentifier.Value;
+            this.TeamIdentifier = templateConfig.TeamIdentifier.Value;
+
+            // Associated App Keys
+            if (templateConfig.AppLaunchURL != null && !String.IsNullOrEmpty(templateConfig.AppLaunchURL.Value))
+                this.AppLaunchURL = templateConfig.AppLaunchURL.Value;
+
+            this.AssociatedStoreIdentifiers.AddRange(templateConfig.AssociatedStoreIdentifiers.OfType<ConfigurationProperty<int>>().Select(s => s.Value));
+
+            // Visual Appearance Keys
+            this.BackgroundColor = templateConfig.BackgroundColor.Value;
+            this.ForegroundColor = templateConfig.ForegroundColor.Value;
+            this.GroupingIdentifier = templateConfig.GroupingIdentifier.Value;
+            this.LabelColor = templateConfig.LabelColor.Value;
+            this.LogoText = templateConfig.LogoText.Value;
+            this.SuppressStripShine = templateConfig.SuppressStripShine.Value;
+
+            // Web Service Keys
+            this.AuthenticationToken = templateConfig.AuthenticationToken.Value;
+            this.WebServiceUrl = templateConfig.WebServiceURL.Value;
+
+            // Fields
+            this.AuxiliaryFields.AddRange(TemplateFields(templateConfig.AuxiliaryFields, parameters));
+            this.BackFields.AddRange(TemplateFields(templateConfig.BackFields, parameters));
+            this.HeaderFields.AddRange(TemplateFields(templateConfig.HeaderFields, parameters));
+            this.PrimaryFields.AddRange(TemplateFields(templateConfig.PrimaryFields, parameters));
+            this.SecondaryFields.AddRange(TemplateFields(templateConfig.SecondaryFields, parameters));
+
+            // Template Images
+            foreach (ImageElement image in templateConfig.Images)
+            {
+                String imagePath = TemplateModel.MapPath(image.FileName);
+                if (File.Exists(imagePath))
+                    this.Images[image.Type] = File.ReadAllBytes(imagePath);
+            }
+
+            // Model Images (Overwriting template images)
+            foreach (KeyValuePair<PassbookImage, byte[]> image in parameters.GetImages())
+            {
+                this.Images[image.Key] = image.Value;
+            }
+
+            // Localization
+            foreach (LanguageElement localization in templateConfig.Localizations)
+            {
+                Dictionary<string, string> values;
+
+                if (!Localizations.TryGetValue(localization.Code, out values))
+                {
+                    values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                    Localizations.Add(localization.Code, values);
+                }
+
+                foreach (LocalizedEntry entry in localization.Localizations)
+                {
+                    values[entry.Key] = entry.Value;
+                }
+            }
+        }
+
+        private static IEnumerable<Field> TemplateFields(FieldCollection templateFields, TemplateModel model)
+        {
+            foreach (FieldElement fieldElement in templateFields)
+            {
+                String key = fieldElement.Key;
+                Field field = null;
+
+                switch (fieldElement.Type)
+                {
+                    case FieldType.Standard:
+                        StandardField standardField = new StandardField();
+                        standardField.Value = model.GetField(key, FieldAttribute.Value, fieldElement.Value.Value);
+
+                        field = standardField;
+                        break;
+                    case FieldType.Date:
+                        DateField dateField = new DateField();
+
+                        if (fieldElement.DateStyle != FieldDateTimeStyle.Unspecified)
+                            dateField.DateStyle = fieldElement.DateStyle;
+
+                        if (fieldElement.TimeStyle != FieldDateTimeStyle.Unspecified)
+                            dateField.TimeStyle = fieldElement.TimeStyle;
+
+                        if (fieldElement.IgnoresTimeZone.HasValue)
+                            dateField.IgnoresTimeZone = fieldElement.IgnoresTimeZone.Value;
+
+                        if (fieldElement.IsRelative.HasValue)
+                            dateField.IsRelative = fieldElement.IsRelative.Value;
+
+                        DateTime dateValue;
+
+                        if (!DateTime.TryParse(fieldElement.Value.Value, out dateValue))
+                            dateValue = DateTime.MinValue;
+
+                        dateField.Value = model.GetField<DateTime>(key, FieldAttribute.Value, dateValue);
+
+                        field = dateField;
+                        break;
+                    case FieldType.Number:
+                        NumberField numberField = new NumberField();
+
+                        if (fieldElement.NumberStyle != FieldNumberStyle.Unspecified)
+                            numberField.NumberStyle = fieldElement.NumberStyle;
+
+                        numberField.CurrencyCode = model.GetField(key, FieldAttribute.CurrencyCode, fieldElement.CurrencyCode.Value);
+
+                        Decimal decimalValue;
+
+                        if (!Decimal.TryParse(fieldElement.Value.Value, out decimalValue))
+                            decimalValue = 0;
+
+                        numberField.Value = model.GetField<Decimal>(key, FieldAttribute.Value, decimalValue);
+
+                        field = numberField;
+                        break;
+                }
+
+                field.Key = fieldElement.Key;
+
+                field.DataDetectorTypes = fieldElement.DataDetectorTypes;
+
+                if (field.TextAlignment != FieldTextAlignment.Unspecified)
+                    field.TextAlignment = fieldElement.TextAlignment;
+
+                field.Label = model.GetField(key, FieldAttribute.Label, fieldElement.Label.Value);
+                field.AttributedValue = model.GetField(key, FieldAttribute.AttributedValue, fieldElement.AttributedValue.Value);
+                field.ChangeMessage = model.GetField(key, FieldAttribute.ChangeMessage, fieldElement.ChangeMessage.Value);
+
+                yield return field;
+            }
+        }
     }
 }
