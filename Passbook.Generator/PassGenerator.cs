@@ -10,6 +10,7 @@ using System.Text;
 using Newtonsoft.Json;
 using Passbook.Generator.Exceptions;
 using System.Security.Cryptography.Pkcs;
+using System.Text.RegularExpressions;
 
 namespace Passbook.Generator
 {
@@ -142,11 +143,12 @@ namespace Passbook.Generator
                 }
             }
 
-            Dictionary<string, string> nameParts =
-            passCert.SubjectName.Name
-                .Split(new string[] { ", " }, StringSplitOptions.RemoveEmptyEntries)
-                .ToDictionary(k => k.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries)[0],
-                    e => e.Split(new char[] { '=' }, StringSplitOptions.RemoveEmptyEntries)[1]);
+            Dictionary<string, string> nameParts = 
+            Regex.Matches(passCert.SubjectName.Name, @"(?<key>[^=,\s]+)\=*(?<value>("".+""|[^,])+)")
+              .Cast<Match>()
+              .ToDictionary(
+                  m => m.Groups["key"].Value,
+                  m => m.Groups["value"].Value);
 
             string teamIdentifier;
 
