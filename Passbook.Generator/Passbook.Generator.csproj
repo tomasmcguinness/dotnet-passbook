@@ -70,7 +70,7 @@
   <ItemGroup>
     <Compile Include="Exceptions\ManifestSigningException.cs" />
     <Compile Include="Exceptions\RequiredFieldValueMissingException.cs" />
-    <Compile Include="Fields\BarCode.cs" />
+    <Compile Include="Fields\Barcode.cs" />
     <Compile Include="Fields\BarcodeType.cs" />
     <Compile Include="Fields\DateField.cs" />
     <Compile Include="Fields\Field.cs" />
@@ -106,9 +106,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-  <ItemGroup>
-    <Folder Include="Configuration\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

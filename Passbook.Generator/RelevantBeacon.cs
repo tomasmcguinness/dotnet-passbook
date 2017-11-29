@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Passbook.Generator.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Passbook.Generator
 {
@@ -18,8 +14,10 @@ namespace Passbook.Generator
         /// Optional. Text displayed on the lock screen when the pass is currently relevant.
         /// </summary>
         public string RelevantText { get; set; }
+
         public int? Major { get; set; }
-        public int? Minor{ get; set; }
+
+        public int? Minor { get; set; }
 
         public void Write(JsonWriter writer)
         {
@@ -53,7 +51,7 @@ namespace Passbook.Generator
 
         private void Validate()
         {
-            if (String.IsNullOrEmpty(ProximityUUID))
+            if (string.IsNullOrEmpty(ProximityUUID))
             {
                 throw new RequiredFieldValueMissingException("ProximityUUID");
             }

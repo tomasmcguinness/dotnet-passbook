@@ -1,17 +1,10 @@
 # dotnet-passbook
 
-[![No Maintenance At This Time]
-(http://unmaintained.tech/badge.svg)]
-(http://unmaintained.tech)
-
-
-A .Net Library for generating Passbook packages for iOS 6 and iOS7
-
-(I'm not working on dotnet-passbook at this time, but will be returning to it soon to update to iOS 9)
+A .Net Library for generating Passbook packages for iOS Wallet (formerly Passbook)
 
 ## Why
 
-Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the [PassVerse](http://www.passverse.com), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS 6 and iOS 7).
+Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the [PassVerse](http://www.passverse.com), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS, starting at version 6).
 
 ## Looking for a full Passbook solution?
 
@@ -25,13 +18,13 @@ The solution requires .Net 4.5 and Visual Studio 2012 or higher.
 
 ##Certificates
 
-Before you run the PassGenerator, you need to ensure you have all the necessary certificates installed. There are two required. 
+Before you run the PassGenerator, you need to ensure you have all the necessary certificates installed. There are two required.
 
-Firstly, you need to install the Apple WWDR (WorldWide Developer Relations) certificate. You can download that from here [http://www.apple.com/certificateauthority/](http://www.apple.com/certificateauthority/) . You must install it in the Local Machine's Intermediate Certificate store. I've hardcoded that location 
+Firstly, you need to install the Apple WWDR (WorldWide Developer Relations) certificate. You can download that from here [http://www.apple.com/certificateauthority/](http://www.apple.com/certificateauthority/) . You must install it in the Local Machine's Intermediate Certificate store. I've hardcoded that location
 
 Secondly, you need to installed your Passbook certificate, which you get from the Developer Portal. You must have a full iPhone developer account. There are [instructions on my blog](http://www.tomasmcguinness.com/2012/06/28/generating-an-apple-ios-certificate-using-windows/) for generating a certificate if you're using a Windows Machine.
 
-You can place this certificate in any of the stores, but it must be placed into the "personal" folder.  When constructing the request for the pass, you specify the location and thumbprint for the certificate. If running this code in IIS for example, installing the certificate in the Local Machine area might make access easier. Alternatively, you could place the certificate into the AppPool's user's certification repository. When you install the certificate, be sure to note the certificate's Thumbprint. 
+You can place this certificate in any of the stores, but it must be placed into the "personal" folder.  When constructing the request for the pass, you specify the location and thumbprint for the certificate. If running this code in IIS for example, installing the certificate in the Local Machine area might make access easier. Alternatively, you could place the certificate into the AppPool's user's certification repository. When you install the certificate, be sure to note the certificate's Thumbprint.
 
 ##Technical Stuff
 
@@ -41,7 +34,7 @@ To generate a pass, start by declaring a PassGenerator.
 
 Next, create a PassGeneratorRequest. This is a raw request that gives you the full power to add all the fields necessary for the pass you wish to create. Each pass is broken down into several sections. Each section is rendered in a different way, based on the style of the pass you are trying to produce. For more information on this, please consult Apple's Passbook Programming Guide. The example below here will show how to create a very basic boarding pass.
 
-Since each pass has a set of mandatory data, fill that in first. 
+Since each pass has a set of mandatory data, fill that in first.
 
     PassGeneratorRequest request = new PassGeneratorRequest();
     request.PassTypeIdentifier = "pass.tomsamcguinness.events";   
@@ -93,10 +86,12 @@ You can now provide more pass specific information. The Style must be set and th
     request.AddAuxiliaryField(new StandardField("passenger-name", "Passenger", "Thomas Anderson"));
 
  	request.TransitType = TransitType.PKTransitTypeAir;
-	
+
 You can add a BarCode.
 
-    request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "UTF-8", "01927847623423234234");
+    request.AddBarCode(BarcodeType.PKBarcodeFormatPDF417, "01927847623423234234", "ISO-8859-1", "01927847623423234234");
+
+Starting with iOS 9, multiple barcodes are now supported. This helper method supports this new feature. If you wanted to support iOS 8 and earlier, you can use the method SetBarcode().
 
 To link the pass to an existing app, you can add the app's Apple ID to the AssociatedStoreIdentifiers array.
 
@@ -109,7 +104,7 @@ Finally, generate the pass by passing the request into the instance of the Gener
 If you are using ASP.NET MVC for example, you can return this byte[] as a Passbook package
 
 	return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
- 
+
 ##Updating passes
 
 To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl.
@@ -127,7 +122,7 @@ If you need a complete implementation of the WebService, do take a look at my [P
 
 Included as part of the solution, the Passbook.Sample.Web project allows you to create some sample passes. You can run this and access the pages from your iPhone to see how the passes are installed and to see the registration and update mechanism in operation.
 
-The project also includes some dummy requests, so illustrate how you can create wrappers around the basic PassGenerationRequest. The above BoardPass can be generated using the BoardingPassGeneratorRequest. Instead of adding the fields explicitly, this encapsulates this logic, so you can call 
+The project also includes some dummy requests, so illustrate how you can create wrappers around the basic PassGenerationRequest. The above BoardPass can be generated using the BoardingPassGeneratorRequest. Instead of adding the fields explicitly, this encapsulates this logic, so you can call
 
 	request.Origin = "San Francisco";
     request.OriginCode = "SFO";
@@ -153,10 +148,11 @@ Dotnet-passbook is also available to  download from NuGet.
 
 	Install-Package dotnet-passbook
 
+=======
+## iOS 10
 
-## iOS 7
-
-This covers almost all of the new fields that were added for iOS7. I have not included the Companion App Keys yet.
+This library covers almost all of the fields in Passbook, but the NFC fields are omitted. These are for use in Apple Pay and require special
+certificates, which I don't have.
 
 ## Contribute
 
