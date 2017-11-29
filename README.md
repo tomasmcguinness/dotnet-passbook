@@ -16,7 +16,7 @@ Instead of developing your own solution, I have created [PassVerse](http://www.p
 
 The solution requires .Net 4.5 and Visual Studio 2012 or higher.
 
-##Certificates
+## Certificates
 
 Before you run the PassGenerator, you need to ensure you have all the necessary certificates installed. There are two required.
 
@@ -26,7 +26,7 @@ Secondly, you need to installed your Passbook certificate, which you get from th
 
 You can place this certificate in any of the stores, but it must be placed into the "personal" folder.  When constructing the request for the pass, you specify the location and thumbprint for the certificate. If running this code in IIS for example, installing the certificate in the Local Machine area might make access easier. Alternatively, you could place the certificate into the AppPool's user's certification repository. When you install the certificate, be sure to note the certificate's Thumbprint.
 
-##Technical Stuff
+## Technical Stuff
 
 To generate a pass, start by declaring a PassGenerator.
 
