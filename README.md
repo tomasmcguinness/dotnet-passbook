@@ -1,4 +1,4 @@
-#dotnet-passbook
+# dotnet-passbook
 
 [![No Maintenance At This Time]
 (http://unmaintained.tech/badge.svg)]
@@ -9,7 +9,7 @@ A .Net Library for generating Passbook packages for iOS 6 and iOS7
 
 (I'm not working on dotnet-passbook at this time, but will be returning to it soon to update to iOS 9)
 
-##Why
+## Why
 
 Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the [PassVerse](http://www.passverse.com), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS 6 and iOS 7).
 
@@ -44,7 +44,7 @@ Next, create a PassGeneratorRequest. This is a raw request that gives you the fu
 Since each pass has a set of mandatory data, fill that in first. 
 
     PassGeneratorRequest request = new PassGeneratorRequest();
-    request.Identifier = "pass.tomsamcguinness.events";   
+    request.PassTypeIdentifier = "pass.tomsamcguinness.events";   
     request.TeamIdentifier = "RW121242";
     request.SerialNumber = "121212";
     request.Description = "My first pass";
@@ -147,25 +147,25 @@ The project also includes some dummy requests, so illustrate how you can create 
 
 These passes are functional and can be saved in iOS Passbook.
 
-##NuGet
+## NuGet
 
 Dotnet-passbook is also available to  download from NuGet.
 
 	Install-Package dotnet-passbook
 
 
-##iOS 7
+## iOS 7
 
 This covers almost all of the new fields that were added for iOS7. I have not included the Companion App Keys yet.
 
-##Contribute
+## Contribute
 
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
-##Progress
+## Progress
 
 You can request features and see what work is being done by checking out the dotnet-passbook Trello board over at [https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62](https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62)
 
-##License
+## License
 
 Dotnet-passbook is distributed under the MIT license: [http://tomasmcguinness.mit-license.org/](http://tomasmcguinness.mit-license.org/)
