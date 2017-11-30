@@ -105,7 +105,7 @@ If you are using ASP.NET MVC for example, you can return this byte[] as a Passbo
 
 	return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
 
-##Updating passes
+## Updating passes
 
 To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl.
 
