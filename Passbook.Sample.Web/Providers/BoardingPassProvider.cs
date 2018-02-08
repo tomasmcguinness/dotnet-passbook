@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Passbook.Generator;
 using Passbook.Generator.Configuration;
 using Passbook.Generator.Fields;
@@ -18,7 +17,7 @@ namespace Passbook.Sample.Web
             return false;
         }
 
-        public override Passbook.Generator.PassGeneratorRequest GetPass(string serialNumber)
+        public override PassGeneratorRequest GetPass(string serialNumber)
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
 
@@ -37,7 +36,7 @@ namespace Passbook.Sample.Web
             parameters.AddField("boarding-gate", FieldAttribute.Value, "F12");
             parameters.AddField("passenger-name", FieldAttribute.Value, "John Appleseed");
 
-            request.AddBarCode("M1APPLESEED/JMR EZQ7O92 GVALHRBA 00723319C002F00009100", BarcodeType.PKBarcodeFormatPDF417, "iso-8859-1");
+            request.AddBarcode(BarcodeType.PKBarcodeFormatPDF417, "M1APPLESEED/JMR EZQ7O92 GVALHRBA 00723319C002F00009100", "iso-8859-1");
 
             request.LoadTemplate("BoardingPass", parameters);
 

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Passbook.Generator;
 using Passbook.Generator.Configuration;
 using Passbook.Generator.Fields;
@@ -18,7 +17,7 @@ namespace Passbook.Sample.Web
             return false;
         }
 
-        public override Passbook.Generator.PassGeneratorRequest GetPass(string serialNumber)
+        public override PassGeneratorRequest GetPass(string serialNumber)
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
 
@@ -34,7 +33,7 @@ namespace Passbook.Sample.Web
             parameters.AddField("doors-open", FieldAttribute.Value, new DateTime(eventDate.Year, eventDate.Month, eventDate.Day, 20, 30, 00));
             parameters.AddField("seating-section", FieldAttribute.Value, 10);
 
-            request.AddBarCode("01927847623423234234", BarcodeType.PKBarcodeFormatPDF417, "iso-8859-1", "01927847623423234234");
+            request.AddBarcode(BarcodeType.PKBarcodeFormatPDF417, "01927847623423234234", "iso-8859-1", "01927847623423234234");
 
             request.LoadTemplate("Event", parameters);
 
