@@ -1,8 +1,8 @@
-#dotnet-passbook
+# dotnet-passbook
 
 A .Net Library for generating Passbook packages for iOS Wallet (formerly Passbook)
 
-##Why
+## Why
 
 Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the [PassVerse](http://www.passverse.com), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS, starting at version 6).
 
@@ -16,7 +16,7 @@ Instead of developing your own solution, I have created [PassVerse](http://www.p
 
 The solution requires .Net 4.5 and Visual Studio 2012 or higher.
 
-##Certificates
+## Certificates
 
 Before you run the PassGenerator, you need to ensure you have all the necessary certificates installed. There are two required.
 
@@ -26,7 +26,7 @@ Secondly, you need to installed your Passbook certificate, which you get from th
 
 You can place this certificate in any of the stores, but it must be placed into the "personal" folder.  When constructing the request for the pass, you specify the location and thumbprint for the certificate. If running this code in IIS for example, installing the certificate in the Local Machine area might make access easier. Alternatively, you could place the certificate into the AppPool's user's certification repository. When you install the certificate, be sure to note the certificate's Thumbprint.
 
-##Technical Stuff
+## Technical Stuff
 
 To generate a pass, start by declaring a PassGenerator.
 
@@ -37,7 +37,7 @@ Next, create a PassGeneratorRequest. This is a raw request that gives you the fu
 Since each pass has a set of mandatory data, fill that in first.
 
     PassGeneratorRequest request = new PassGeneratorRequest();
-    request.Identifier = "pass.tomsamcguinness.events";   
+    request.PassTypeIdentifier = "pass.tomsamcguinness.events";   
     request.TeamIdentifier = "RW121242";
     request.SerialNumber = "121212";
     request.Description = "My first pass";
@@ -105,7 +105,7 @@ If you are using ASP.NET MVC for example, you can return this byte[] as a Passbo
 
 	return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
 
-##Updating passes
+## Updating passes
 
 To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl.
 
@@ -142,26 +142,26 @@ The project also includes some dummy requests, so illustrate how you can create 
 
 These passes are functional and can be saved in iOS Passbook.
 
-##NuGet
+## NuGet
 
 Dotnet-passbook is also available to  download from NuGet.
 
 	Install-Package dotnet-passbook
 
-
-##iOS 10
+=======
+## iOS 10
 
 This library covers almost all of the fields in Passbook, but the NFC fields are omitted. These are for use in Apple Pay and require special
 certificates, which I don't have.
 
-##Contribute
+## Contribute
 
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
-##Progress
+## Progress
 
 You can request features and see what work is being done by checking out the dotnet-passbook Trello board over at [https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62](https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62)
 
-##License
+## License
 
 Dotnet-passbook is distributed under the MIT license: [http://tomasmcguinness.mit-license.org/](http://tomasmcguinness.mit-license.org/)
