@@ -4,13 +4,7 @@ A .Net Library for generating Passbook packages for iOS Wallet (formerly Passboo
 
 ## Why
 
-Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the [PassVerse](http://www.passverse.com), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS, starting at version 6).
-
-## Looking for a full Passbook solution?
-
-Handling Passbook requires not only generating the passes, but handing registration, serial numbers and push notifications.
-
-Instead of developing your own solution, I have created [PassVerse](http://www.passverse.com), which is a complete application that handles all aspects of Passbook for you, freeing you to focus on your own application. You install it on your own servers and use your existing database. It offers a powerful REST based API that makes it simple to integrate with your own application. It's free to use with up-to 20 active passes. You can  [download it now from PassVerse.com ](http://www.passverse.com/downloads) and it only takes five minutes to setup.
+Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the PassVerse (no longer available), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS, starting at version 6).
 
 ## Requirements
 
@@ -115,8 +109,6 @@ To be able to update your pass, you must provide it with a callback. When genera
 There are several methods that the Pass will invoke when it's installed and updated. To see a reference implementation of this, look at the PassRegistrationController class in the Passbook.Sample.Web project.
 
 The method that is of most interest in the beginning is the Post method as this actually captures the PushToken for the passes. The UpdateController has a very simple mechanism for sending an update. At present, the device ID is hard-coded, but this should provide a working reference.
-
-If you need a complete implementation of the WebService, do take a look at my [PassVerse management system](http://www.passverse.com) as it contains everything you need.
 
 ## Sample Web Application
 
