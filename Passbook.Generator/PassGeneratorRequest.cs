@@ -56,7 +56,19 @@ namespace Passbook.Generator
         /// Required. Display name of the organization that originated and signed the pass.
         /// </summary>
         public string OrganizationName { get; set; }
+        /// <summary>
+        /// Disables sharing of the pass.
+        /// </summary>
+        public bool SharingProhibited { get; set; }
 
+        #region Images Files
+
+        /// <summary>
+        /// When using in memory, the binary of each image is put here.
+        /// </summary>
+        public Dictionary<PassbookImage, byte[]> Images { get; set; }
+
+        #endregion
         #endregion
 
         #region Companion App Keys
@@ -71,14 +83,6 @@ namespace Passbook.Generator
 
         #endregion
 
-        #region Images Files
-
-        /// <summary>
-        /// When using in memory, the binary of each image is put here.
-        /// </summary>
-        public Dictionary<PassbookImage, byte[]> Images { get; set; }
-
-        #endregion
 
         #region Visual Appearance Keys
 
@@ -480,6 +484,9 @@ namespace Passbook.Generator
 
             writer.WritePropertyName("teamIdentifier");
             writer.WriteValue(TeamIdentifier);
+
+            writer.WritePropertyName("sharingProhibited");
+            writer.WriteValue(SharingProhibited);
 
             if (!String.IsNullOrEmpty(LogoText))
             {
