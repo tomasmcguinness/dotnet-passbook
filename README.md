@@ -152,7 +152,11 @@ All pull requests are welcomed! If you come across an issue you cannot fix, plea
 
 ## Progress
 
-You can request features and see what work is being done by checking out the dotnet-passbook Trello board over at [https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62](https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62)
+If you want anything added to this library, or any bugs fixed, please open an issue. 
+
+## .Net Core
+
+I've had several people ask whether this library will support .Net Core. If I get the time, I'll try and make this a .Net Standard library, but I'm dependant on Crypto libs etc., so I'll need to evaluate them to ensure they will work .Net Core also.
 
 ## License
 
