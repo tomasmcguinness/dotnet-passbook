@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Http;
 using System.Diagnostics;
-using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 using System.Net;
@@ -10,14 +8,14 @@ using System.Net;
 namespace Passbook.Web
 {
     [RoutePrefix("api/passbook")]
-    public class PassbookController : PassbookBaseController
+    public abstract class PassbookController : PassbookBaseController
     {
         private string GenerateRequestHash(string passTypeIdentifier, string serialNumber, string validity)
         {
             using (System.Security.Cryptography.SHA1CryptoServiceProvider hasher = new System.Security.Cryptography.SHA1CryptoServiceProvider())
             {
                 byte[] data = Encoding.UTF8.GetBytes(passTypeIdentifier.ToLower() + serialNumber.ToLower() + validity.ToLower() + AuthorizationKey);
-                return System.BitConverter.ToString(hasher.ComputeHash(data)).Replace("-", string.Empty).ToLower();
+                return BitConverter.ToString(hasher.ComputeHash(data)).Replace("-", string.Empty).ToLower();
             }
         }
 
@@ -40,7 +38,7 @@ namespace Passbook.Web
             return false;
         }
 
-        public PassbookController(): base()
+        public PassbookController() : base()
         {
         }
 
@@ -59,8 +57,8 @@ namespace Passbook.Web
 
                 if (result != null)
                     return result;
-                    
-                Trace.TraceError("DownloadPass: No pass available for [{0}, {1}]", passTypeIdentifier, serialNumber);    
+
+                Trace.TraceError("DownloadPass: No pass available for [{0}, {1}]", passTypeIdentifier, serialNumber);
 
                 return Content<Serialization.ApiResult>(HttpStatusCode.NoContent, new Serialization.ApiResult("No pass available."));
             }
