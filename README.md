@@ -93,11 +93,15 @@ To link the pass to an existing app, you can add the app's Apple ID to the Assoc
 
 Finally, generate the pass by passing the request into the instance of the Generator. This will create the signed manifest and package all the the image files into zip.
 
-    byte[] generatedPass = generator.Generate(request);
+    	byte[] generatedPass = generator.Generate(request);
 
 If you are using ASP.NET MVC for example, you can return this byte[] as a Passbook package
 
 	return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
+	
+### IIS Security
+	
+If you're running the signing code within an IIS application, you might run into some issues accessing the private key of your certificates.  To resolve this open MMC => Add Certificates (Local computer) snap-in => Certificates (Local Computer) => Personal => Certificates => Right click the certificate of interest => All tasks => Manage private key => Add IIS AppPool\AppPoolName and grant it Full control. Replace "AppPoolName" with the name of the application pool that your app is running under. (sometimes IIS_IUSRS)
 
 ## Updating passes
 
