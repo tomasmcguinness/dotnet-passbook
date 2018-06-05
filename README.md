@@ -4,7 +4,7 @@ A .Net Library for generating Passbook packages for iOS Wallet (formerly Passboo
 
 ## Why
 
-Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the PassVerse (no longer available), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Passbook (Available in iOS, starting at version 6).
+Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the PassVerse (no longer available), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Wallet (Available in iOS, starting at version 6).
 
 ## Requirements
 
@@ -143,16 +143,15 @@ Dotnet-passbook is also available to  download from NuGet.
 =======
 ## iOS 10
 
-This library covers almost all of the fields in Passbook, but the NFC fields are omitted. These are for use in Apple Pay and require special
-certificates, which I don't have.
+This library covers almost all of the fields in Passbook, but the NFC fields are omitted. These are for use in Apple Pay and require special certificates, which I don't have.
 
 ## Contribute
 
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
 
-## Progress
+## .Net Core
 
-You can request features and see what work is being done by checking out the dotnet-passbook Trello board over at [https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62](https://trello.com/board/dotnet-passbook/500b31ef655e242e590fda62)
+I've had several people ask whether this library will support .Net Core. If I get the time, I'll try and make this a .Net Standard library, but I'm dependant on Crypto libs etc., so I'll need to evaluate them to ensure they will work .Net Core also.
 
 ## License
 
