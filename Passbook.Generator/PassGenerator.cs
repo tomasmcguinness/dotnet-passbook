@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+using Passbook.Generator.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -5,11 +7,9 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using Newtonsoft.Json;
-using Passbook.Generator.Exceptions;
-using System.Security.Cryptography.Pkcs;
 using System.Text.RegularExpressions;
 
 namespace Passbook.Generator
@@ -226,9 +226,16 @@ namespace Passbook.Generator
 
                         foreach (KeyValuePair<PassbookImage, byte[]> image in request.Images)
                         {
-                            hash = GetHashForBytes(image.Value);
-                            jsonWriter.WritePropertyName(image.Key.ToFilename());
-                            jsonWriter.WriteValue(hash);
+                            try
+                            {
+                                hash = GetHashForBytes(image.Value);
+                                jsonWriter.WritePropertyName(image.Key.ToFilename());
+                                jsonWriter.WriteValue(hash);
+                            }
+                            catch (Exception exception)
+                            {
+                                throw new Exception($"Unexpect error writing image on manifest file. Image Key: \"{image.Key}\"", exception);
+                            }
                         }
 
                         foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
