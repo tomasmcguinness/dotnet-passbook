@@ -144,7 +144,6 @@ Dotnet-passbook is also available to  download from NuGet.
 
 	Install-Package dotnet-passbook
 
-=======
 ## iOS 10
 
 This library covers almost all of the fields in Passbook, but the NFC fields are omitted. These are for use in Apple Pay and require special certificates, which I don't have.
