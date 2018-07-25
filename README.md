@@ -160,6 +160,10 @@ All pull requests are welcomed! If you come across an issue you cannot fix, plea
 
 I've had several people ask whether this library will support .Net Core. If I get the time, I'll try and make this a .Net Standard library, but I'm dependant on Crypto libs etc., so I'll need to evaluate them to ensure they will work .Net Core also.
 
+## Supporting the project
+
+If you use dotnet-passbook, please consider donating https://www.buymeacoffee.com/fMKJ2NnQ3 - it will enable me to keep the project updated with improvements and changes. Thanks!
+
 ## License
 
 Dotnet-passbook is distributed under the MIT license: [http://tomasmcguinness.mit-license.org/](http://tomasmcguinness.mit-license.org/)
