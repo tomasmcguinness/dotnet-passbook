@@ -506,6 +506,12 @@ namespace Passbook.Generator
 
                 writer.WriteEndArray();
             }
+
+            if(!string.IsNullOrEmpty(AppLaunchURL))
+            {
+                writer.WritePropertyName("appLaunchURL");
+                writer.WriteValue(AppLaunchURL);
+            }
         }
 
         private void WriteUserInfo(JsonWriter writer)

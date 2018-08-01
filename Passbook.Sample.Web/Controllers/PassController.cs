@@ -26,14 +26,13 @@ namespace Passbook.Sample.Web.Controllers
 
         public ActionResult Coupon()
         {
-            return View();
-
             PassGenerator generator = new PassGenerator();
 
             CouponPassGeneratorRequest request = new CouponPassGeneratorRequest();
             request.PassTypeIdentifier = "pass.passverse.com.public";
-            request.CertThumbprint = ConfigurationManager.AppSettings["PassBookCertificateThumbprint"];
-            request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.LocalMachine;
+            request.Certificate = System.IO.File.ReadAllBytes(@"C:\Development\TestMDM\Certificates\SSL Certificates\SSL.pfx");
+            request.CertificatePassword = "Bjaxebh2";
+            request.AppleWWDRCACertificate = System.IO.File.ReadAllBytes(@"C:\Users\gtmx\Downloads\AppleIncRootCertificate.cer");
             request.SerialNumber = "121211";
             request.Description = "My first pass";
             request.OrganizationName = "Tomas McGuinness";
@@ -43,6 +42,7 @@ namespace Passbook.Sample.Web.Controllers
             request.ForegroundColor = "rgb(255,255,255)";
 
             request.AssociatedStoreIdentifiers.Add(551768476);
+            request.AppLaunchURL = "something-goes-here";
 
             // override icon and icon retina
             request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon.png")));
