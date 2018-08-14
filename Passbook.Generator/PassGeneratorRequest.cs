@@ -77,13 +77,12 @@ namespace Passbook.Generator
 
         #region Expiration Keys
 
-        public DateTime? ExpirationDate { get; set; }
+        public DateTimeOffset? ExpirationDate { get; set; }
 
         public Boolean? Voided { get; set; }
 
         #endregion
-
-
+        
         #region Visual Appearance Keys
 
         /// <summary>
@@ -162,14 +161,9 @@ namespace Passbook.Generator
         #region Relevance Keys
 
         /// <summary>
-        /// Optional. Always display the time and date in the given time zone, not in the user’s current time zone. The default value is false
-        /// </summary>
-        public Boolean? IgnoresTimeZone { get; set; }
-
-        /// <summary>
         /// Optional. Date and time when the pass becomes relevant. For example, the start time of a movie.
         /// </summary>
-        public DateTime? RelevantDate { get; set; }
+        public DateTimeOffset? RelevantDate { get; set; }
 
         /// <summary>
         /// Optional. Locations where the passisrelevant. For example, the location of your store.
@@ -608,7 +602,9 @@ namespace Passbook.Generator
                 return string.Format("rgb({0},{1},{2})", c.R, c.G, c.B);
             }
             else
+            {
                 return color;
+            }
         }
 
         public void LoadTemplate(string template, TemplateModel parameters)
