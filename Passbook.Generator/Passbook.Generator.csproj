@@ -80,6 +80,7 @@
     <Compile Include="Fields\FieldDateTimeStyle.cs" />
     <Compile Include="Fields\FieldTextAlignment.cs" />
     <Compile Include="Images\PassbookImage.cs" />
+    <Compile Include="NFC.cs" />
     <Compile Include="RelevantBeacon.cs" />
     <Compile Include="RelevantLocation.cs" />
     <Compile Include="PassStyle.cs" />

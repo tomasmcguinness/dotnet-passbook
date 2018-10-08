@@ -1,14 +1,14 @@
-using System;
-using System.Linq;
 using Newtonsoft.Json;
-using Passbook.Generator.Fields;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Drawing;
-using System.Diagnostics;
 using Passbook.Generator.Configuration;
-using System.IO;
+using Passbook.Generator.Fields;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Passbook.Generator
 {
@@ -27,6 +27,7 @@ namespace Passbook.Generator
             this.AssociatedStoreIdentifiers = new List<int>();
             this.Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
             this.Barcodes = new List<Barcode>();
+            this.Nfc = new Nfc();
             this.UserInfo = null;
         }
 
@@ -82,7 +83,7 @@ namespace Passbook.Generator
         public Boolean? Voided { get; set; }
 
         #endregion
-        
+
         #region Visual Appearance Keys
 
         /// <summary>
@@ -249,7 +250,13 @@ namespace Passbook.Generator
         public Dictionary<string, Dictionary<string, string>> Localizations { get; set; }
         #endregion
 
-        #region Helpers
+        #region NFC
+
+        public Nfc Nfc { get; private set; }
+
+        #endregion
+
+        #region Helpers and Serialization
 
         public void AddHeaderField(Field field)
         {
@@ -352,6 +359,8 @@ namespace Passbook.Generator
             WriteExpirationKeys(writer);
             Trace.TraceInformation("Writing barcode keys..");
             WriteBarcodes(writer);
+            Trace.TraceInformation("Writing NFC fields");
+            WriteNfcKeys(writer);
 
             Trace.TraceInformation("Opening style section..");
             OpenStyleSpecificKey(writer);
@@ -501,7 +510,7 @@ namespace Passbook.Generator
                 writer.WriteEndArray();
             }
 
-            if(!string.IsNullOrEmpty(AppLaunchURL))
+            if (!string.IsNullOrEmpty(AppLaunchURL))
             {
                 writer.WritePropertyName("appLaunchURL");
                 writer.WriteValue(AppLaunchURL);
@@ -567,9 +576,9 @@ namespace Passbook.Generator
 
         private void OpenStyleSpecificKey(JsonWriter writer)
         {
-            String key = Style.ToString();
+            string key = Style.ToString();
 
-            writer.WritePropertyName(Char.ToLowerInvariant(key[0]) + key.Substring(1));
+            writer.WritePropertyName(char.ToLowerInvariant(key[0]) + key.Substring(1));
             writer.WriteStartObject();
         }
 
@@ -590,6 +599,16 @@ namespace Passbook.Generator
 
             writer.WriteEndArray();
         }
+
+        private void WriteNfcKeys(JsonWriter writer)
+        {
+            writer.WritePropertyName("nfc");
+            writer.WriteStartObject();
+            writer.WritePropertyName("message");
+            writer.WriteValue(Nfc.Message);
+            writer.WriteEndObject();
+        }
+
         #endregion
 
         public bool IsValid { get { return true; } }
