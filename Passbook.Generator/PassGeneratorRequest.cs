@@ -16,19 +16,19 @@ namespace Passbook.Generator
     {
         public PassGeneratorRequest()
         {
-            this.HeaderFields = new List<Field>();
-            this.PrimaryFields = new List<Field>();
-            this.SecondaryFields = new List<Field>();
-            this.AuxiliaryFields = new List<Field>();
-            this.BackFields = new List<Field>();
-            this.Images = new Dictionary<PassbookImage, byte[]>();
-            this.RelevantLocations = new List<RelevantLocation>();
-            this.RelevantBeacons = new List<RelevantBeacon>();
-            this.AssociatedStoreIdentifiers = new List<int>();
-            this.Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
-            this.Barcodes = new List<Barcode>();
-            this.Nfc = new Nfc();
-            this.UserInfo = null;
+            HeaderFields = new List<Field>();
+            PrimaryFields = new List<Field>();
+            SecondaryFields = new List<Field>();
+            AuxiliaryFields = new List<Field>();
+            BackFields = new List<Field>();
+            Images = new Dictionary<PassbookImage, byte[]>();
+            RelevantLocations = new List<RelevantLocation>();
+            RelevantBeacons = new List<RelevantBeacon>();
+            AssociatedStoreIdentifiers = new List<int>();
+            Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+            Barcodes = new List<Barcode>();
+            Nfc = new Nfc();
+            UserInfo = null;
         }
 
         #region Standard Keys
