@@ -602,11 +602,21 @@ namespace Passbook.Generator
 
         private void WriteNfcKeys(JsonWriter writer)
         {
-            writer.WritePropertyName("nfc");
-            writer.WriteStartObject();
-            writer.WritePropertyName("message");
-            writer.WriteValue(Nfc.Message);
-            writer.WriteEndObject();
+            if (!string.IsNullOrEmpty(Nfc.Message))
+            {
+                writer.WritePropertyName("nfc");
+                writer.WriteStartObject();
+                writer.WritePropertyName("message");
+                writer.WriteValue(Nfc.Message);
+
+                if (!string.IsNullOrEmpty(Nfc.EncryptionPublicKey))
+                {
+                    writer.WritePropertyName("encryptionPublicKey");
+                    writer.WriteValue(Nfc.EncryptionPublicKey);
+                }
+
+                writer.WriteEndObject();
+            }
         }
 
         #endregion

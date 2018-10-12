@@ -8,9 +8,16 @@
 
         public Nfc(string message)
         {
-            this.Message = message;
+            Message = message;
+        }
+
+        public Nfc(string message, string encryptionPublicKey) : this(message)
+        {
+            EncryptionPublicKey = encryptionPublicKey;
         }
 
         public string Message { get; set; }
+
+        public string EncryptionPublicKey { get; set; }
     }
 }
