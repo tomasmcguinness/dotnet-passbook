@@ -138,7 +138,7 @@ The project also includes some dummy requests, so illustrate how you can create 
 
 /Home/Index will open a simple HTML page where you can choose the card type.  
 /Pass/EventTicket will generate an event based Pass (not fully functional).  
-/Pass/BoardingPass will generate simple baording card.
+/Pass/BoardingPass will generate simple boarding card.
 
 These passes are functional and can be saved in iOS Passbook.
 
@@ -148,17 +148,17 @@ Dotnet-passbook is also available to  download from NuGet.
 
 	Install-Package dotnet-passbook
 
-## iOS 10
+## NFC Support
 
-This library covers almost all of the fields in Passbook, but the NFC fields are omitted. These are for use in Apple Pay and require special certificates, which I don't have.
+This library covers almost all of the fields in Passbook. At present the NFC fields are omitted, but I have a new branch that contains this key. I'm working with some users of the library on testing this feature since a special NFC certificate is required from Apple. Unfortunately, Apple won't supply a certificate, even for testing.
+
+## .Net Core
+
+I've had several people ask whether this library will support .Net Core. I've created a new branch called port-to-dotnet-standard, which cotains a new version of the library, built on .Net Standard 2.0. I've had to remove all the template support, since this uses System.Configuration, which doesn't really exist in .Net Standard. I haven't decided on an approach that will work for both .Net Framework and .Net Core configuration models. I will most likely release this as v2 of the library to Nuget at some point.
 
 ## Contribute
 
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
-
-## .Net Core
-
-I've had several people ask whether this library will support .Net Core. If I get the time, I'll try and make this a .Net Standard library, but I'm dependant on Crypto libs etc., so I'll need to evaluate them to ensure they will work .Net Core also.
 
 ## Supporting the project
 
