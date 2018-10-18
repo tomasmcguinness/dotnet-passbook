@@ -34,17 +34,10 @@ namespace Passbook.Generator
                 throw new ArgumentNullException("request", "You must pass an instance of PassGeneratorRequest");
             }
 
-            if (request.IsValid)
-            {
-                CreatePackage(request);
-                ZipPackage(request);
+            CreatePackage(request);
+            ZipPackage(request);
 
-                return pkPassFile;
-            }
-            else
-            {
-                throw new Exception("PassGeneratorRequest is not valid");
-            }
+            return pkPassFile;
         }
 
         private void ZipPackage(PassGeneratorRequest request)
@@ -143,7 +136,7 @@ namespace Passbook.Generator
                 }
             }
 
-            Dictionary<string, string> nameParts = 
+            Dictionary<string, string> nameParts =
             Regex.Matches(passCert.SubjectName.Name, @"(?<key>[^=,\s]+)\=*(?<value>("".+""|[^,])+)")
               .Cast<Match>()
               .ToDictionary(

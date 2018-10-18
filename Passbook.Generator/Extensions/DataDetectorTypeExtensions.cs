@@ -6,17 +6,17 @@ namespace Passbook.Generator
     {
         // Dotfucated friendly enum name conversion
         // http://stackoverflow.com/questions/483794/convert-enum-to-string
-        public static string ToSafeString(this DataDetectorType dataDetectorType)
+        public static string ToSafeString(this DataDetectorTypes dataDetectorType)
         {
             switch (dataDetectorType)
             {
-                case DataDetectorType.PKDataDetectorTypeAddress:
+                case DataDetectorTypes.PKDataDetectorTypeAddress:
                     return "PKDataDetectorTypeAddress";
-                case DataDetectorType.PKDataDetectorTypeCalendarEvent:
+                case DataDetectorTypes.PKDataDetectorTypeCalendarEvent:
                     return "PKDataDetectorTypeCalendarEvent";
-                case DataDetectorType.PKDataDetectorTypeLink:
+                case DataDetectorTypes.PKDataDetectorTypeLink:
                     return "PKDataDetectorTypeLink";
-                case DataDetectorType.PKDataDetectorTypePhoneNumber:
+                case DataDetectorTypes.PKDataDetectorTypePhoneNumber:
                     return "PKDataDetectorTypePhoneNumber";
                 default:
                     return "";
