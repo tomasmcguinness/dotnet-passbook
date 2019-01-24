@@ -95,11 +95,11 @@ Starting with iOS 9, multiple barcodes are now supported. This helper method sup
 
 To link the pass to an existing app, you can add the app's Apple ID to the AssociatedStoreIdentifiers array.
 
-	   request.AssociatedStoreIdentifiers.Add(551768478);
+	request.AssociatedStoreIdentifiers.Add(551768478);
 
 Finally, generate the pass by passing the request into the instance of the Generator. This will create the signed manifest and package all the the image files into zip.
 
-    	byte[] generatedPass = generator.Generate(request);
+	byte[] generatedPass = generator.Generate(request);
 
 If you are using ASP.NET MVC for example, you can return this byte[] as a Passbook package
 
