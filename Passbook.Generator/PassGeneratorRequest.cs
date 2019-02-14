@@ -3,7 +3,7 @@ using Passbook.Generator.Fields;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
+using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Passbook.Generator
@@ -592,8 +592,26 @@ namespace Passbook.Generator
         {
             if (!string.IsNullOrEmpty(color) && color.Substring(0, 1) == "#")
             {
-                Color c = ColorTranslator.FromHtml(color);
-                return string.Format("rgb({0},{1},{2})", c.R, c.G, c.B);
+                int r, g, b;
+
+                if (color.Length == 3)
+                {
+                    r = int.Parse(color.Substring(1, 1), NumberStyles.HexNumber);
+                    g = int.Parse(color.Substring(2, 1), NumberStyles.HexNumber);
+                    b = int.Parse(color.Substring(3, 1), NumberStyles.HexNumber);
+                }
+                else if (color.Length >= 6)
+                {
+                    r = int.Parse(color.Substring(1, 2), NumberStyles.HexNumber);
+                    g = int.Parse(color.Substring(2, 2), NumberStyles.HexNumber);
+                    b = int.Parse(color.Substring(3, 2), NumberStyles.HexNumber);
+                }
+                else
+                {
+                    throw new ArgumentException("use #rgb or #rrggbb for color values", color);
+                }
+
+                return $"rgb({r},{g},{b})";
             }
             else
             {
