@@ -73,7 +73,8 @@ Next, define the images you with to use. You must always include both standard a
 
     // override icon and icon retina
     request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon.png")));
-    request.Images.Add(PassbookImage.IconRetina, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@2x.png")));
+    request.Images.Add(PassbookImage.Icon2X, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@2x.png")));
+    request.Images.Add(PassbookImage.Icon3X, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@3x.png")));
 
 You can now provide more pass specific information. The Style must be set and then all information is then added to fields to the required sections. For a baording pass, the fields are add to three sections;  primary, secondary and auxiliary.
 
