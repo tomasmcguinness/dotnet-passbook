@@ -319,7 +319,14 @@ namespace Passbook.Generator
             {
                 if (request.Certificate == null)
                 {
-                    return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My);
+                    if (string.IsNullOrEmpty(request.CertThumbprint))
+                    {
+                        return GetSpecifiedCertificateFromCertStore(request.PassTypeIdentifier, StoreName.My, X509FindType.FindBySubjectName);
+                    }
+                    else
+                    {
+                        return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My, X509FindType.FindByThumbprint);
+                    }
                 }
                 else
                 {
@@ -333,14 +340,14 @@ namespace Passbook.Generator
             }
         }
 
-        private static X509Certificate2 GetSpecifiedCertificateFromCertStore(string thumbPrint, StoreName storeName)
+        private static X509Certificate2 GetSpecifiedCertificateFromCertStore(string searchValue, StoreName storeName, X509FindType findType)
         {
             foreach (StoreLocation storeLocation in Enum.GetValues(typeof(StoreLocation)))
             {
                 X509Store store = new X509Store(storeName, storeLocation);
                 store.Open(OpenFlags.ReadOnly);
 
-                X509Certificate2Collection certs = store.Certificates.Find(X509FindType.FindByThumbprint, thumbPrint, false);
+                X509Certificate2Collection certs = store.Certificates.Find(findType, searchValue, false);
 
                 if (certs.Count > 0)
                 {
