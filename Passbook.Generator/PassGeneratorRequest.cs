@@ -603,8 +603,8 @@ namespace Passbook.Generator
                 else if (color.Length >= 6)
                 {
                     r = int.Parse(color.Substring(1, 2), NumberStyles.HexNumber);
-                    g = int.Parse(color.Substring(2, 2), NumberStyles.HexNumber);
-                    b = int.Parse(color.Substring(3, 2), NumberStyles.HexNumber);
+                    g = int.Parse(color.Substring(3, 2), NumberStyles.HexNumber);
+                    b = int.Parse(color.Substring(5, 2), NumberStyles.HexNumber);
                 }
                 else
                 {
