@@ -14,9 +14,7 @@ Creating passes for Apple's Passbook is pretty simple, but requires the use of P
 
 ## Requirements
 
-The solution requires .Net 4.5 and Visual Studio 2012 or higher.
-
-Port to .NET Standard is in the works. There is a branch called port-to-dotnet-standard, which I'm working on.
+The solution requires Visual Studio 2017 or higher. The library is built for .NET Standard 2.0.
 
 ## Certificates
 
