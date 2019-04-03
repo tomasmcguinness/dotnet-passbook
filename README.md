@@ -1,6 +1,6 @@
 # dotnet-passbook
 
-A .Net Library for generating Passbook packages for iOS Wallet (formerly Passbook)
+A .Net Standard Library for generating Passbook packages for iOS Wallet (formerly Passbook)
 
 ## Installing
 
