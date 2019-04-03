@@ -1,6 +1,6 @@
 # dotnet-passbook
 
-A .Net Standard Library for generating Passbook packages for iOS Wallet (formerly Passbook)
+A .NET Standard Library for generating Passbook packages for iOS Wallet (formerly Passbook)
 
 ## Installing
 
@@ -10,7 +10,7 @@ dotnet-passbook is also available to  download from NuGet.
 
 ## Why
 
-Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the PassVerse (no longer available), I created a library that performs all the steps in C#. I decided to open source this library to other .Net developers. It allows you to generate, sign and zip Passbook files for use with Apple's Wallet (Available in iOS, starting at version 6).
+Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building the PassVerse (no longer available), I created a library that performs all the steps in C#. I decided to open source this library to other .NET developers. It allows you to generate, sign and zip Passbook files for use with Apple's Wallet (Available in iOS, starting at version 6).
 
 ## Requirements
 
