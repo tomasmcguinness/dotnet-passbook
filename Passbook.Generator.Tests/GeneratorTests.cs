@@ -10,7 +10,7 @@ namespace Passbook.Generator.Tests
     public class GeneratorTests
     {
         [TestMethod]
-        public void TestMethod1()
+        public void EnsureDatesAreInCorrectFormat()
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
             request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Local);

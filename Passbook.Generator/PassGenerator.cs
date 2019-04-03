@@ -290,7 +290,7 @@ namespace Passbook.Generator
             {
                 if (request.AppleWWDRCACertificate == null)
                 {
-                    return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority);
+                    return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority, X509FindType.FindByThumbprint);
                 }
                 else
                 {
