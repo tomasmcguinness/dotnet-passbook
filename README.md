@@ -4,7 +4,7 @@ A .NET Standard Library for generating Passbook packages for iOS Wallet (formerl
 
 ## Installing
 
-dotnet-passbook is also available to  download from NuGet.
+dotnet-passbook is also available to download from NuGet (but this is the .Net Framework version as I haven't published a new one yet).
 
 	Install-Package dotnet-passbook
 
@@ -116,46 +116,18 @@ If you're running the signing code within an IIS application, you might run into
 
 ## Updating passes
 
-To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl.
+To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl. Both of these values are required. The WebServiceUrl must be HTTPS by default, but you can disable this requirment in the iOS developer options on any device you're testing on.
 
-	request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
+    request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
     request.WebServiceUrl = "http://192.168.1.59:82/api";
 
-There are several methods that the Pass will invoke when it's installed and updated. To see a reference implementation of this, look at the PassRegistrationController class in the Passbook.Sample.Web project.
+The webservice you point to must support Apple's protocol, outlined here https://developer.apple.com/library/archive/documentation/PassKit/Reference/PassKit_WebService/WebService.html#//apple_ref/doc/uid/TP40011988
 
-The method that is of most interest in the beginning is the Post method as this actually captures the PushToken for the passes. The UpdateController has a very simple mechanism for sending an update. At present, the device ID is hard-coded, but this should provide a working reference.
-
-## Sample Web Application
-
-Included as part of the solution, the Passbook.Sample.Web project allows you to create some sample passes. You can run this and access the pages from your iPhone to see how the passes are installed and to see the registration and update mechanism in operation.
-
-The project also includes some dummy requests, so illustrate how you can create wrappers around the basic PassGenerationRequest. The above BoardPass can be generated using the BoardingPassGeneratorRequest. Instead of adding the fields explicitly, this encapsulates this logic, so you can call
-
-	request.Origin = "San Francisco";
-    request.OriginCode = "SFO";
-
-    request.Destination = "London";
-    request.DestinationCode = "LDN";
-
-    request.Seat = "7A";
-    request.BoardingGate = "F12";
-    request.PassengerName = "John Appleseed";
-
-    request.TransitType = TransitType.PKTransitTypeAir;
-
-/Home/Index will open a simple HTML page where you can choose the card type.  
-/Pass/EventTicket will generate an event based Pass (not fully functional).  
-/Pass/BoardingPass will generate simple boarding card.
-
-These passes are functional and can be saved in iOS Passbook.
+I'm working on a sample implementation of the protocol in ASP.Net Core and you can find it on the branch new-sample-webservice.
 
 ## NFC Support
 
 This library covers almost all of the fields in Passbook. At present the NFC fields are omitted, but I have a new branch that contains this key. I'm working with some users of the library on testing this feature since a special NFC certificate is required from Apple. Unfortunately, Apple won't supply a certificate, even for testing.
-
-## .Net Core
-
-I've had several people ask whether this library will support .Net Core. I've created a new branch called port-to-dotnet-standard, which cotains a new version of the library, built on .Net Standard 2.0. I've had to remove all the template support, since this uses System.Configuration, which doesn't really exist in .Net Standard. I haven't decided on an approach that will work for both .Net Framework and .Net Core configuration models. I will most likely release this as v2 of the library to Nuget at some point.
 
 ## Contribute
 
