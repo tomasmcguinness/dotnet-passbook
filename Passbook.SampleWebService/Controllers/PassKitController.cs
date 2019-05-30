@@ -42,6 +42,14 @@ namespace Passbook.SampleWebService.Controllers
             }
         }
 
+        /// <summary>
+        /// The AuthenticationToken will be passed by PassKit in hte Authorization header.
+        /// </summary>
+        /// <example>
+        /// Authorization: ApplePass <TOKEN>
+        /// </example>
+        /// <param name="request"></param>
+        /// <returns></returns>
         private string GetAuthenticationTokenFromHeader(HttpRequest request)
         {
             request.Headers.TryGetValue("Authorization", out StringValues headerValues);
