@@ -6,7 +6,7 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>dotnet-passbook</PackageId>
     <Company>Tomas McGuinness</Company>
-    <Product>Tomas McGuinness</Product>
+    <Product>dotnet-passbook</Product>
     <Description>Generate pass files for Apple Wallet. This library allows you to build and sign a pkpass file.</Description>
     <PackageReleaseNotes>Supports .Net Standard</PackageReleaseNotes>
     <PackageTags>PassBook Wallet Apple Passkit</PackageTags>

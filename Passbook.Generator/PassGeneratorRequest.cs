@@ -1,9 +1,13 @@
 using Newtonsoft.Json;
+using Passbook.Generator.Configuration;
 using Passbook.Generator.Fields;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
-using System.Globalization;
+using System.Drawing;
+using System.IO;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Passbook.Generator
@@ -12,18 +16,19 @@ namespace Passbook.Generator
     {
         public PassGeneratorRequest()
         {
-            this.HeaderFields = new List<Field>();
-            this.PrimaryFields = new List<Field>();
-            this.SecondaryFields = new List<Field>();
-            this.AuxiliaryFields = new List<Field>();
-            this.BackFields = new List<Field>();
-            this.Images = new Dictionary<PassbookImage, byte[]>();
-            this.RelevantLocations = new List<RelevantLocation>();
-            this.RelevantBeacons = new List<RelevantBeacon>();
-            this.AssociatedStoreIdentifiers = new List<int>();
-            this.Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
-            this.Barcodes = new List<Barcode>();
-            this.UserInfo = null;
+            HeaderFields = new List<Field>();
+            PrimaryFields = new List<Field>();
+            SecondaryFields = new List<Field>();
+            AuxiliaryFields = new List<Field>();
+            BackFields = new List<Field>();
+            Images = new Dictionary<PassbookImage, byte[]>();
+            RelevantLocations = new List<RelevantLocation>();
+            RelevantBeacons = new List<RelevantBeacon>();
+            AssociatedStoreIdentifiers = new List<int>();
+            Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+            Barcodes = new List<Barcode>();
+            Nfc = new Nfc();
+            UserInfo = null;
         }
 
         #region Standard Keys
@@ -245,7 +250,13 @@ namespace Passbook.Generator
         public Dictionary<string, Dictionary<string, string>> Localizations { get; set; }
         #endregion
 
-        #region Helpers
+        #region NFC
+
+        public Nfc Nfc { get; private set; }
+
+        #endregion
+
+        #region Helpers and Serialization
 
         public void AddHeaderField(Field field)
         {
@@ -348,6 +359,8 @@ namespace Passbook.Generator
             WriteExpirationKeys(writer);
             Trace.TraceInformation("Writing barcode keys..");
             WriteBarcodes(writer);
+            Trace.TraceInformation("Writing NFC fields");
+            WriteNfcKeys(writer);
 
             Trace.TraceInformation("Opening style section..");
             OpenStyleSpecificKey(writer);
@@ -563,9 +576,9 @@ namespace Passbook.Generator
 
         private void OpenStyleSpecificKey(JsonWriter writer)
         {
-            String key = Style.ToString();
+            string key = Style.ToString();
 
-            writer.WritePropertyName(Char.ToLowerInvariant(key[0]) + key.Substring(1));
+            writer.WritePropertyName(char.ToLowerInvariant(key[0]) + key.Substring(1));
             writer.WriteStartObject();
         }
 
@@ -586,6 +599,26 @@ namespace Passbook.Generator
 
             writer.WriteEndArray();
         }
+
+        private void WriteNfcKeys(JsonWriter writer)
+        {
+            if (!string.IsNullOrEmpty(Nfc.Message))
+            {
+                writer.WritePropertyName("nfc");
+                writer.WriteStartObject();
+                writer.WritePropertyName("message");
+                writer.WriteValue(Nfc.Message);
+
+                if (!string.IsNullOrEmpty(Nfc.EncryptionPublicKey))
+                {
+                    writer.WritePropertyName("encryptionPublicKey");
+                    writer.WriteValue(Nfc.EncryptionPublicKey);
+                }
+
+                writer.WriteEndObject();
+            }
+        }
+
         #endregion
 
         private static string ConvertColor(string color)
