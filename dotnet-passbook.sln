@@ -8,12 +8,19 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4C5E4812-6174-4F75-8AEE-45100AB9205F}"
 	ProjectSection(SolutionItems) = preProject
 		dotnet-passbook.nuspec = dotnet-passbook.nuspec
+		license.txt = license.txt
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.Generator.Tests", "Passbook.Generator.Tests\Passbook.Generator.Tests.csproj", "{9366CDD5-5B37-4C40-9661-47B205C6D01D}"
 EndProject
+<<<<<<< Updated upstream
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.Generator", "Passbook.Generator\Passbook.Generator.csproj", "{3723CA11-BB28-4CE6-B70C-2631DF1F14A1}"
+=======
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passbook.Generator", "Passbook.Generator\Passbook.Generator.csproj", "{3723CA11-BB28-4CE6-B70C-2631DF1F14A1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passbook.SampleWebService", "Passbook.SampleWebService\Passbook.SampleWebService.csproj", "{282F14EB-2C6D-41E5-A3BA-63D5EF00FB5F}"
+>>>>>>> Stashed changes
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
