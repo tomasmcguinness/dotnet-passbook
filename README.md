@@ -129,6 +129,13 @@ I'm working on a sample implementation of the protocol in ASP.Net Core and you c
 
 This library covers almost all of the fields in Passbook. At present the NFC fields are omitted, but I have a new branch that contains this key. I'm working with some users of the library on testing this feature since a special NFC certificate is required from Apple. Unfortunately, Apple won't supply a certificate, even for testing.
 
+As of version 2.0.1, the NFC keys are now supported. To use them, just set hte Nfc property with a new Nfc object. Both the message and encoded public key values are mandatory.
+
+	 PassGeneratorRequest request = new PassGeneratorRequest();
+         request.Nfc = new Nfc("THE NFC Message", "<encoded private key>");
+	 
+I cannot supply any information as to the values required since it's not available publically.
+
 ## Contribute
 
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
