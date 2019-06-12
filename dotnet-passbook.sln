@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2047
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.Sample.Web", "Passbook.Sample.Web\Passbook.Sample.Web.csproj", "{5E027B2A-8351-4805-B633-13095574CF06}"
 EndProject
@@ -14,13 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.Generator.Tests", "Passbook.Generator.Tests\Passbook.Generator.Tests.csproj", "{9366CDD5-5B37-4C40-9661-47B205C6D01D}"
 EndProject
-<<<<<<< Updated upstream
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.Generator", "Passbook.Generator\Passbook.Generator.csproj", "{3723CA11-BB28-4CE6-B70C-2631DF1F14A1}"
-=======
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passbook.Generator", "Passbook.Generator\Passbook.Generator.csproj", "{3723CA11-BB28-4CE6-B70C-2631DF1F14A1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passbook.SampleWebService", "Passbook.SampleWebService\Passbook.SampleWebService.csproj", "{282F14EB-2C6D-41E5-A3BA-63D5EF00FB5F}"
->>>>>>> Stashed changes
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
