@@ -15,7 +15,7 @@ namespace Passbook.Generator.Tests
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
             request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Local);
-            request.Nfc.Message = "My NFC Message";
+            request.Nfc = new Nfc("My NFC Message", "SKLSJLKJ");
 
             DateTime offset = new DateTime(2018, 01, 05, 12, 00, 0);
             TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");

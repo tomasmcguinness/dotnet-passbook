@@ -1,13 +1,9 @@
 using Newtonsoft.Json;
-using Passbook.Generator.Configuration;
 using Passbook.Generator.Fields;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
+using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Passbook.Generator
@@ -27,7 +23,6 @@ namespace Passbook.Generator
             AssociatedStoreIdentifiers = new List<int>();
             Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
             Barcodes = new List<Barcode>();
-            Nfc = new Nfc();
             UserInfo = null;
         }
 
@@ -252,7 +247,7 @@ namespace Passbook.Generator
 
         #region NFC
 
-        public Nfc Nfc { get; private set; }
+        public Nfc Nfc { get; set; }
 
         #endregion
 
@@ -359,8 +354,12 @@ namespace Passbook.Generator
             WriteExpirationKeys(writer);
             Trace.TraceInformation("Writing barcode keys..");
             WriteBarcodes(writer);
-            Trace.TraceInformation("Writing NFC fields");
-            WriteNfcKeys(writer);
+
+            if (Nfc != null)
+            {
+                Trace.TraceInformation("Writing NFC fields");
+                WriteNfcKeys(writer);
+            }
 
             Trace.TraceInformation("Opening style section..");
             OpenStyleSpecificKey(writer);

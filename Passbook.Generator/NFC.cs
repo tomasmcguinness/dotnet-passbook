@@ -2,22 +2,14 @@
 {
     public class Nfc
     {
-        public Nfc()
-        {
-        }
-
-        public Nfc(string message)
+        public Nfc(string message, string encryptionPublicKey)
         {
             Message = message;
-        }
-
-        public Nfc(string message, string encryptionPublicKey) : this(message)
-        {
             EncryptionPublicKey = encryptionPublicKey;
         }
 
-        public string Message { get; set; }
+        public string Message { get; }
 
-        public string EncryptionPublicKey { get; set; }
+        public string EncryptionPublicKey { get; }
     }
 }
