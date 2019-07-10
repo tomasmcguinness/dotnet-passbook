@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -18,18 +19,20 @@ namespace Passbook.SampleWebService.Controllers
 
         [HttpGet]
         [Route("{version}/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}/{serialNumber}")]
-        public ActionResult RegisterPass([FromBody] RegistrationRequestModel model, string version, string deviceLibraryIdentifier, string passTypeIdentifier, string serialNumber)
+        public async Task<ActionResult> RegisterPass([FromBody] RegistrationRequestModel model, string version, string deviceLibraryIdentifier, string passTypeIdentifier, string serialNumber)
         {
             var authenticationToken = GetAuthenticationTokenFromHeader(Request);
 
-            if (!_handler.IsAuthorized(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, authenticationToken))
+            var isAuthorized = await _handler.IsAuthorizedAsync(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, authenticationToken);
+
+            if (!isAuthorized)
             {
                 return Unauthorized();
             }
 
             var pushToken = model.PushToken;
 
-            var result = _handler.RegisterPass(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, pushToken);
+            var result = await _handler.RegisterPassAsync(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, pushToken, "Private");
 
             switch (result)
             {

@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.Generator.Tests", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passbook.Generator", "Passbook.Generator\Passbook.Generator.csproj", "{3723CA11-BB28-4CE6-B70C-2631DF1F14A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.SampleWebService", "Passbook.SampleWebService\Passbook.SampleWebService.csproj", "{282F14EB-2C6D-41E5-A3BA-63D5EF00FB5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passbook.SampleWebService", "Passbook.SampleWebService\Passbook.SampleWebService.csproj", "{282F14EB-2C6D-41E5-A3BA-63D5EF00FB5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

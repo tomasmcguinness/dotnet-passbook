@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Passbook.SampleWebService.SampleHandling;
+using Passbook.SampleWebService.Repository;
 
 namespace Passbook.SampleWebService
 {
@@ -27,10 +21,11 @@ namespace Passbook.SampleWebService
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            /*
-             * I'm using a simple singlton value here, which returns my InMemoryWebServiceHandler
-             */
-            services.AddSingleton<IWebServiceHandler, InMemoryWebServiceHandler>();
+            var config = new TableStorageConfiguration();
+            Configuration.Bind("TableStorage", config);
+            services.AddSingleton(config);
+
+            services.AddSingleton<IWebServiceHandler, TableStorageWebServiceHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
