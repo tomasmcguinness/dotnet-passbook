@@ -47,25 +47,28 @@ Since each pass has a set of mandatory data, fill that in first.
 Colours can be specified in HTML format or in RGB format.
 
     request.BackgroundColor = "#FFFFFF";
-	request.LabelColor = "#000000";
+    request.LabelColor = "#000000";
     request.ForegroundColor = "#000000";
-
-	request.BackgroundColor = "rgb(255,255,255)";
-	request.LabelColor = "rgb(0,0,0)";
+    
+    request.BackgroundColor = "rgb(255,255,255)";
+    request.LabelColor = "rgb(0,0,0)";
     request.ForegroundColor = "rgb(0,0,0)";
 
-To select the certificate there are two options. Firstly, you can use the Windows Certificate store to hold the certificates. You choose the location of your Passbook certificate by specifying the thumbprint of the certificates. The Apple WWDRC is also loaded  in this way, so you don't need to specify anything.
+To select the certificate there are two options. Firstly, you can use the Windows Certificate store to hold the certificates. You choose the location of your Passbook certificate by specifying the thumbprint of the certificates. 
 
- 	request.CertThumbprint = "22C5FADDFBF935E26E2DDB8656010C7D4103E02E";
+    request.CertThumbprint = "22C5FADDFBF935E26E2DDB8656010C7D4103E02E";
     request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
 
 An alternative way to pass the certificates into the PassGenerator is to load them as byte[] and add them to the request.
 
-	request.Certificate = certData; // Loaded from a database or other mechanism for example.
+    byte[] certData = <the contents of the certificate>; // e.g. File.ReadAllBytes(@"C:\path\to\your\certificate");
+    request.Certificate = certData;
     request.CertificatePassword = "abc123"; // The password for the certificate's private key.
-    string appleCertPath = (HttpContext.Current.Server.MapPath("~/Certificates
-    AppleWWDRCA.cer");
-	request.AppleWWDRCACertificate = File.ReadAllBytes(appleCertPath);
+
+The Apple WWDRC Certificate can only be loaded as a byte[].
+
+    var certData =  <the contents of the WWDR certificate>; // e.g. File.ReadAllBytes(@"C:\path\to\the\apple\wwdr\certificate");
+    request.AppleWWDRCACertificate = certData;
 
 Next, define the images you with to use. You must always include both standard and retina sized images. Images are supplied as byte[].
 
@@ -86,7 +89,7 @@ You can now provide more pass specific information. The Style must be set and th
     request.AddAuxiliaryField(new StandardField("seat", "Seat", "G5" ));
     request.AddAuxiliaryField(new StandardField("passenger-name", "Passenger", "Thomas Anderson"));
 
- 	request.TransitType = TransitType.PKTransitTypeAir;
+    request.TransitType = TransitType.PKTransitTypeAir;
 
 You can add a BarCode.
 
@@ -96,15 +99,15 @@ Starting with iOS 9, multiple barcodes are now supported. This helper method sup
 
 To link the pass to an existing app, you can add the app's Apple ID to the AssociatedStoreIdentifiers array.
 
-	request.AssociatedStoreIdentifiers.Add(551768478);
+    request.AssociatedStoreIdentifiers.Add(551768478);
 
 Finally, generate the pass by passing the request into the instance of the Generator. This will create the signed manifest and package all the the image files into zip.
 
-	byte[] generatedPass = generator.Generate(request);
+    byte[] generatedPass = generator.Generate(request);
 
 If you are using ASP.NET MVC for example, you can return this byte[] as a Passbook package
 
-	return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
+    return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
 	
 ### Troubleshooting Passes
 
