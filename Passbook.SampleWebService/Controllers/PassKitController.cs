@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Passbook.SampleWebService.Models;
+using System.Threading.Tasks;
 
 namespace Passbook.SampleWebService.Controllers
 {
@@ -65,8 +64,7 @@ namespace Passbook.SampleWebService.Controllers
             {
                 var authorizationHeaderValue = headerValues[0];
 
-                var tokenValue = authorizationHeaderValue.Replace("ApplePass", "");
-                tokenValue = tokenValue.Trim();
+                var tokenValue = authorizationHeaderValue.Replace("ApplePass", "").Trim();
 
                 return tokenValue;
             }
