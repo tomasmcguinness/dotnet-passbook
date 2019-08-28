@@ -9,13 +9,22 @@ namespace Passbook.SampleWebService.Controllers
     [ApiController]
     public class PassKitController : ControllerBase
     {
-        private IWebServiceHandler _handler;
+        private readonly IWebServiceHandler _handler;
 
         public PassKitController(IWebServiceHandler handler)
         {
             _handler = handler;
         }
 
+        /// <summary>
+        /// When a pass is opened on a device, this API method will be called. This registers the pass on the device.
+        /// </summary>
+        /// <param name="model">The body of the request includes the push token, which is used to send notifications.</param>
+        /// <param name="version">The version of the API. This is fixed at 1.</param>
+        /// <param name="deviceLibraryIdentifier">The identifier of the device</param>
+        /// <param name="passTypeIdentifier">The identifier of the pass.</param>
+        /// <param name="serialNumber">The serial number of the pass.</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{version}/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}/{serialNumber}")]
         public async Task<ActionResult> RegisterPass([FromBody] RegistrationRequestModel model,
@@ -49,7 +58,7 @@ namespace Passbook.SampleWebService.Controllers
         }
 
         /// <summary>
-        /// The AuthenticationToken will be passed by PassKit in hte Authorization header.
+        /// The AuthenticationToken will be passed by PassKit in the HTTP Authorization header. It is prefixed with ApplePass.
         /// </summary>
         /// <example>
         /// Authorization: ApplePass <TOKEN>

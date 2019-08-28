@@ -8,7 +8,7 @@ namespace Passbook.SampleWebService.Controllers
         public IActionResult Index()
         {
             PassModel model = new PassModel();
-            
+
             return View(model);
         }
 
@@ -19,7 +19,10 @@ namespace Passbook.SampleWebService.Controllers
             {
                 // Generate the pass.
                 //
-                return new FileContentResult();
+
+                // Return the file. You can download this onto your own iPhone.
+                //
+                return File(new byte[0], "pass/pass");
             }
 
             return View(model);
@@ -31,7 +34,7 @@ namespace Passbook.SampleWebService.Controllers
 
         public IActionResult Update(UpdatePassModel model)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
 
             }

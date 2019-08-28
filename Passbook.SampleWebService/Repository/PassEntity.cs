@@ -9,16 +9,16 @@ namespace Passbook.SampleWebService.Repository
 
         }
 
-        public PassEntity(string partitionKey, string rowKey, string value, string secret)
+        public PassEntity(string partitionKey, string rowKey, string value, string authenticationToken)
         {
             PartitionKey = partitionKey;
             RowKey = rowKey;
             Value = value;
-            Secret = secret;
+            AuthenticationToken = authenticationToken;
         }
 
         public string Value { get; set; }
 
-        public string Secret { get; set; }
+        public string AuthenticationToken { get; set; }
     }
 }

@@ -63,7 +63,7 @@ namespace Passbook.SampleWebService.Repository
                                                   string authorizationToken)
         {
             var pass = await GetPassAsync(passTypeIdentifier, serialNumber);
-            return authorizationToken == pass.Secret;
+            return authorizationToken == pass.AuthenticationToken;
         }
 
         // Private methods for existing the passes
