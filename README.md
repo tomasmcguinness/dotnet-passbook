@@ -119,10 +119,12 @@ If you're running the signing code within an IIS application, you might run into
 
 ## Updating passes
 
-To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl. Both of these values are required. The WebServiceUrl must be HTTPS by default, but you can disable this requirment in the iOS developer options on any device you're testing on.
+To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl. Both of these values are required. The WebServiceUrl must be HTTPS by default, but you can disable this requirement in the iOS developer options on any device you're testing on.
 
-    request.AuthenticationToken = "vxwxd7J8AlNNFPS8k0a0FfUFtq0ewzFdc";
-    request.WebServiceUrl = "http://192.168.1.59:82/api";
+The authentication token is a string that will be included in the header of all requets made to your API. It's your responsibility to validate this token.
+
+    request.AuthenticationToken = "<a secret to ensure authorized access>";
+    request.WebServiceUrl = "https://<your api>";
 
 The webservice you point to must support Apple's protocol, outlined here https://developer.apple.com/library/archive/documentation/PassKit/Reference/PassKit_WebService/WebService.html#//apple_ref/doc/uid/TP40011988
 
