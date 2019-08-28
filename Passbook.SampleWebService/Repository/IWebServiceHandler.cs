@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Passbook.SampleWebService
+namespace Passbook.SampleWebService.Repository
 {
     public interface IWebServiceHandler
     {

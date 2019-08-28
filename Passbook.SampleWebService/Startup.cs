@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Passbook.SampleWebService.Repository;
+using Passbook.SampleWebService.Services;
 
 namespace Passbook.SampleWebService
 {
@@ -21,11 +22,16 @@ namespace Passbook.SampleWebService
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            var config = new TableStorageConfiguration();
-            Configuration.Bind("TableStorage", config);
-            services.AddSingleton(config);
+            var storageConfig = new TableStorageConfiguration();
+            Configuration.Bind("TableStorage", storageConfig);
+            services.AddSingleton(storageConfig);
+
+            var generatorConfig = new PassGeneratorConfiguration();
+            Configuration.Bind("PassGenerator", generatorConfig);
+            services.AddSingleton(generatorConfig);
 
             services.AddSingleton<IWebServiceHandler, TableStorageHandler>();
+            services.AddSingleton<IPassService, PassService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

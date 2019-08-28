@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using Passbook.SampleWebService.Models;
+using Passbook.SampleWebService.Repository;
 using System.Threading.Tasks;
 
 namespace Passbook.SampleWebService.Controllers

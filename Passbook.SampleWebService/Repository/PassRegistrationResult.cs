@@ -1,4 +1,4 @@
-﻿namespace Passbook.SampleWebService
+﻿namespace Passbook.SampleWebService.Repository
 {
     public enum PassRegistrationResult
     {
