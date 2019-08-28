@@ -4,7 +4,7 @@ A .NET Standard Library for generating Passbook packages for iOS Wallet (formerl
 
 ## Installing
 
-dotnet-passbook is also available to download from NuGet (but this is the .Net Framework version as I haven't published a new one yet).
+dotnet-passbook is also available to download from NuGet
 
 	Install-Package dotnet-passbook
 
