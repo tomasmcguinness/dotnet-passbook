@@ -15,7 +15,7 @@ namespace Passbook.SampleWebService.Services
             _generatorConfiguration = generatorConfiguration;
         }
 
-        public Task<byte[]> GeneratePassAsync(string serialNumber, string value, string secret)
+        public async Task<byte[]> GeneratePassAsync(string serialNumber, string value, string secret)
         {
             var generatorRequest = new PassGeneratorRequest();
 
@@ -38,6 +38,8 @@ namespace Passbook.SampleWebService.Services
 
             var generator = new PassGenerator();
             var rawPass = generator.Generate(generatorRequest);
+
+            // Write the pass details to the database.
 
             return rawPass;
         }
