@@ -7,22 +7,26 @@ using System.Threading.Tasks;
 namespace Passbook.SampleWebService.Controllers
 {
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class PassKitController : ControllerBase
     {
         private IWebServiceHandler _handler;
 
-        public ValuesController(IWebServiceHandler handler)
+        public PassKitController(IWebServiceHandler handler)
         {
             _handler = handler;
         }
 
         [HttpGet]
         [Route("{version}/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}/{serialNumber}")]
-        public async Task<ActionResult> RegisterPass([FromBody] RegistrationRequestModel model, string version, string deviceLibraryIdentifier, string passTypeIdentifier, string serialNumber)
+        public async Task<ActionResult> RegisterPass([FromBody] RegistrationRequestModel model,
+                                                     string version,
+                                                     string deviceLibraryIdentifier,
+                                                     string passTypeIdentifier,
+                                                     string serialNumber)
         {
             var authenticationToken = GetAuthenticationTokenFromHeader(Request);
 
-            var isAuthorized = await _handler.IsAuthorizedAsync(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, authenticationToken);
+            var isAuthorized = await _handler.IsAuthorizedAsync(passTypeIdentifier, serialNumber, authenticationToken);
 
             if (!isAuthorized)
             {
@@ -31,7 +35,7 @@ namespace Passbook.SampleWebService.Controllers
 
             var pushToken = model.PushToken;
 
-            var result = await _handler.RegisterPassAsync(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, pushToken, "Private");
+            var result = await _handler.RegisterPassAsync(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, pushToken);
 
             switch (result)
             {

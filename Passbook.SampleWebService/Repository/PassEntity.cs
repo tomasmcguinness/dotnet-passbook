@@ -1,5 +1,4 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using System;
 
 namespace Passbook.SampleWebService.Repository
 {
@@ -10,20 +9,16 @@ namespace Passbook.SampleWebService.Repository
 
         }
 
-        public PassEntity(string partitionKey, string rowKey, string pushToken, string secret)
+        public PassEntity(string partitionKey, string rowKey, string value, string secret)
         {
             PartitionKey = partitionKey;
             RowKey = rowKey;
-            PushToken = pushToken;
+            Value = value;
             Secret = secret;
         }
 
-        public string PushToken { get; set; }
-
-        public string Secret { get; set; }
-
         public string Value { get; set; }
 
-        public DateTime? LastUpdated { get; set; }
+        public string Secret { get; set; }
     }
 }

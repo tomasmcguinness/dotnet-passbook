@@ -1,7 +1,24 @@
-﻿
+﻿@model Passbook.SampleWebService.Models.PassModel
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Create New Pass";
 }
 
-<h1>Index</h1>
+<h1>Create Passes</h1>
+<hr />
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(m => m.SerialNumber)
+    @Html.TextBoxFor(m => m.SerialNumber)
+    @Html.ValidationMessageFor(m => m.SerialNumber)
+
+    @Html.LabelFor(m => m.Value)
+    @Html.TextBoxFor(m => m.Value)
+    @Html.ValidationMessageFor(m => m.Value)
+
+    @Html.LabelFor(m => m.Secret)
+    @Html.TextBoxFor(m => m.Secret)
+    @Html.ValidationMessageFor(m => m.Secret)
+
+    <button type="submit">Submit</button>
+}
 

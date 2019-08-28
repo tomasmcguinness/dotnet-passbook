@@ -25,7 +25,7 @@ namespace Passbook.SampleWebService
             Configuration.Bind("TableStorage", config);
             services.AddSingleton(config);
 
-            services.AddSingleton<IWebServiceHandler, TableStorageWebServiceHandler>();
+            services.AddSingleton<IWebServiceHandler, TableStorageHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
