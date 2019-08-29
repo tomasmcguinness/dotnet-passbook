@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Passbook.SampleWebService.Models;
 using Passbook.SampleWebService.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace Passbook.SampleWebService.Controllers
@@ -8,17 +9,24 @@ namespace Passbook.SampleWebService.Controllers
     public class PassController : Controller
     {
         private readonly IPassService _passService;
+        private readonly PassGeneratorConfiguration _configuration;
 
-        public PassController(IPassService passService)
+        public PassController(IPassService passService, PassGeneratorConfiguration configuration)
         {
             _passService = passService;
+            _configuration = configuration;
         }
 
         public IActionResult Index()
         {
-            PassModel model = new PassModel();
-
-            return View(model);
+            if (_configuration.IsValid())
+            {
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("CheckConfiguration");
+            }
         }
 
         [HttpPost]
@@ -50,6 +58,11 @@ namespace Passbook.SampleWebService.Controllers
             }
 
             return View(model);
+        }
+
+        public IActionResult CheckConfiguration()
+        {
+            return View();
         }
     }
 }

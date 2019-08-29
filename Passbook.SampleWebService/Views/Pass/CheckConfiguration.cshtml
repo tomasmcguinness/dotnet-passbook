@@ -1,0 +1,52 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Check Configuration</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
+</head>
+<body>
+    <div class="ui container" style="padding-top: 20px;">
+        <h1>Check your configuration</h1>
+        <hr />
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th style="width: 100px;">
+                        Key
+                    </th>
+                    <th style="width: 20px;" />
+                    <th />
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        AppleWWDRCACertificatePath
+                    </td>
+                    <td style="text-align:center">
+                        <i class="green thumbs up icon"></i>
+                    </td>
+                    <td>Present and correct</td>
+                </tr>
+                <tr>
+                    <td>
+                        CertificatePath
+                    </td>
+                    <td style="text-align:center">
+                        <i class="red thumbs down icon"></i>
+                    </td>
+                    <td />
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+</body>
+</html>

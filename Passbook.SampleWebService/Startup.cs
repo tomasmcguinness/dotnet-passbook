@@ -42,7 +42,10 @@ namespace Passbook.SampleWebService
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("default", "{controller=Pass}/{action=Index}/{id?}");
+            });
         }
     }
 }

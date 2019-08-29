@@ -3,22 +3,31 @@
     ViewData["Title"] = "Create New Pass";
 }
 
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.css" integrity="sha256-9mbkOfVho3ZPXfM7W8sV2SndrGDuh7wuyLjtsWeTI1Q=" crossorigin="anonymous" />
+</head>
+<body>
+    <div class="ui container">
 <h1>Create Passes</h1>
 <hr />
 @using (Html.BeginForm())
 {
-    @Html.LabelFor(m => m.SerialNumber)
-    @Html.TextBoxFor(m => m.SerialNumber)
-    @Html.ValidationMessageFor(m => m.SerialNumber)
+@Html.LabelFor(m => m.SerialNumber)
+@Html.TextBoxFor(m => m.SerialNumber)
+@Html.ValidationMessageFor(m => m.SerialNumber)
 
-    @Html.LabelFor(m => m.Value)
-    @Html.TextBoxFor(m => m.Value)
-    @Html.ValidationMessageFor(m => m.Value)
+@Html.LabelFor(m => m.Value)
+@Html.TextBoxFor(m => m.Value)
+@Html.ValidationMessageFor(m => m.Value)
 
-    @Html.LabelFor(m => m.Secret)
-    @Html.TextBoxFor(m => m.Secret)
-    @Html.ValidationMessageFor(m => m.Secret)
+@Html.LabelFor(m => m.Secret)
+@Html.TextBoxFor(m => m.Secret)
+@Html.ValidationMessageFor(m => m.Secret)
 
-    <button type="submit">Submit</button>
+<button type="submit">Submit</button>
 }
-
+        </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+</body>
+</html>
