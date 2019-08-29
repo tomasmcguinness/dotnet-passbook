@@ -28,15 +28,15 @@ namespace Passbook.SampleWebService.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("{version}/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}/{serialNumber}")]
-        public async Task<ActionResult> RegisterPass([FromBody] RegistrationRequestModel model,
-                                                     string version,
-                                                     string deviceLibraryIdentifier,
-                                                     string passTypeIdentifier,
-                                                     string serialNumber)
+        public ActionResult RegisterPass([FromBody] RegistrationRequestModel model,
+                                         string version,
+                                         string deviceLibraryIdentifier,
+                                         string passTypeIdentifier,
+                                         string serialNumber)
         {
             var authenticationToken = GetAuthenticationTokenFromHeader(Request);
 
-            var isAuthorized = await _handler.IsAuthorizedAsync(passTypeIdentifier, serialNumber, authenticationToken);
+            var isAuthorized = _handler.IsAuthorized(passTypeIdentifier, serialNumber, authenticationToken);
 
             if (!isAuthorized)
             {
@@ -45,7 +45,7 @@ namespace Passbook.SampleWebService.Controllers
 
             var pushToken = model.PushToken;
 
-            var result = await _handler.RegisterPassAsync(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, pushToken);
+            var result = _handler.RegisterPass(version, deviceLibraryIdentifier, passTypeIdentifier, serialNumber, pushToken);
 
             switch (result)
             {

@@ -22,15 +22,11 @@ namespace Passbook.SampleWebService
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            var storageConfig = new TableStorageConfiguration();
-            Configuration.Bind("TableStorage", storageConfig);
-            services.AddSingleton(storageConfig);
-
             var generatorConfig = new PassGeneratorConfiguration();
             Configuration.Bind("PassGenerator", generatorConfig);
             services.AddSingleton(generatorConfig);
 
-            services.AddSingleton<IWebServiceHandler, TableStorageHandler>();
+            services.AddSingleton<IWebServiceHandler, InMemoryHandler>();
             services.AddSingleton<IPassService, PassService>();
         }
 

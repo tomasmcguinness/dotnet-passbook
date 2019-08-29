@@ -4,20 +4,20 @@ namespace Passbook.SampleWebService.Repository
 {
     public interface IWebServiceHandler
     {
-        Task<PassRegistrationResult> RegisterPassAsync(string version,
-                                                       string deviceLibraryIdentifier,
-                                                       string passTypeIdentifier,
-                                                       string serialNumber,
-                                                       string pushToken);
+        PassRegistrationResult RegisterPass(string version,
+                                            string deviceLibraryIdentifier,
+                                            string passTypeIdentifier,
+                                            string serialNumber,
+                                            string pushToken);
 
-        Task<bool> IsAuthorizedAsync(string passTypeIdentifier,
-                                     string serialNumber,
-                                     string authorizationToken);
+        bool IsAuthorized(string passTypeIdentifier,
+                          string serialNumber,
+                          string authorizationToken);
 
-        Task UnregisterPassAsync(string version,
-                                 string deviceLibraryIdentifier,
-                                 string passTypeIdentifier,
-                                 string serialNumber);
+        void UnregisterPass(string version,
+                            string deviceLibraryIdentifier,
+                            string passTypeIdentifier,
+                            string serialNumber);
 
         string[] GetSerialNumbersOfPassesUpdatedSince(string version,
                                                       string deviceLibraryIdentifier,
