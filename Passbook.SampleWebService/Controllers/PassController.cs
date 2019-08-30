@@ -88,6 +88,63 @@ namespace Passbook.SampleWebService.Controllers
                 }
             }
 
+            if (string.IsNullOrEmpty(_configuration.PassTypeCertificatePassword))
+            {
+                model.WebServiceUrlMessage = "You must provide a password for certificate.";
+            }
+
+            if (string.IsNullOrEmpty(_configuration.PassTypeCertificatePath))
+            {
+                model.CertificatePathMessage = "You must provide a value for this configuration item.";
+            }
+            else
+            {
+                if (System.IO.File.Exists(_configuration.PassTypeCertificatePath))
+                {
+                    if (string.IsNullOrEmpty(_configuration.PassTypeCertificatePassword))
+                    {
+                        model.CertificatePathMessage = "You must provide a password so the certificate can be loaded.";
+                    }
+                    else
+                    {
+                        try
+                        {
+                            var cert = new X509Certificate(_configuration.PassTypeCertificatePath, _configuration.PassTypeCertificatePassword);
+                        }
+                        catch
+                        {
+                            model.CertificatePathMessage = $"The file specified at \"{_configuration.AppleWWDRCACertificatePath}\" does not appear to be a valid certificate.";
+                        }
+                    }
+                }
+                else
+                {
+                    model.CertificatePathMessage = $"The file specified at \"{_configuration.AppleWWDRCACertificatePath}\" could not be found.";
+                }
+            }
+
+            if (string.IsNullOrEmpty(_configuration.WebServiceUrl))
+            {
+                model.WebServiceUrlMessage = "You must provide a value for this configuration item.";
+            }
+            else
+            {
+                if (_configuration.WebServiceUrl.StartsWith("http://"))
+                {
+                    model.WebServiceUrlMessage = "This is a HTTP url. Please ensure you enable support for HTTP in your device's settings.";
+                }
+            }
+
+            if (string.IsNullOrEmpty(_configuration.PassTypeIdentifier))
+            {
+                model.PassTypeIdentifierMessage = "You must provide a value for this configuration item.";
+            }
+
+            if (string.IsNullOrEmpty(_configuration.TeamIdentifier))
+            {
+                model.TeamIdentifierMessage = "You must provide a value for this configuration item.";
+            }
+
             return View(model);
         }
     }

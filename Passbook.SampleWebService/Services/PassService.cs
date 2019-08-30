@@ -20,8 +20,8 @@ namespace Passbook.SampleWebService.Services
             var generatorRequest = new PassGeneratorRequest();
 
             generatorRequest.AppleWWDRCACertificate = GetCertificateContents(_generatorConfiguration.AppleWWDRCACertificatePath);
-            generatorRequest.Certificate = GetCertificateContents(_generatorConfiguration.CertificatePath);
-            generatorRequest.CertificatePassword = _generatorConfiguration.CertificatePassword;
+            generatorRequest.Certificate = GetCertificateContents(_generatorConfiguration.PassTypeCertificatePath);
+            generatorRequest.CertificatePassword = _generatorConfiguration.PassTypeCertificatePassword;
 
             generatorRequest.AddPrimaryField(new StandardField("primary-value-text", "Main Value", value));
 

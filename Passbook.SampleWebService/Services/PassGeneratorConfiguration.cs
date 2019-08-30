@@ -6,9 +6,9 @@ namespace Passbook.SampleWebService.Services
     {
         public string AppleWWDRCACertificatePath { get; set; }
 
-        public string CertificatePath { get; set; }
+        public string PassTypeCertificatePath { get; set; }
 
-        public string CertificatePassword { get; set; }
+        public string PassTypeCertificatePassword { get; set; }
 
         public string WebServiceUrl { get; set; }
 
@@ -20,9 +20,9 @@ namespace Passbook.SampleWebService.Services
         {
             return !string.IsNullOrEmpty(AppleWWDRCACertificatePath) &&
                    File.Exists(AppleWWDRCACertificatePath) &&
-                   !string.IsNullOrEmpty(CertificatePath) &&
-                   File.Exists(CertificatePath) &&
-                   !string.IsNullOrEmpty(CertificatePassword) &&
+                   !string.IsNullOrEmpty(PassTypeCertificatePath) &&
+                   File.Exists(PassTypeCertificatePath) &&
+                   !string.IsNullOrEmpty(PassTypeCertificatePassword) &&
                    !string.IsNullOrEmpty(WebServiceUrl) &&
                    !string.IsNullOrEmpty(PassTypeIdentifier) &&
                    !string.IsNullOrEmpty(TeamIdentifier);

@@ -31,18 +31,96 @@
                         AppleWWDRCACertificatePath
                     </td>
                     <td style="text-align:center">
-                        <i class="green thumbs up icon"></i>
+                        @if (Model.AppleWWDRCACertificatePathMessage == null)
+                        {
+                            <i class="green thumbs up icon"></i>
+                        }
+                        else
+                        {
+                            <i class="red thumbs down icon"></i>
+                        }
                     </td>
                     <td>@Model.AppleWWDRCACertificatePathMessage</td>
+                </tr>
+                <tr>
+                    <td>
+                        CertificatePassword
+                    </td>
+                    <td style="text-align:center">
+                        @if (Model.WebServiceUrlMessage == null)
+                        {
+                            <i class="green thumbs up icon"></i>
+                        }
+                        else
+                        {
+                            <i class="red thumbs down icon"></i>
+                        }
+                    </td>
+                    <td>@Model.WebServiceUrlMessage</td>
                 </tr>
                 <tr>
                     <td>
                         CertificatePath
                     </td>
                     <td style="text-align:center">
-                        <i class="red thumbs down icon"></i>
+                        @if (Model.WebServiceUrlMessage == null)
+                        {
+                            <i class="green thumbs up icon"></i>
+                        }
+                        else
+                        {
+                            <i class="red thumbs down icon"></i>
+                        }
                     </td>
-                    <td />
+                    <td>@Model.CertificatePathMessage</td>
+                </tr>
+                <tr>
+                    <td>
+                        WebServiceUrl
+                    </td>
+                    <td style="text-align:center">
+                        @if (Model.WebServiceUrlMessage == null)
+                        {
+                            <i class="green thumbs up icon"></i>
+                        }
+                        else
+                        {
+                            <i class="red thumbs down icon"></i>
+                        }
+                    </td>
+                    <td>@Model.CertificatePathMessage</td>
+                </tr>
+                <tr>
+                    <td>
+                        PassTypeIdentifier
+                    </td>
+                    <td style="text-align:center">
+                        @if (Model.PassTypeIdentifierMessage == null)
+                        {
+                            <i class="green thumbs up icon"></i>
+                        }
+                        else
+                        {
+                            <i class="red thumbs down icon"></i>
+                        }
+                    </td>
+                    <td>@Model.PassTypeIdentifierMessage</td>
+                </tr>
+                <tr>
+                    <td>
+                        TeamIdentifier
+                    </td>
+                    <td style="text-align:center">
+                        @if (Model.TeamIdentifierMessage == null)
+                        {
+                            <i class="green thumbs up icon"></i>
+                        }
+                        else
+                        {
+                            <i class="red thumbs down icon"></i>
+                        }
+                    </td>
+                    <td>@Model.TeamIdentifierMessage</td>
                 </tr>
             </tbody>
         </table>
