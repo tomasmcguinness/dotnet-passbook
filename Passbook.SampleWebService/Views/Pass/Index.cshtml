@@ -9,25 +9,36 @@
 </head>
 <body>
     <div class="ui container">
-<h1>Create Passes</h1>
-<hr />
-@using (Html.BeginForm())
-{
-@Html.LabelFor(m => m.SerialNumber)
-@Html.TextBoxFor(m => m.SerialNumber)
-@Html.ValidationMessageFor(m => m.SerialNumber)
+        <h1>Create Passes</h1>
+        <hr />
+        @if (Model.HasInvalidConfiguration)
+        {
+            <div class="ui red message">
+                Your configuration appears to be incomplete. Visit @Html.ActionLink("configuraiton", "checkconfiguration") for more details. If you don't correct the configuration, you
+                will be unable to generate and update passes.
+            </div>
+        }
+        @using (Html.BeginForm(FormMethod.Post, new { @class = "ui form" }))
+        {
+            @Html.ValidationSummary(false, "", new { @class = "ui message" })
 
-@Html.LabelFor(m => m.Value)
-@Html.TextBoxFor(m => m.Value)
-@Html.ValidationMessageFor(m => m.Value)
+            <div class="required field">
+                @Html.LabelFor(m => m.SerialNumber)
+                @Html.TextBoxFor(m => m.SerialNumber)
+            </div>
 
-@Html.LabelFor(m => m.Secret)
-@Html.TextBoxFor(m => m.Secret)
-@Html.ValidationMessageFor(m => m.Secret)
+            <div class="required field">
+                @Html.LabelFor(m => m.Value)
+                @Html.TextBoxFor(m => m.Value)
+            </div>
 
-<button type="submit">Submit</button>
-}
-        </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
+            <div class="required field">
+                @Html.LabelFor(m => m.Secret)
+                @Html.TextBoxFor(m => m.Secret)
+            </div>
+            <button class="ui primary button" type="submit">Submit</button>
+        }
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI=" crossorigin="anonymous"></script>
 </body>
 </html>

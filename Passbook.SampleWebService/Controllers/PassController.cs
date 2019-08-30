@@ -20,14 +20,9 @@ namespace Passbook.SampleWebService.Controllers
 
         public IActionResult Index()
         {
-            if (_configuration.IsValid())
-            {
-                return View();
-            }
-            else
-            {
-                return RedirectToAction("CheckConfiguration");
-            }
+            var model = new PassModel();
+            model.HasInvalidConfiguration = !_configuration.IsValid();
+            return View(model);
         }
 
         [HttpPost]
@@ -43,6 +38,8 @@ namespace Passbook.SampleWebService.Controllers
                 //
                 return File(passContents, "pass/pass");
             }
+
+            model.HasInvalidConfiguration = !_configuration.IsValid();
 
             return View(model);
         }

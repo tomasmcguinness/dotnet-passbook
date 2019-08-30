@@ -12,5 +12,6 @@ namespace Passbook.SampleWebService.Models
 
         [Required]
         public string Secret { get; set; }
+        public bool HasInvalidConfiguration { get; internal set; }
     }
 }
