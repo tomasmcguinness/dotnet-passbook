@@ -1,4 +1,4 @@
-﻿
+﻿@model Passbook.SampleWebService.Models.ConfigurationModel
 @{
     Layout = null;
 }
@@ -22,7 +22,7 @@
                         Key
                     </th>
                     <th style="width: 20px;" />
-                    <th />
+                    <th>Message</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,7 +33,7 @@
                     <td style="text-align:center">
                         <i class="green thumbs up icon"></i>
                     </td>
-                    <td>Present and correct</td>
+                    <td>@Model.AppleWWDRCACertificatePathMessage</td>
                 </tr>
                 <tr>
                     <td>

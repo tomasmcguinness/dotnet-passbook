@@ -2,6 +2,7 @@
 using Passbook.SampleWebService.Models;
 using Passbook.SampleWebService.Services;
 using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Passbook.SampleWebService.Controllers
@@ -62,7 +63,32 @@ namespace Passbook.SampleWebService.Controllers
 
         public IActionResult CheckConfiguration()
         {
-            return View();
+            var model = new ConfigurationModel();
+
+            if (string.IsNullOrEmpty(_configuration.AppleWWDRCACertificatePath))
+            {
+                model.AppleWWDRCACertificatePathMessage = "You must provide a value for this configuration item.";
+            }
+            else
+            {
+                if (System.IO.File.Exists(_configuration.AppleWWDRCACertificatePath))
+                {
+                    try
+                    {
+                        var cert = new X509Certificate(_configuration.AppleWWDRCACertificatePath);
+                    }
+                    catch
+                    {
+                        model.AppleWWDRCACertificatePathMessage = $"The file specified at \"{_configuration.AppleWWDRCACertificatePath}\" does not appear to be a valid certificate.";
+                    }
+                }
+                else
+                {
+                    model.AppleWWDRCACertificatePathMessage = $"The file specified at \"{_configuration.AppleWWDRCACertificatePath}\" could not be found.";
+                }
+            }
+
+            return View(model);
         }
     }
 }

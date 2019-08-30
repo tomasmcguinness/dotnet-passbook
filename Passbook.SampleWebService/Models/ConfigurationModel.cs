@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Passbook.SampleWebService.Models
+﻿namespace Passbook.SampleWebService.Models
 {
     public class ConfigurationModel
     {
-
+        public string AppleWWDRCACertificatePathMessage { get; internal set; }
     }
 }
