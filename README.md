@@ -10,7 +10,7 @@ dotnet-passbook is also available to download from NuGet
 
 ## Why
 
-Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building PassVerse.com (no longer available), I created a library that performs all the steps in C#. I decided to open source this library for other .NET developers. It allows you to generate pkpass files that work with Apple's Wallet.
+Creating passes for Apple's Passbook is pretty simple, but requires the use of PKI for signing manifest files, which isn't so simple! During the course of building PassVerse.com (no longer available), I created a .Net library that performs all the steps. I decided to open source this library for other .NET developers.
 
 ## Requirements
 
