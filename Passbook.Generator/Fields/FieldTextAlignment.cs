@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Passbook.Generator.Fields
+﻿namespace Passbook.Generator.Fields
 {
     /// <summary>
     /// Won't be used in primary fields.
@@ -8,21 +6,21 @@ namespace Passbook.Generator.Fields
     public enum FieldTextAlignment
     {
         Unspecified,
-		/// <summary>
-		/// Left align text
-		/// </summary>
+        /// <summary>
+        /// Left align text
+        /// </summary>
         PKTextAlignmentLeft,
-		/// <summary>
-		/// Center align text
-		/// </summary>
+        /// <summary>
+        /// Center align text
+        /// </summary>
         PKTextAlignmentCenter,
-		/// <summary>
-		/// Right align text
-		/// </summary>
+        /// <summary>
+        /// Right align text
+        /// </summary>
         PKTextAlignmentRight,
-		/// <summary>
-		/// Natural alignment, aligns the text appropriately based on its script direction.
-		/// </summary>
+        /// <summary>
+        /// Natural alignment, aligns the text appropriately based on its script direction.
+        /// </summary>
         PKTextAlignmentNatural
     }
 }

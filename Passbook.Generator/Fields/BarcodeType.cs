@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Passbook.Generator.Fields
+﻿namespace Passbook.Generator.Fields
 {
     /// <summary>
     /// Barcode format

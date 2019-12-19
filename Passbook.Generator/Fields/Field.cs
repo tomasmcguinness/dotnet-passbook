@@ -1,31 +1,29 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Passbook.Generator.Exceptions;
-using System.Collections.Generic;
-using System.Text;
+using System;
 
 namespace Passbook.Generator.Fields
 {
-    public abstract class Field
-    {
-        public Field()
-        {
+	public abstract class Field
+	{
+		public Field()
+		{
 			this.DataDetectorTypes = DataDetectorTypes.PKDataDetectorAll;
-        }
+		}
 
 		public Field(string key, string label)
 			: this()
-        {
-            this.Key = key;
-            this.Label = label;
-        }
+		{
+			this.Key = key;
+			this.Label = label;
+		}
 
 		public Field(string key, string label, string changeMessage, FieldTextAlignment textAligment)
 			: this(key, label)
-        {
-            this.ChangeMessage = changeMessage;
-            this.TextAlignment = textAligment;
-        }
+		{
+			this.ChangeMessage = changeMessage;
+			this.TextAlignment = textAligment;
+		}
 
 		/// <summary>
 		/// Required. The key must be unique within the scope of the entire pass. For example, “departure-gate”.
@@ -92,51 +90,51 @@ namespace Passbook.Generator.Fields
 		/// </summary>
 		public DataDetectorTypes DataDetectorTypes { get; internal set; }
 
-        public void Write(JsonWriter writer)
-        {
-            Validate();
+		public void Write(JsonWriter writer)
+		{
+			Validate();
 
-            writer.WriteStartObject();
+			writer.WriteStartObject();
 
-            writer.WritePropertyName("key");
-            writer.WriteValue(Key);
+			writer.WritePropertyName("key");
+			writer.WriteValue(Key);
 
-            if (!string.IsNullOrEmpty(ChangeMessage))
-            {
-                writer.WritePropertyName("changeMessage");
-                writer.WriteValue(ChangeMessage);
-            }
+			if (!string.IsNullOrEmpty(ChangeMessage))
+			{
+				writer.WritePropertyName("changeMessage");
+				writer.WriteValue(ChangeMessage);
+			}
 
-            if (!string.IsNullOrEmpty(Label))
-            {
-                writer.WritePropertyName("label");
-                writer.WriteValue(Label);
-            }
+			if (!string.IsNullOrEmpty(Label))
+			{
+				writer.WritePropertyName("label");
+				writer.WriteValue(Label);
+			}
 
-            if (TextAlignment != FieldTextAlignment.Unspecified)
-            {
-                writer.WritePropertyName("textAlignment");
-                writer.WriteValue(TextAlignment.ToString());
-            }
+			if (TextAlignment != FieldTextAlignment.Unspecified)
+			{
+				writer.WritePropertyName("textAlignment");
+				writer.WriteValue(TextAlignment.ToString());
+			}
 
 			if (!string.IsNullOrEmpty(AttributedValue))
-            {
-                writer.WritePropertyName("attributedValue");
-                writer.WriteValue(this.AttributedValue);
-            }
+			{
+				writer.WritePropertyName("attributedValue");
+				writer.WriteValue(this.AttributedValue);
+			}
 
-            WriteKeys(writer);
+			WriteKeys(writer);
 
-            WriteDataDetectorTypes(writer);
+			WriteDataDetectorTypes(writer);
 
-            writer.WritePropertyName("value");
-            WriteValue(writer);
+			writer.WritePropertyName("value");
+			WriteValue(writer);
 
-            writer.WriteEndObject();
-        }
+			writer.WriteEndObject();
+		}
 
-        private void WriteDataDetectorTypes(JsonWriter writer)
-        {
+		private void WriteDataDetectorTypes(JsonWriter writer)
+		{
 			if (DataDetectorTypes != Fields.DataDetectorTypes.PKDataDetectorAll)
 			{
 				writer.WritePropertyName("dataDetectorTypes");
@@ -150,25 +148,25 @@ namespace Passbook.Generator.Fields
 
 				writer.WriteEndArray();
 			}
-        }
+		}
 
-        private void Validate()
-        {
-            if (string.IsNullOrEmpty(Key))
-            {
-                throw new RequiredFieldValueMissingException("key");
-            }
-        }
+		private void Validate()
+		{
+			if (string.IsNullOrEmpty(Key))
+			{
+				throw new RequiredFieldValueMissingException("key");
+			}
+		}
 
-        protected virtual void WriteKeys(JsonWriter writer)
-        {
-            // NO OP
-        }
+		protected virtual void WriteKeys(JsonWriter writer)
+		{
+			// NO OP
+		}
 
-        protected abstract void WriteValue(JsonWriter writer);
+		protected abstract void WriteValue(JsonWriter writer);
 
-        public abstract void SetValue(object value);
+		public abstract void SetValue(object value);
 
-        public abstract bool HasValue { get; }
-    }
+		public abstract bool HasValue { get; }
+	}
 }

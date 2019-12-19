@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Passbook.Generator
+﻿namespace Passbook.Generator
 {
     public enum TransitType
     {

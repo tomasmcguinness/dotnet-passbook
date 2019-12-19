@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.Security.Cryptography.X509Certificates;
 using System.Security.Authentication;
-using System.IO;
-using WhereAreMyStaff.Services;
-using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 
 namespace WhereAreMyStaff.Services.Mobile
 {
@@ -51,7 +47,7 @@ namespace WhereAreMyStaff.Services.Mobile
 
                     byte[] deviceToken = HexToData(deviceIdentifier);
                     bw.Write(deviceToken);
-                    
+
                     string msg = "{}";
 
                     bw.Write(new byte[] { 0, 2 });

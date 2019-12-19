@@ -1,5 +1,4 @@
 ﻿using Passbook.Generator.Exceptions;
-using System;
 
 namespace Passbook.Generator.Fields
 {
@@ -10,16 +9,16 @@ namespace Passbook.Generator.Fields
         { }
 
         public StandardField(string key, string label, string value)
-			: base(key, label)
+            : base(key, label)
         {
             this.Value = value;
         }
 
-		public StandardField(string key, string label, string value, string attributedValue, DataDetectorTypes dataDetectorTypes)
-			: this(key, label, value)
+        public StandardField(string key, string label, string value, string attributedValue, DataDetectorTypes dataDetectorTypes)
+            : this(key, label, value)
         {
             this.AttributedValue = attributedValue;
-			this.DataDetectorTypes = DataDetectorTypes.PKDataDetectorAll;
+            this.DataDetectorTypes = DataDetectorTypes.PKDataDetectorAll;
         }
 
         public string Value { get; set; }

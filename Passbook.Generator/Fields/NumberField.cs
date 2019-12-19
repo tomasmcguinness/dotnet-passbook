@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Passbook.Generator.Fields
+﻿namespace Passbook.Generator.Fields
 {
     public class NumberField : Field
     {
@@ -15,24 +13,24 @@ namespace Passbook.Generator.Fields
             this.NumberStyle = numberStyle;
         }
 
-		public NumberField(string key, string label, int value, FieldNumberStyle numberStyle)
-			: this(key, label, (decimal)value, numberStyle)
-		{
-		}
+        public NumberField(string key, string label, int value, FieldNumberStyle numberStyle)
+            : this(key, label, (decimal)value, numberStyle)
+        {
+        }
 
-		/// <summary>
-		/// ISO 4217 currency code for the field’s value.
-		/// </summary>
-		public string CurrencyCode { get; set; }
-		/// <summary>
-		/// Style of number to display. Must be one of <see cref="FieldNumberStyle" />
-		/// </summary>
-		public FieldNumberStyle NumberStyle { get; set; }
+        /// <summary>
+        /// ISO 4217 currency code for the field’s value.
+        /// </summary>
+        public string CurrencyCode { get; set; }
+        /// <summary>
+        /// Style of number to display. Must be one of <see cref="FieldNumberStyle" />
+        /// </summary>
+        public FieldNumberStyle NumberStyle { get; set; }
         public decimal Value { get; set; }
 
         protected override void WriteKeys(Newtonsoft.Json.JsonWriter writer)
         {
-			if (!string.IsNullOrEmpty(CurrencyCode))
+            if (!string.IsNullOrEmpty(CurrencyCode))
             {
                 writer.WritePropertyName("currencyCode");
                 writer.WriteValue(CurrencyCode);
@@ -47,12 +45,12 @@ namespace Passbook.Generator.Fields
 
         protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
         {
-			// Non-fractional (PassWallet for Android requires this)
-			if ((decimal)((int)Value) == Value)
-				writer.WriteValue((int)Value);
-			// Fractional
-			else
-				writer.WriteValue(Value);
+            // Non-fractional (PassWallet for Android requires this)
+            if ((decimal)((int)Value) == Value)
+                writer.WriteValue((int)Value);
+            // Fractional
+            else
+                writer.WriteValue(Value);
         }
 
         public override void SetValue(object value)

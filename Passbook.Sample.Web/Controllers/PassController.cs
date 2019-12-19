@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Passbook.Generator;
+﻿using Passbook.Generator;
 using Passbook.Generator.Fields;
-using System.IO;
 using Passbook.Sample.Web.SampleRequests;
-using System.Net;
+using System.Web.Mvc;
 
 namespace Passbook.Sample.Web.Controllers
 {

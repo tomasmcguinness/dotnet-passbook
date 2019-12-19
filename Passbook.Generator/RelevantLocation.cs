@@ -1,9 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Passbook.Generator.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Passbook.Generator
 {
