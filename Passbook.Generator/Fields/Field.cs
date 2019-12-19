@@ -90,6 +90,11 @@ namespace Passbook.Generator.Fields
 		/// </summary>
 		public DataDetectorTypes DataDetectorTypes { get; internal set; }
 
+		/// <summary>
+		/// Optional for Auxiliary fields
+		/// </summary>
+		public int? Row { get; set; }
+
 		public void Write(JsonWriter writer)
 		{
 			Validate();
@@ -121,6 +126,12 @@ namespace Passbook.Generator.Fields
 			{
 				writer.WritePropertyName("attributedValue");
 				writer.WriteValue(this.AttributedValue);
+			}
+
+			if(Row.HasValue)
+			{
+				writer.WritePropertyName("row");
+				writer.WriteValue(this.Row.Value);
 			}
 
 			WriteKeys(writer);

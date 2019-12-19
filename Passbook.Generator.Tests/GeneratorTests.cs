@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Passbook.Generator.Fields;
 using System;
 using System.IO;
 using System.Text;
@@ -11,7 +12,7 @@ namespace Passbook.Generator.Tests
     public class GeneratorTests
     {
         [TestMethod]
-        public void EnsureDatesAreInCorrectFormat()
+        public void EnsurePassIsGeneratedCorrectly()
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
             request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Local);
@@ -22,6 +23,14 @@ namespace Passbook.Generator.Tests
             DateTimeOffset offsetConverted = new DateTimeOffset(offset, zone.GetUtcOffset(offset));
 
             request.RelevantDate = offsetConverted;
+
+            request.AddAuxiliaryField(new StandardField()
+            {
+                Key = "aux-1",
+                Value = "Test",
+                Label = "Label",
+                Row = 1
+            });
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -45,6 +54,16 @@ namespace Passbook.Generator.Tests
                     var nfcPayload = (JToken)json["nfc"];
                     var nfcMessage = (string)nfcPayload["message"];
                     Assert.AreEqual("My NFC Message", nfcMessage);
+
+                    var genericKeys = json["generic"];
+                    Assert.AreEqual(1, genericKeys["auxiliaryFields"].Count);
+
+                    var auxField = genericKeys["auxiliaryFields"][0];
+
+                    Assert.AreEqual("aux-1", (string)auxField["key"]);
+                    Assert.AreEqual("Test", (string)auxField["value"]);
+                    Assert.AreEqual("Label", (string)auxField["label"]);
+                    Assert.AreEqual(1, (int)auxField["row"]);
 
                 }
             }
