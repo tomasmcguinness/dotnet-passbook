@@ -356,17 +356,8 @@ namespace Passbook.Generator
         {
             Trace.TraceInformation("Opening Certificate: [{0}] bytes with password [{1}]", bytes.Length, password);
 
-            X509Certificate2 certificate = null;
-
-            if (password == null)
-            {
-                certificate = new X509Certificate2(bytes);
-            }
-            else
-            {
-                X509KeyStorageFlags flags = X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable;
-                certificate = new X509Certificate2(bytes, password, flags);
-            }
+            X509KeyStorageFlags flags = X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable;
+            X509Certificate2 certificate = new X509Certificate2(bytes, password, flags);
 
             return certificate;
         }
