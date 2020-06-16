@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29001.49
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.Sample.Web", "Passbook.Sample.Web\Passbook.Sample.Web.csproj", "{5E027B2A-8351-4805-B633-13095574CF06}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4C5E4812-6174-4F75-8AEE-45100AB9205F}"
 	ProjectSection(SolutionItems) = preProject
 		dotnet-passbook.nuspec = dotnet-passbook.nuspec
@@ -24,14 +22,6 @@ Global
 		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5E027B2A-8351-4805-B633-13095574CF06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5E027B2A-8351-4805-B633-13095574CF06}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5E027B2A-8351-4805-B633-13095574CF06}.Production|Any CPU.ActiveCfg = Release|Any CPU
-		{5E027B2A-8351-4805-B633-13095574CF06}.Production|Any CPU.Build.0 = Release|Any CPU
-		{5E027B2A-8351-4805-B633-13095574CF06}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5E027B2A-8351-4805-B633-13095574CF06}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E027B2A-8351-4805-B633-13095574CF06}.Test|Any CPU.ActiveCfg = Release|Any CPU
-		{5E027B2A-8351-4805-B633-13095574CF06}.Test|Any CPU.Build.0 = Release|Any CPU
 		{9366CDD5-5B37-4C40-9661-47B205C6D01D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9366CDD5-5B37-4C40-9661-47B205C6D01D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9366CDD5-5B37-4C40-9661-47B205C6D01D}.Production|Any CPU.ActiveCfg = Release|Any CPU
