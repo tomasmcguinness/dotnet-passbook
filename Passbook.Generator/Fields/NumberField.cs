@@ -47,12 +47,7 @@
 
         protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
         {
-            // Non-fractional (PassWallet for Android requires this)
-            if ((decimal)((int)Value) == Value)
-                writer.WriteValue((int)Value);
-            // Fractional
-            else
-                writer.WriteValue(Value);
+            writer.WriteValue(Value);
         }
 
         public override void SetValue(object value)
