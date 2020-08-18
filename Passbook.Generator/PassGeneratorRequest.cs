@@ -23,7 +23,7 @@ namespace Passbook.Generator
             AssociatedStoreIdentifiers = new List<int>();
             Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
             Barcodes = new List<Barcode>();
-            UserInfo = null;
+            UserInfo = new Dictionary<string, object>();
         }
 
         #region Standard Keys
@@ -237,7 +237,7 @@ namespace Passbook.Generator
 
         #region User Info Keys
 
-        public Object UserInfo { get; set; }
+        public IDictionary<string, object> UserInfo { get; set; }
 
         #endregion
 
