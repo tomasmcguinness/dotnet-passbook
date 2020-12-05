@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Passbook.Generator.Fields
 {
@@ -74,7 +75,29 @@ namespace Passbook.Generator.Fields
 
         protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
         {
-            writer.WriteValue(Value.ToString("yyyy-MM-ddTHH:mmZ"));
+            if (this.Value.Kind == DateTimeKind.Utc ||
+                this.Value.Kind == DateTimeKind.Unspecified)
+            {
+                writer.WriteValue(Value.ToString("yyyy-MM-ddTHH:mmZ"));
+            }
+            else
+            {
+                var localDate = new DateTime(this.Value.Year, this.Value.Month, this.Value.Day, this.Value.Hour, this.Value.Minute, this.Value.Second, this.Value.Kind);
+                var utcDate = new DateTime(this.Value.Year, this.Value.Month, this.Value.Day, this.Value.Hour, this.Value.Minute, this.Value.Second, this.Value.Kind);
+                var diff = utcDate - localDate.ToUniversalTime();
+
+                string outputText = localDate.ToString("yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
+                if (diff < TimeSpan.Zero)
+                {
+                    outputText = string.Format("{0}-{1:00}:{2:00}", outputText, Math.Abs(diff.Hours), diff.Minutes);
+                }
+                else
+                {
+                    outputText = string.Format("{0}+{1:00}:{2:00}", outputText, Math.Abs(diff.Hours), diff.Minutes);
+                }
+                
+                writer.WriteValue(outputText);
+            }
         }
 
         public override void SetValue(object value)
