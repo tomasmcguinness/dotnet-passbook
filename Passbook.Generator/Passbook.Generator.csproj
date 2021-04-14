@@ -2,19 +2,21 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
-    <Version>2.0.3</Version>
+    <Version>2.0.4</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>dotnet-passbook</PackageId>
     <Company>Tomas McGuinness</Company>
     <Product>dotnet-passbook</Product>
     <Description>Generate pass files for Apple Wallet. This library allows you to build and sign a pkpass file.</Description>
-    <PackageReleaseNotes>Includes small fixes including certificate loading</PackageReleaseNotes>
+    <PackageReleaseNotes>Fixed StandardField constructor so dataDetectorTypes are respected and removed internal flag from property to the dataDetectorTypes can be changed.</PackageReleaseNotes>
     <PackageTags>PassBook Wallet Apple Passkit</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression></PackageLicenseExpression>
     <RepositoryUrl>https://github.com/tomasmcguinness/dotnet-passbook</RepositoryUrl>
     <Copyright>2020 Tomas McGuinness</Copyright>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
+    <AssemblyVersion>2.0.5.0</AssemblyVersion>
+    <FileVersion>2.0.5.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
