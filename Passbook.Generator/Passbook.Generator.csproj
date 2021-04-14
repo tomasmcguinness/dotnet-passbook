@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Version>2.0.5</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>dotnet-passbook</PackageId>
@@ -17,6 +17,7 @@
     <PackageLicenseFile>license.txt</PackageLicenseFile>
     <AssemblyVersion>2.0.5.0</AssemblyVersion>
     <FileVersion>2.0.5.0</FileVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
 
   <ItemGroup>
