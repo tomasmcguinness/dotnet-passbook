@@ -78,7 +78,7 @@ namespace Passbook.Generator.Fields
             if (this.Value.Kind == DateTimeKind.Utc ||
                 this.Value.Kind == DateTimeKind.Unspecified)
             {
-                writer.WriteValue(Value.ToString("yyyy-MM-ddTHH:mmZ"));
+                writer.WriteValue(Value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             }
             else
             {
@@ -86,7 +86,7 @@ namespace Passbook.Generator.Fields
                 var utcDate = new DateTime(this.Value.Year, this.Value.Month, this.Value.Day, this.Value.Hour, this.Value.Minute, this.Value.Second, this.Value.Kind);
                 var diff = utcDate - localDate.ToUniversalTime();
 
-                string outputText = localDate.ToString("yyyy-MM-ddTHH:mm", CultureInfo.InvariantCulture);
+                string outputText = localDate.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
                 if (diff < TimeSpan.Zero)
                 {
                     outputText = string.Format("{0}-{1:00}:{2:00}", outputText, Math.Abs(diff.Hours), diff.Minutes);
