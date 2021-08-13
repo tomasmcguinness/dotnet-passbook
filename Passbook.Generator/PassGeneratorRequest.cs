@@ -11,6 +11,7 @@ namespace Passbook.Generator
     {
         public PassGeneratorRequest()
         {
+            SemanticTags = new SemanticTags();
             HeaderFields = new List<Field>();
             PrimaryFields = new List<Field>();
             SecondaryFields = new List<Field>();
@@ -56,6 +57,8 @@ namespace Passbook.Generator
         /// </summary>
         public bool SharingProhibited { get; set; }
 
+        #endregion
+
         #region Images Files
 
         /// <summary>
@@ -63,7 +66,6 @@ namespace Passbook.Generator
         /// </summary>
         public Dictionary<PassbookImage, byte[]> Images { get; set; }
 
-        #endregion
         #endregion
 
         #region Companion App Keys
@@ -105,6 +107,11 @@ namespace Passbook.Generator
         /// Optional. If true, the strip image is displayed without a shine effect. The default value is false.
         /// </summary>
         public bool? SuppressStripShine { get; set; }
+
+        /// <summary>
+        /// Optional. The semantic tags to add to the pass.
+        /// </summary>
+        public SemanticTags SemanticTags { get; }
 
         /// <summary>
         /// Optional. Fields to be displayed prominently on the front of the pass.
@@ -332,6 +339,8 @@ namespace Passbook.Generator
 
             writer.WriteStartObject();
 
+            Trace.TraceInformation("Writing semantics..");
+            WriteSemantics(writer);
             Trace.TraceInformation("Writing standard keys..");
             WriteStandardKeys(writer);
             Trace.TraceInformation("Writing user information..");
@@ -455,6 +464,11 @@ namespace Passbook.Generator
 
                 writer.WriteEndArray();
             }
+        }
+
+        private void WriteSemantics(JsonWriter writer)
+        {
+            SemanticTags.Write(writer);
         }
 
         private void WriteStandardKeys(JsonWriter writer)

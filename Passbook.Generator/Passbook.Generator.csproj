@@ -36,8 +36,5 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="4.5.2" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SemanticFields\" />
-  </ItemGroup>
 
 </Project>
