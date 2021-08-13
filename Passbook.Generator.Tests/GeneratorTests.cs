@@ -1,17 +1,16 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Passbook.Generator.Fields;
 using System;
 using System.IO;
 using System.Text;
+using Xunit;
 
 namespace Passbook.Generator.Tests
 {
-    [TestClass]
     public class GeneratorTests
     {
-        [TestMethod]
+        [Fact]
         public void EnsurePassIsGeneratedCorrectly()
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
@@ -48,28 +47,28 @@ namespace Passbook.Generator.Tests
 
                     dynamic json = JsonConvert.DeserializeObject(jsonString, settings);
 
-                    Assert.AreEqual("2018-01-01T00:00:00+00:00", (string)json["expirationDate"]);
-                    Assert.AreEqual("2018-01-05T12:00:00-05:00", (string)json["relevantDate"]);
+                    Assert.Equal("2018-01-01T00:00:00+00:00", (string)json["expirationDate"]);
+                    Assert.Equal("2018-01-05T12:00:00-05:00", (string)json["relevantDate"]);
 
                     var nfcPayload = (JToken)json["nfc"];
                     var nfcMessage = (string)nfcPayload["message"];
-                    Assert.AreEqual("My NFC Message", nfcMessage);
+                    Assert.Equal("My NFC Message", nfcMessage);
 
                     var genericKeys = json["generic"];
-                    Assert.AreEqual(1, genericKeys["auxiliaryFields"].Count);
+                    Assert.Single(genericKeys["auxiliaryFields"]);
 
                     var auxField = genericKeys["auxiliaryFields"][0];
 
-                    Assert.AreEqual("aux-1", (string)auxField["key"]);
-                    Assert.AreEqual("Test", (string)auxField["value"]);
-                    Assert.AreEqual("Label", (string)auxField["label"]);
-                    Assert.AreEqual(1, (int)auxField["row"]);
+                    Assert.Equal("aux-1", (string)auxField["key"]);
+                    Assert.Equal("Test", (string)auxField["value"]);
+                    Assert.Equal("Label", (string)auxField["label"]);
+                    Assert.Equal(1, (int)auxField["row"]);
 
                 }
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void EnsureFieldHasLocalTime()
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
@@ -125,41 +124,40 @@ namespace Passbook.Generator.Tests
 
                     dynamic json = JsonConvert.DeserializeObject(jsonString, settings);
 
-                    Assert.AreEqual("2018-01-01T00:00:00+00:00", (string)json["expirationDate"]);
-                    Assert.AreEqual("2018-01-05T12:00:00-05:00", (string)json["relevantDate"]);
+                    Assert.Equal("2018-01-01T00:00:00+00:00", (string)json["expirationDate"]);
+                    Assert.Equal("2018-01-05T12:00:00-05:00", (string)json["relevantDate"]);
 
                     var nfcPayload = (JToken)json["nfc"];
                     var nfcMessage = (string)nfcPayload["message"];
-                    Assert.AreEqual("My NFC Message", nfcMessage);
+                    Assert.Equal("My NFC Message", nfcMessage);
 
                     var genericKeys = json["generic"];
-                    Assert.AreEqual(1, genericKeys["auxiliaryFields"].Count);
+                    Assert.Equal(3, genericKeys["auxiliaryFields"].Count);
 
                     var auxField = genericKeys["auxiliaryFields"][0];
 
-                    Assert.AreEqual("aux-1", (string)auxField["key"]);
-                    Assert.AreEqual("Test", (string)auxField["value"]);
-                    Assert.AreEqual("Label", (string)auxField["label"]);
-                    Assert.AreEqual(1, (int)auxField["row"]);
+                    Assert.Equal("aux-1", (string)auxField["key"]);
+                    Assert.Equal("Test", (string)auxField["value"]);
+                    Assert.Equal("Label", (string)auxField["label"]);
+                    Assert.Equal(1, (int)auxField["row"]);
 
                     var datetimeField = genericKeys["auxiliaryFields"][1];
-                    Assert.AreEqual("datetime-1", (string)datetimeField["key"]);
+                    Assert.Equal("datetime-1", (string)datetimeField["key"]);
                     string datetime1 = (string)datetimeField["value"];
                     string expected1start = string.Format("{0:yyyy-MM-ddTHH:mm}", local);
 
-                    Assert.IsTrue(datetime1.StartsWith(expected1start));
-                    Assert.IsFalse(datetime1.Contains("Z"));
-                    Assert.AreEqual("Label", (string)datetimeField["label"]);
+                    Assert.StartsWith(expected1start, datetime1);
+                    Assert.DoesNotContain("Z", datetime1);
+                    Assert.Equal("Label", (string)datetimeField["label"]);
 
 
                     var utcdatetimeField = genericKeys["auxiliaryFields"][2];
-                    Assert.AreEqual("datetime-1", (string)utcdatetimeField["key"]);
+                    Assert.Equal("datetime-1", (string)utcdatetimeField["key"]);
                     string datetime2 = (string)utcdatetimeField["value"];
                     string expected2 = string.Format("{0:yyyy-MM-ddTHH:mm}Z", utc);
 
-                    Assert.AreEqual(expected2, datetime2);
-                    Assert.AreEqual("Label", (string)utcdatetimeField["label"]);
-
+                    Assert.Equal(expected2, datetime2);
+                    Assert.Equal("Label", (string)utcdatetimeField["label"]);
                 }
             }
         }
