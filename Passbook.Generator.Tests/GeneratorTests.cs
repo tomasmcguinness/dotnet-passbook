@@ -152,9 +152,9 @@ namespace Passbook.Generator.Tests
 
 
                     var utcdatetimeField = genericKeys["auxiliaryFields"][2];
-                    Assert.Equal("datetime-1", (string)utcdatetimeField["key"]);
+                    Assert.Equal("datetime-2", (string)utcdatetimeField["key"]);
                     string datetime2 = (string)utcdatetimeField["value"];
-                    string expected2 = string.Format("{0:yyyy-MM-ddTHH:mm}Z", utc);
+                    string expected2 = string.Format("{0:yyyy-MM-ddTHH:mm:ss}Z", utc);
 
                     Assert.Equal(expected2, datetime2);
                     Assert.Equal("Label", (string)utcdatetimeField["label"]);
