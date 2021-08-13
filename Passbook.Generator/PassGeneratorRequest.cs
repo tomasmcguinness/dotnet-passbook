@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Passbook.Generator
 {
@@ -178,31 +177,22 @@ namespace Passbook.Generator
 
         #endregion
 
-        #region Certificate
+        #region Certificates
 
         /// <summary>
-        /// A byte array containing the X509 certificate
+        /// A byte array containing the PassKit certificate
         /// </summary>
         public byte[] Certificate { get; set; }
+
+        /// <summary>
+        /// The private key password for PassKit Certificate.
+        /// </summary>
+        public string CertificatePassword { get; set; }
 
         /// <summary>
         /// A byte array containing the Apple WWDRCA X509 certificate
         /// </summary>
         public byte[] AppleWWDRCACertificate { get; set; }
-
-        /// <summary>
-        /// The private key password for the certificate.
-        /// </summary>
-        public string CertificatePassword { get; set; }
-
-        /// <summary>
-        /// Certificate Thumbprint value
-        /// </summary>
-        public string CertThumbprint { get; set; }
-        /// <summary>
-        /// Certificate Store Location
-        /// </summary>
-        public StoreLocation CertLocation { get; set; }
 
         #endregion
 

@@ -286,20 +286,18 @@ namespace Passbook.Generator
         {
             Trace.TraceInformation("Fetching Apple Certificate...");
 
+            if (request.AppleWWDRCACertificate == null)
+            {
+                throw new InvalidOperationException("You must provide the Apple WWDR Certificate");
+            }
+
             try
             {
-                if (request.AppleWWDRCACertificate == null)
-                {
-                    return GetSpecifiedCertificateFromCertStore(APPLE_CERTIFICATE_THUMBPRINT, StoreName.CertificateAuthority, X509FindType.FindByThumbprint);
-                }
-                else
-                {
-                    return GetCertificateFromBytes(request.AppleWWDRCACertificate, null);
-                }
+                return GetCertificateFromBytes(request.AppleWWDRCACertificate, null);
             }
             catch (Exception exp)
             {
-                Trace.TraceError("Failed to fetch Apple Certificate: [{0}]", exp.Message);
+                Trace.TraceError("Failed to load the Apple Certificate: [{0}]", exp.Message);
                 throw;
             }
         }
@@ -308,48 +306,20 @@ namespace Passbook.Generator
         {
             Trace.TraceInformation("Fetching Pass Certificate...");
 
+            if (request.Certificate == null)
+            {
+                throw new InvalidOperationException("You must provide a PassKit certificate.");
+            }
+
             try
             {
-                if (request.Certificate == null)
-                {
-                    if (string.IsNullOrEmpty(request.CertThumbprint))
-                    {
-                        return GetSpecifiedCertificateFromCertStore(request.PassTypeIdentifier, StoreName.My, X509FindType.FindBySubjectName);
-                    }
-                    else
-                    {
-                        return GetSpecifiedCertificateFromCertStore(request.CertThumbprint, StoreName.My, X509FindType.FindByThumbprint);
-                    }
-                }
-                else
-                {
-                    return GetCertificateFromBytes(request.Certificate, request.CertificatePassword);
-                }
+                return GetCertificateFromBytes(request.Certificate, request.CertificatePassword);
             }
             catch (Exception exp)
             {
-                Trace.TraceError("Failed to fetch Pass Certificate: [{0}]", exp.Message);
+                Trace.TraceError("Failed to load the PassKit Certificate: [{0}]", exp.Message);
                 throw;
             }
-        }
-
-        private static X509Certificate2 GetSpecifiedCertificateFromCertStore(string searchValue, StoreName storeName, X509FindType findType)
-        {
-            foreach (StoreLocation storeLocation in Enum.GetValues(typeof(StoreLocation)))
-            {
-                X509Store store = new X509Store(storeName, storeLocation);
-                store.Open(OpenFlags.ReadOnly);
-
-                X509Certificate2Collection certs = store.Certificates.Find(findType, searchValue, false);
-
-                if (certs.Count > 0)
-                {
-                    Debug.WriteLine(certs[0].Thumbprint);
-                    return certs[0];
-                }
-            }
-
-            return null;
         }
 
         private static X509Certificate2 GetCertificateFromBytes(byte[] bytes, string password)
