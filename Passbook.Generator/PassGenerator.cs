@@ -21,10 +21,7 @@ namespace Passbook.Generator
         private byte[] manifestFile = null;
         private Dictionary<string, byte[]> localizationFiles = null;
         private byte[] pkPassFile = null;
-        private X509Certificate2 appleCert = null;
-        private X509Certificate2 passCert = null;
 
-        private const string APPLE_CERTIFICATE_THUMBPRINT = "FF6797793A3CD798DC5B2ABEF56F73EDC9F83A64";
         private const string passTypePrefix = "Pass Type ID: ";
 
         public byte[] Generate(PassGeneratorRequest request)
@@ -105,21 +102,17 @@ namespace Passbook.Generator
 
         private void ValidateCertificates(PassGeneratorRequest request)
         {
-            passCert = GetCertificate(request);
-
-            if (passCert == null)
+            if (request.Certificate == null)
             {
                 throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
             }
 
-            appleCert = GetAppleCertificate(request);
-
-            if (appleCert == null)
+            if (request.AppleWWDRCACertificate == null)
             {
                 throw new FileNotFoundException("Apple Certificate could not be found. Please download it from http://www.apple.com/certificateauthority/ and install it into your PERSONAL or LOCAL MACHINE certificate store.");
             }
 
-            string passTypeIdentifier = passCert.GetNameInfo(X509NameType.SimpleName, false);
+            string passTypeIdentifier = request.Certificate.GetNameInfo(X509NameType.SimpleName, false);
 
             if (passTypeIdentifier.StartsWith(passTypePrefix, StringComparison.OrdinalIgnoreCase))
             {
@@ -137,7 +130,7 @@ namespace Passbook.Generator
             }
 
             Dictionary<string, string> nameParts =
-            Regex.Matches(passCert.SubjectName.Name, @"(?<key>[^=,\s]+)\=*(?<value>("".+""|[^,])+)")
+            Regex.Matches(request.Certificate.SubjectName.Name, @"(?<key>[^=,\s]+)\=*(?<value>("".+""|[^,])+)")
               .Cast<Match>()
               .ToDictionary(
                   m => m.Groups["key"].Value,
@@ -256,15 +249,15 @@ namespace Passbook.Generator
 
                 SignedCms signing = new SignedCms(contentInfo, true);
 
-                CmsSigner signer = new CmsSigner(SubjectIdentifierType.SubjectKeyIdentifier, passCert)
+                CmsSigner signer = new CmsSigner(SubjectIdentifierType.SubjectKeyIdentifier, request.Certificate)
                 {
                     IncludeOption = X509IncludeOption.None
                 };
 
                 Trace.TraceInformation("Fetching Apple Certificate for signing..");
                 Trace.TraceInformation("Constructing the certificate chain..");
-                signer.Certificates.Add(appleCert);
-                signer.Certificates.Add(passCert);
+                signer.Certificates.Add(request.AppleWWDRCACertificate);
+                signer.Certificates.Add(request.Certificate);
 
                 signer.SignedAttributes.Add(new Pkcs9SigningTime());
 
@@ -280,56 +273,6 @@ namespace Passbook.Generator
                 Trace.TraceError("Failed to sign the manifest file: [{0}]", exp.Message);
                 throw new ManifestSigningException("Failed to sign manifest", exp);
             }
-        }
-
-        private X509Certificate2 GetAppleCertificate(PassGeneratorRequest request)
-        {
-            Trace.TraceInformation("Fetching Apple Certificate...");
-
-            if (request.AppleWWDRCACertificate == null)
-            {
-                throw new InvalidOperationException("You must provide the Apple WWDR Certificate");
-            }
-
-            try
-            {
-                return GetCertificateFromBytes(request.AppleWWDRCACertificate, null);
-            }
-            catch (Exception exp)
-            {
-                Trace.TraceError("Failed to load the Apple Certificate: [{0}]", exp.Message);
-                throw;
-            }
-        }
-
-        private static X509Certificate2 GetCertificate(PassGeneratorRequest request)
-        {
-            Trace.TraceInformation("Fetching Pass Certificate...");
-
-            if (request.Certificate == null)
-            {
-                throw new InvalidOperationException("You must provide a PassKit certificate.");
-            }
-
-            try
-            {
-                return GetCertificateFromBytes(request.Certificate, request.CertificatePassword);
-            }
-            catch (Exception exp)
-            {
-                Trace.TraceError("Failed to load the PassKit Certificate: [{0}]", exp.Message);
-                throw;
-            }
-        }
-
-        private static X509Certificate2 GetCertificateFromBytes(byte[] bytes, string password)
-        {
-            Trace.TraceInformation("Opening Certificate: [{0}] bytes with password [{1}]", bytes.Length, password);
-
-            X509KeyStorageFlags flags = X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable;
-            X509Certificate2 certificate = new X509Certificate2(bytes, password, flags);
-
-            return certificate;
         }
 
         private string GetHashForBytes(byte[] bytes)
