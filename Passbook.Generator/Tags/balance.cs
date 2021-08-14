@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
+using System;
 
 namespace Passbook.Generator.Tags
 {
-    class balance
+    public class Balance : SemanticTag
     {
+        public override void Write(JsonWriter writer)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

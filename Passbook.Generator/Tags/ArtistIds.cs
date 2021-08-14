@@ -2,13 +2,13 @@
 
 namespace Passbook.Generator.Tags
 {
-    public class AirlineCodeSemanticTag : SemanticTag
+    public class ArtistIds : SemanticTag
     {
-        private readonly string _airlineCode;
+        private readonly string[] _artistIds;
 
-        public AirlineCodeSemanticTag(string airlineCode)
+        public ArtistIds(params string[] artistIds)
         {
-            _airlineCode = airlineCode;
+            _artistIds = artistIds;
         }
 
         public override void Write(JsonWriter writer)
