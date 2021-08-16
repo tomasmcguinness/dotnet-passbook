@@ -6,19 +6,14 @@ namespace Passbook.Generator.Tags
     {
         private readonly string[] _artistIds;
 
-        public ArtistIds(params string[] artistIds)
+        public ArtistIds(params string[] artistIds) : base("artistIds")
         {
             _artistIds = artistIds;
         }
 
-        public override void Write(JsonWriter writer)
+        public override void WriteValue(JsonWriter writer)
         {
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("airlineCode");
-            writer.WriteValue(_airlineCode);
-
-            writer.WriteEndObject();
+            writer.WriteValue(_artistIds);
         }
     }
 }

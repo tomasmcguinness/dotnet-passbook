@@ -2,26 +2,18 @@
 
 namespace Passbook.Generator.Tags
 {
-    public class StringSemanticTag
+    public class StringSemanticTag : SemanticTag
     {
         private readonly string _value;
-        private readonly string _tag;
 
-        public StringSemanticTag(string tag, string value)
+        public StringSemanticTag(string tag, string value) : base(tag)
         {
-            _tag = tag;
             _value = value;
         }
 
-        public void Write(JsonWriter writer)
+        public override void WriteValue(JsonWriter writer)
         {
-            writer.WriteStartObject();
-
-            writer.WritePropertyName(_tag);
             writer.WriteValue(_value);
-
-            writer.WriteEndObject();
         }
-
     }
 }

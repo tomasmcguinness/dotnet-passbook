@@ -1,13 +1,26 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace Passbook.Generator.Tags
 {
     public class Balance : SemanticTag
     {
-        public override void Write(JsonWriter writer)
+        private readonly string _amount;
+        private readonly string _currencyCode;
+
+        public Balance(string amount, string currencyCode) : base("balance")
         {
-            throw new NotImplementedException();
+            _amount = amount;
+            _currencyCode = currencyCode;
+        }
+
+        public override void WriteValue(JsonWriter writer)
+        {
+            writer.WriteStartObject();
+            writer.WritePropertyName("amount");
+            writer.WriteValue(_amount);
+            writer.WritePropertyName("currencyCode");
+            writer.WriteValue(_currencyCode);
+            writer.WriteEndObject();
         }
     }
 }

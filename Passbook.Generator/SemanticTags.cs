@@ -10,14 +10,14 @@ namespace Passbook.Generator
         public void Write(JsonWriter writer)
         {
             writer.WritePropertyName("semantics");
-            writer.WriteStartArray();
-
+            writer.WriteStartObject();
+            
             foreach (var tag in this)
             {
                 tag.Write(writer);
             }
 
-            writer.WriteEndArray();
+            writer.WriteEndObject();
         }
     }
 }
