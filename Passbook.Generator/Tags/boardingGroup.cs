@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class boardingGroup
+    public class BoardingGroup : StringSemanticTag
     {
+        public BoardingGroup(string value) : base("boardingGroup", value)
+        {
+            // NO OP
+        }
     }
 }

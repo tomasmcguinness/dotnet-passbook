@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class confirmationNumber
+    public class ConfirmationNumber : StringSemanticTag
     {
+        public ConfirmationNumber(string value) : base("confirmationNumber", value)
+        {
+            // NO OP
+        }
     }
 }
