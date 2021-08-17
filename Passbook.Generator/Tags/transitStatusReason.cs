@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class transitStatusReason
+    public class TransitStatusReason : StringSemanticTag
     {
+        public TransitStatusReason(string value) : base("transitStatusReason", value)
+        {
+            // NO OP
+        }
     }
 }
