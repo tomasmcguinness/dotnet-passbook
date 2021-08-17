@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class departureLocationDescription
+    class DepartureLocationDescription : StringSemanticTag
     {
+        public DepartureLocationDescription(string value) : base("departureLocationDescription", value)
+        {
+            // NO OP
+        }
     }
 }

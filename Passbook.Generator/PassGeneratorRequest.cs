@@ -110,7 +110,7 @@ namespace Passbook.Generator
         public bool? SuppressStripShine { get; set; }
 
         /// <summary>
-        /// Optional. The semantic tags to add to the pass.
+        /// Optional. The semantic tags to add to the pass. Read more about them here https://developer.apple.com/documentation/walletpasses/semantictags
         /// </summary>
         public SemanticTags SemanticTags { get; }
 
