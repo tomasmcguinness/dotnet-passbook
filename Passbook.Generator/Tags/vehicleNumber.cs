@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class vehicleNumber
+    public class VehicleNumber : StringSemanticTag
     {
+        public VehicleNumber(string value) : base("vehicleNumber", value)
+        {
+            // NO OP
+        }
     }
 }

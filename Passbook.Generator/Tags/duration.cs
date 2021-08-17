@@ -1,10 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Newtonsoft.Json;
 
 namespace Passbook.Generator.Tags
 {
-    class duration
+    public class Duration : SemanticTag
     {
+        private readonly double _value;
+
+        public Duration(double value) : base("duration")
+        {
+            _value = value;
+        }
+
+        public override void WriteValue(JsonWriter writer)
+        {
+            writer.WriteValue(_value);
+        }
     }
 }
