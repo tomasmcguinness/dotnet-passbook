@@ -2,7 +2,7 @@
 
 namespace Passbook.Generator.Tags
 {
-    public class AirlineCode : StringSemanticTag
+    public class AirlineCode : SemanticTagBaseValue
     {
         public AirlineCode(string value) : base("airlineCode", value)
         {

@@ -1,6 +1,6 @@
 ﻿namespace Passbook.Generator.Tags
 {
-    class CurrentDepartureDate : StringSemanticTag
+    class CurrentDepartureDate : SemanticTagBaseValue
     {
         public CurrentDepartureDate(string value) : base("currentDepartureDate", value)
         {

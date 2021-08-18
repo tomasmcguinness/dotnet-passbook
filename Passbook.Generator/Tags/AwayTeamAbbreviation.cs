@@ -1,6 +1,6 @@
 ﻿namespace Passbook.Generator.Tags
 {
-    public class AwayTeamAbbreviation : StringSemanticTag
+    public class AwayTeamAbbreviation : SemanticTagBaseValue
     {
         public AwayTeamAbbreviation(string value) : base("awayTeamAbbreviation", value)
         {

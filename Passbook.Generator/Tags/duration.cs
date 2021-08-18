@@ -2,18 +2,13 @@
 
 namespace Passbook.Generator.Tags
 {
-    public class Duration : SemanticTag
+    public class Duration : SemanticTagBaseValue
     {
         private readonly double _value;
 
-        public Duration(double value) : base("duration")
+        public Duration(double value) : base("duration", value)
         {
-            _value = value;
-        }
-
-        public override void WriteValue(JsonWriter writer)
-        {
-            writer.WriteValue(_value);
+            // NO OP
         }
     }
 }

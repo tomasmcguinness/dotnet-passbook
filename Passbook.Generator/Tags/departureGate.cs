@@ -1,6 +1,6 @@
 ﻿namespace Passbook.Generator.Tags
 {
-    class DepartureGate : StringSemanticTag
+    class DepartureGate : SemanticTagBaseValue
     {
         public DepartureGate(string value) : base("departureGate", value)
         {

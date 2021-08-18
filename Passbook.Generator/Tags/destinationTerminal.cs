@@ -1,6 +1,6 @@
 ﻿namespace Passbook.Generator.Tags
 {
-    public class DestinationTerminal : StringSemanticTag
+    public class DestinationTerminal : SemanticTagBaseValue
     {
         public DestinationTerminal(string value) : base("destinationTerminal", value)
         {

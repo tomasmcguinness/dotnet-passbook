@@ -33,26 +33,32 @@ namespace Passbook.Generator
         /// Required. Pass type identifier, as issued by Apple. The value must correspond with your signing certificate.
         /// </summary>
         public string PassTypeIdentifier { get; set; }
+
         /// <summary>
         /// Required. Version of the file format. The value must be 1.
         /// </summary>
         public int FormatVersion { get { return 1; } }
+
         /// <summary>
         /// Required. Serial number that uniquely identifies the pass. No two passes with the same pass type identifier may have the same serial number.
         /// </summary>
         public string SerialNumber { get; set; }
+
         /// <summary>
         /// Required. A simple description of the pass
         /// </summary>
         public string Description { get; set; }
+
         /// <summary>
         /// Required. Team identifier of the organization that originated and signed the pass, as issued by Apple.
         /// </summary>
         public string TeamIdentifier { get; set; }
+
         /// <summary>
         /// Required. Display name of the organization that originated and signed the pass.
         /// </summary>
         public string OrganizationName { get; set; }
+
         /// <summary>
         /// Disables sharing of the pass.
         /// </summary>

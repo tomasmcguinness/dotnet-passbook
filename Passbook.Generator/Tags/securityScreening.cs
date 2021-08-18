@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class securityScreening
+    public class SecurityScreening : SemanticTagBaseValue
     {
+        public SecurityScreening(string value) : base("securityScreening", value)
+        {
+            // NO OP
+        }
     }
 }
