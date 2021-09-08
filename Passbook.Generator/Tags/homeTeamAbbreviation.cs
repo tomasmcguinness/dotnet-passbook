@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class homeTeamAbbreviation
+    /// <summary>
+    /// The unique abbreviation of the homee team’s name. Use this key only for a sports event ticket.
+    /// </summary>
+    public class HomeTeamAbbreviation : SemanticTagBaseValue
     {
+        public HomeTeamAbbreviation(string value) : base("homeTeamAbbreviation", value)
+        {
+            // NO OP
+        }
     }
 }

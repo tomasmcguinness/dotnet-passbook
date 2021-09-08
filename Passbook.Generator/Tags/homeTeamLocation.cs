@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class homeTeamLocation
+    /// <summary>
+    /// The home location of the home team. Use this key only for a sports event ticket.
+    /// </summary>
+    public class HomeTeamLocation : SemanticTagBaseValue
     {
+        public HomeTeamLocation(string value) : base("homeTeamLocation", value)
+        {
+            // NO OP
+        }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class originalDepartureDate
+    public class OriginalDepartureDate : SemanticTagBaseValue
     {
+        public OriginalDepartureDate(string value) : base("originalDepartureDate", value)
+        {
+            // NO OP
+        }
     }
 }

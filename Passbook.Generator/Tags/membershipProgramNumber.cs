@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class membershipProgramNumber
+    /// <summary>
+    /// The ticketed passenger’s frequent flyer or loyalty number. Use this key for any type of boarding pass.
+    /// </summary>
+    public class MembershipProgramNumber : SemanticTagBaseValue
     {
+        public MembershipProgramNumber(string value) : base("membershipProgramNumber", value)
+        {
+        }
     }
 }
+

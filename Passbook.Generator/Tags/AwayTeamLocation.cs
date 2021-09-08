@@ -5,7 +5,7 @@
     /// </summary>
     public class AwayTeamLocation : SemanticTagBaseValue
     {
-        public AwayTeamLocation(string value) : base("awayTeamLocationSemanticTag", value)
+        public AwayTeamLocation(string value) : base("awayTeamLocation", value)
         {
             // NO OP
         }
