@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System;
 
 namespace Passbook.Generator.Tags
 {
+    /// <summary>
+    /// The type of event. Use this key for any type of event ticket.
+    /// </summary>
     public class EventType : SemanticTag
     {
         private readonly EventTypes _eventType;
@@ -14,7 +16,7 @@ namespace Passbook.Generator.Tags
 
         public override void WriteValue(JsonWriter writer)
         {
-            throw new NotImplementedException();
+            writer.WriteValue(_eventType.ToString());
         }
     }
 }

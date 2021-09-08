@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    class genre
+    /// <summary>
+    /// The genre of the performance, such as “Classical”. Use this key for any type of event ticket.
+    /// </summary>
+    public class Genre : SemanticTagBaseValue
     {
+        public Genre(string value) : base("genre", value)
+        {
+            // NO OP
+        }
     }
 }
