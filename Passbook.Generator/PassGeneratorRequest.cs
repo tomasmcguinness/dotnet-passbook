@@ -196,7 +196,7 @@ namespace Passbook.Generator
         /// <summary>
         /// A byte array containing the PassKit certificate
         /// </summary>
-        public X509Certificate2 Certificate { get; set; }
+        public X509Certificate2 PassbookCertificate { get; set; }
 
         /// <summary>
         /// A byte array containing the Apple WWDRCA X509 certificate

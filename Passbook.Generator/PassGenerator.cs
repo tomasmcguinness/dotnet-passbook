@@ -102,7 +102,7 @@ namespace Passbook.Generator
 
         private void ValidateCertificates(PassGeneratorRequest request)
         {
-            if (request.Certificate == null)
+            if (request.PassbookCertificate == null)
             {
                 throw new FileNotFoundException("Certificate could not be found. Please ensure the thumbprint and cert location values are correct.");
             }
@@ -112,7 +112,7 @@ namespace Passbook.Generator
                 throw new FileNotFoundException("Apple Certificate could not be found. Please download it from http://www.apple.com/certificateauthority/ and install it into your PERSONAL or LOCAL MACHINE certificate store.");
             }
 
-            string passTypeIdentifier = request.Certificate.GetNameInfo(X509NameType.SimpleName, false);
+            string passTypeIdentifier = request.PassbookCertificate.GetNameInfo(X509NameType.SimpleName, false);
 
             if (passTypeIdentifier.StartsWith(passTypePrefix, StringComparison.OrdinalIgnoreCase))
             {
@@ -130,7 +130,7 @@ namespace Passbook.Generator
             }
 
             Dictionary<string, string> nameParts =
-            Regex.Matches(request.Certificate.SubjectName.Name, @"(?<key>[^=,\s]+)\=*(?<value>("".+""|[^,])+)")
+            Regex.Matches(request.PassbookCertificate.SubjectName.Name, @"(?<key>[^=,\s]+)\=*(?<value>("".+""|[^,])+)")
               .Cast<Match>()
               .ToDictionary(
                   m => m.Groups["key"].Value,
@@ -249,7 +249,7 @@ namespace Passbook.Generator
 
                 SignedCms signing = new SignedCms(contentInfo, true);
 
-                CmsSigner signer = new CmsSigner(SubjectIdentifierType.SubjectKeyIdentifier, request.Certificate)
+                CmsSigner signer = new CmsSigner(SubjectIdentifierType.SubjectKeyIdentifier, request.PassbookCertificate)
                 {
                     IncludeOption = X509IncludeOption.None
                 };
@@ -257,7 +257,7 @@ namespace Passbook.Generator
                 Trace.TraceInformation("Fetching Apple Certificate for signing..");
                 Trace.TraceInformation("Constructing the certificate chain..");
                 signer.Certificates.Add(request.AppleWWDRCACertificate);
-                signer.Certificates.Add(request.Certificate);
+                signer.Certificates.Add(request.PassbookCertificate);
 
                 signer.SignedAttributes.Add(new Pkcs9SigningTime());
 
