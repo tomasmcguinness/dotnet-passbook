@@ -22,11 +22,11 @@ The solution requires Visual Studio 2017 or higher. The library is built for .NE
 
 Before you run the PassGenerator, you need to ensure you have all the necessary certificates installed. There are two required.
 
-Firstly, you need to install the Apple WWDR (WorldWide Developer Relations) certificate. You can download that from here [http://www.apple.com/certificateauthority/](http://www.apple.com/certificateauthority/) . You must install it in the Local Machine's Intermediate Certificate store. I've hardcoded that location
+Firstly, you need to install the Apple WWDR (WorldWide Developer Relations) certificate. You can download that from here [http://www.apple.com/certificateauthority/](http://www.apple.com/certificateauthority/).
 
 Secondly, you need to installed your Passbook certificate, which you get from the Developer Portal. You must have a full iPhone developer account. There are [instructions on my blog](http://www.tomasmcguinness.com/2012/06/28/generating-an-apple-ios-certificate-using-windows/) for generating a certificate if you're using a Windows Machine.
 
-You can place this certificate in any of the stores, but it must be placed into the "personal" folder.  When constructing the request for the pass, you specify the location and thumbprint for the certificate. If running this code in IIS for example, installing the certificate in the Local Machine area might make access easier. Alternatively, you could place the certificate into the AppPool's user's certification repository. When you install the certificate, be sure to note the certificate's Thumbprint.
+Be sure that your Passbook certificate includes the private key component 
 
 ## Technical Stuff
 
@@ -56,25 +56,13 @@ Colours can be specified in HTML format or in RGB format.
     request.LabelColor = "rgb(0,0,0)";
     request.ForegroundColor = "rgb(0,0,0)";
 
-To select the certificate there are two options. Firstly, you can use the Windows Certificate store to hold the certificates. You choose the location of your Passbook certificate by specifying the thumbprint of the certificates. 
+You must provide both the Apple WWDR and your Passbook certificate as X509Certificate instances.  
 
-    request.CertThumbprint = "22C5FADDFBF935E26E2DDB8656010C7D4103E02E";
-    request.CertLocation = System.Security.Cryptography.X509Certificates.StoreLocation.CurrentUser;
-
-An alternative way to pass the certificates into the PassGenerator is to load them as byte[] and add them to the request.
-
-    byte[] certData = <the contents of the certificate>; // e.g. File.ReadAllBytes(@"C:\path\to\your\certificate");
-    request.Certificate = certData;
-    request.CertificatePassword = "abc123"; // The password for the certificate's private key.
-
-The Apple WWDRC Certificate can only be loaded as a byte[].
-
-    var certData =  <the contents of the WWDR certificate>; // e.g. File.ReadAllBytes(@"C:\path\to\the\apple\wwdr\certificate");
-    request.AppleWWDRCACertificate = certData;
+    request.AppleWWDRCACertificate = new X509Certificate(...);
+    request.PassbookCertificate = new X509Certificate(...);
 
 Next, define the images you with to use. You must always include both standard and retina sized images. Images are supplied as byte[].
 
-    // override icon and icon retina
     request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon.png")));
     request.Images.Add(PassbookImage.Icon2X, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@2x.png")));
     request.Images.Add(PassbookImage.Icon3X, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@3x.png")));
@@ -115,10 +103,6 @@ If you are using ASP.NET MVC for example, you can return this byte[] as a Passbo
 
 If the passes you create don't seem to open on iOS or in the simulator, the payload is probably invalid. To aid troubleshooting, I've created this simple tool - https://pkpassvalidator.azurewebsites.net - just run your pkpass file through this and it might give some idea what's wrong. The tool is new (Jul'18) and doesn't check absolutely everything. I'll try and add more validation to the generator itself.
 
-### IIS Security
-	
-If you're running the signing code within an IIS application, you might run into some issues accessing the private key of your certificates.  To resolve this open MMC => Add Certificates (Local computer) snap-in => Certificates (Local Computer) => Personal => Certificates => Right click the certificate of interest => All tasks => Manage private key => Add IIS AppPool\AppPoolName and grant it Full control. Replace "AppPoolName" with the name of the application pool that your app is running under. (sometimes IIS_IUSRS)
-
 ## Updating passes
 
 To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl. Both of these values are required. The WebServiceUrl must be HTTPS by default, but you can disable this requirement in the iOS developer options on any device you're testing on.
@@ -137,9 +121,9 @@ I'm working on a sample implementation of the protocol in ASP.Net Core and you c
 As of version 2.0.1, the NFC keys are now supported. To use them, just set hte Nfc property with a new Nfc object. Both the message and encoded public key values are mandatory.
 
 	 PassGeneratorRequest request = new PassGeneratorRequest();
-         request.Nfc = new Nfc("THE NFC Message", "<encoded private key>");
+     request.Nfc = new Nfc("THE NFC Message", "<encoded private key>");
 	 
-I cannot supply any information as to the values required since it's not available publically.
+I cannot supply any information as to the values required since it's not publically available.
 
 ## Contribute
 
