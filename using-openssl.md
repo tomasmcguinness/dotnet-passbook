@@ -118,7 +118,7 @@ Sign in to the Apple Developer portal, go to **Certificates**, Add, **scroll** d
 
 Click Continue. Provide a Pass certificate name, and choose the Pass Type ID you selected in step 2:
 
-<img src="images/apple-create-new-pass-type-id-certificate.png" alt="Screenshot of Apple Developer website showing how to create a new Pass Type ID Certificate" style="zoom:80%;" />
+<img src="images/apple-create-a-new-pass-type-id-certificate.png" alt="Screenshot of Apple Developer website showing how to create a new Pass Type ID Certificate" style="zoom:80%;" />
 
 Upload the `passbook.csr` file you created earlier using openSSL:
 
