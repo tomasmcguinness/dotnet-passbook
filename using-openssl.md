@@ -114,7 +114,7 @@ That's it. You should now have two new files:
 
 Sign in to the Apple Developer portal, go to **Certificates**, Add, **scroll** down to **Services**, select **Pass Type ID Certificate**:
 
-<img src="images/apple-pass-type-id-certificate.PNG" alt="Screenshot of Apple Developer website showing the list of available types when creating a new certificate" style="zoom:80%;" />
+<img src="images/apple-pass-type-id-certificate.png" alt="Screenshot of Apple Developer website showing the list of available types when creating a new certificate" style="zoom:80%;" />
 
 Click Continue. Provide a Pass certificate name, and choose the Pass Type ID you selected in step 2:
 
