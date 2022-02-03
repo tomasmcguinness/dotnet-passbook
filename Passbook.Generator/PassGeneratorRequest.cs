@@ -12,6 +12,7 @@ namespace Passbook.Generator
     {
         public PassGeneratorRequest()
         {
+            SemanticTags = new SemanticTags();
             HeaderFields = new List<Field>();
             PrimaryFields = new List<Field>();
             SecondaryFields = new List<Field>();
@@ -32,30 +33,38 @@ namespace Passbook.Generator
         /// Required. Pass type identifier, as issued by Apple. The value must correspond with your signing certificate.
         /// </summary>
         public string PassTypeIdentifier { get; set; }
+
         /// <summary>
         /// Required. Version of the file format. The value must be 1.
         /// </summary>
         public int FormatVersion { get { return 1; } }
+
         /// <summary>
         /// Required. Serial number that uniquely identifies the pass. No two passes with the same pass type identifier may have the same serial number.
         /// </summary>
         public string SerialNumber { get; set; }
+
         /// <summary>
         /// Required. A simple description of the pass
         /// </summary>
         public string Description { get; set; }
+
         /// <summary>
         /// Required. Team identifier of the organization that originated and signed the pass, as issued by Apple.
         /// </summary>
         public string TeamIdentifier { get; set; }
+
         /// <summary>
         /// Required. Display name of the organization that originated and signed the pass.
         /// </summary>
         public string OrganizationName { get; set; }
+
         /// <summary>
         /// Disables sharing of the pass.
         /// </summary>
         public bool SharingProhibited { get; set; }
+
+        #endregion
 
         #region Images Files
 
@@ -64,7 +73,6 @@ namespace Passbook.Generator
         /// </summary>
         public Dictionary<PassbookImage, byte[]> Images { get; set; }
 
-        #endregion
         #endregion
 
         #region Companion App Keys
@@ -106,6 +114,11 @@ namespace Passbook.Generator
         /// Optional. If true, the strip image is displayed without a shine effect. The default value is false.
         /// </summary>
         public bool? SuppressStripShine { get; set; }
+
+        /// <summary>
+        /// Optional. The semantic tags to add to the pass. Read more about them here https://developer.apple.com/documentation/walletpasses/semantictags
+        /// </summary>
+        public SemanticTags SemanticTags { get; }
 
         /// <summary>
         /// Optional. Fields to be displayed prominently on the front of the pass.
@@ -178,31 +191,17 @@ namespace Passbook.Generator
 
         #endregion
 
-        #region Certificate
+        #region Certificates
 
         /// <summary>
-        /// A byte array containing the X509 certificate
+        /// A byte array containing the PassKit certificate
         /// </summary>
-        public byte[] Certificate { get; set; }
+        public X509Certificate2 PassbookCertificate { get; set; }
 
         /// <summary>
         /// A byte array containing the Apple WWDRCA X509 certificate
         /// </summary>
-        public byte[] AppleWWDRCACertificate { get; set; }
-
-        /// <summary>
-        /// The private key password for the certificate.
-        /// </summary>
-        public string CertificatePassword { get; set; }
-
-        /// <summary>
-        /// Certificate Thumbprint value
-        /// </summary>
-        public string CertThumbprint { get; set; }
-        /// <summary>
-        /// Certificate Store Location
-        /// </summary>
-        public StoreLocation CertLocation { get; set; }
+        public X509Certificate2 AppleWWDRCACertificate { get; set; }
 
         #endregion
 
@@ -342,6 +341,8 @@ namespace Passbook.Generator
 
             writer.WriteStartObject();
 
+            Trace.TraceInformation("Writing semantics..");
+            WriteSemantics(writer);
             Trace.TraceInformation("Writing standard keys..");
             WriteStandardKeys(writer);
             Trace.TraceInformation("Writing user information..");
@@ -465,6 +466,11 @@ namespace Passbook.Generator
 
                 writer.WriteEndArray();
             }
+        }
+
+        private void WriteSemantics(JsonWriter writer)
+        {
+            SemanticTags.Write(writer);
         }
 
         private void WriteStandardKeys(JsonWriter writer)
