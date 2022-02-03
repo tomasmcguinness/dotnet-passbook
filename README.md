@@ -4,6 +4,10 @@ A .NET Standard Library for generating Passbook packages for iOS Wallet (formerl
 
 [![.NET Core](https://github.com/tomasmcguinness/dotnet-passbook/actions/workflows/dotnetcore.yml/badge.svg)](https://github.com/tomasmcguinness/dotnet-passbook/actions/workflows/dotnetcore.yml)
 
+## Supporting
+
+If you use dotnet-passbook, please consider supporting me https://ko-fi.com/tomasmcguinness - it will enable me to keep the project updated with improvements and changes. Thanks!
+
 ## Installing
 
 dotnet-passbook is also available to download from NuGet
@@ -140,10 +144,6 @@ I cannot supply any information as to the values required since it's not availab
 ## Contribute
 
 All pull requests are welcomed! If you come across an issue you cannot fix, please raise an issue or drop me an email at tomas@tomasmcguinness.com or follow me on twitter @tomasmcguinness
-
-## Supporting the project
-
-If you use dotnet-passbook, please consider donating https://www.buymeacoffee.com/fMKJ2NnQ3 - it will enable me to keep the project updated with improvements and changes. Thanks!
 
 ## License
 
