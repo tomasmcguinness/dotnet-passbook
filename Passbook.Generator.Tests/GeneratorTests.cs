@@ -1,10 +1,12 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Passbook.Generator.Fields;
 using System;
 using System.IO;
 using System.Text;
 using Xunit;
+using Microsoft.CSharp;
+using TimeZoneConverter;
 
 namespace Passbook.Generator.Tests
 {
@@ -18,7 +20,7 @@ namespace Passbook.Generator.Tests
             request.Nfc = new Nfc("My NFC Message", "SKLSJLKJ");
 
             DateTime offset = new DateTime(2018, 01, 05, 12, 00, 0);
-            TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            TimeZoneInfo zone = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
             DateTimeOffset offsetConverted = new DateTimeOffset(offset, zone.GetUtcOffset(offset));
 
             request.RelevantDate = offsetConverted;
@@ -55,7 +57,7 @@ namespace Passbook.Generator.Tests
                     Assert.Equal("My NFC Message", nfcMessage);
 
                     var genericKeys = json["generic"];
-                    Assert.Single(genericKeys["auxiliaryFields"]);
+                    Assert.Equal(1, genericKeys["auxiliaryFields"].Count);
 
                     var auxField = genericKeys["auxiliaryFields"][0];
 
@@ -76,7 +78,7 @@ namespace Passbook.Generator.Tests
             request.Nfc = new Nfc("My NFC Message", "SKLSJLKJ");
 
             DateTime offset = new DateTime(2018, 01, 05, 12, 00, 0);
-            TimeZoneInfo zone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+            TimeZoneInfo zone = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
             DateTimeOffset offsetConverted = new DateTimeOffset(offset, zone.GetUtcOffset(offset));
 
             request.RelevantDate = offsetConverted;
@@ -158,6 +160,7 @@ namespace Passbook.Generator.Tests
 
                     Assert.Equal(expected2, datetime2);
                     Assert.Equal("Label", (string)utcdatetimeField["label"]);
+
                 }
             }
         }
