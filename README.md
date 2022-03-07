@@ -28,7 +28,7 @@ Before you run the PassGenerator, you need to ensure you have all the necessary 
 
 Firstly, you need the Apple WWDR (WorldWide Developer Relations) certificate. You can download that from here [http://www.apple.com/certificateauthority/](http://www.apple.com/certificateauthority/).
 
-⚠️ You MUST use the "G1" version of this certificate ([Worldwide Developer Relations - G1 (Expiring 02/07/2023 21:48:47 UTC)](https://developer.apple.com/certificationauthority/AppleWWDRCA.cer)
+⚠️ You MUST use the "G4" version of this certificate ([Worldwide Developer Relations - G4 (Expiring 12/10/2030 00:00:00 UTC)](https://www.apple.com/certificateauthority/AppleWWDRCAG4.cer)
 
 The other "Worldwide Developer Relations" certificates listed here will work, but will create signed passes which don't actually work with Apple Wallet. *("Sorry, your Pass cannot be installed to Passbook at this time.")*
 
