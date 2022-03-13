@@ -6,7 +6,9 @@ A .NET Standard Library for generating Passbook packages for iOS Wallet (formerl
 
 ## Supporting
 
-If you use dotnet-passbook, please consider supporting me https://ko-fi.com/tomasmcguinness - it will enable me to keep the project updated with improvements and changes. Thanks!
+If you use dotnet-passbook, please consider buying me a cup of coffee - 
+
+<a href='https://ko-fi.com/G2G11TQK5' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi2.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 ## Installing
 
