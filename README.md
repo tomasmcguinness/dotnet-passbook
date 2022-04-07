@@ -28,15 +28,15 @@ The solution requires Visual Studio 2017 or higher. The library is built for .NE
 
 Before you run the PassGenerator, you need to ensure you have all the necessary certificates installed. There are two required.
 
-Firstly, you need the Apple WWDR (WorldWide Developer Relations) certificate. You can download that from here [http://www.apple.com/certificateauthority/](http://www.apple.com/certificateauthority/).
+Firstly, you need to your Passbook certificate, which you get from the Developer Portal. You must have an iOS developer account. 
 
-⚠️ You MUST use the "G4" version of this certificate ([Worldwide Developer Relations - G4 (Expiring 12/10/2030 00:00:00 UTC)](https://www.apple.com/certificateauthority/AppleWWDRCAG4.cer)
+Secondly, you need the Apple WWDR (WorldWide Developer Relations) certificate. You can download that from here [http://www.apple.com/certificateauthority/](http://www.apple.com/certificateauthority/).
+
+Depending on when you generated your Passbook certificate you'll need either the G1 or G4 certificate. If you generated your passbook certificate on or before the January 27, 2022, use G1. Otherwise use G4.
 
 The other "Worldwide Developer Relations" certificates listed here will work, but will create signed passes which don't actually work with Apple Wallet. *("Sorry, your Pass cannot be installed to Passbook at this time.")*
 
-Secondly, you need to your Passbook certificate, which you get from the Developer Portal. You must have a full iPhone developer account. 
-
-There are [instructions on my blog](http://www.tomasmcguinness.com/2012/06/28/generating-an-apple-ios-certificate-using-windows/) for generating a certificate using IIS if you're using a Windows machine.
+There are [instructions on my blog](http://www.tomasmcguinness.com/2012/06/28/generating-an-apple-ios-certificate-using-windows/) for generating a certificate using IIS if you're using a Windows machine
 
 If you're on Linux/macOS or would prefer to use OpenSSL on Windows, check out [using-openssl.md](using-openssl.md) for instructions on how to create the necessary certificates using OpenSSL.
 
