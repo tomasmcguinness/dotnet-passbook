@@ -21,7 +21,7 @@ namespace Passbook.Generator
         private byte[] manifestFile = null;
         private Dictionary<string, byte[]> localizationFiles = null;
         private byte[] pkPassFile = null;
-
+        private byte[] pkPassBundle = null;
         private const string passTypePrefix = "Pass Type ID: ";
 
         public byte[] Generate(PassGeneratorRequest request)
@@ -37,6 +37,58 @@ namespace Passbook.Generator
             return pkPassFile;
         }
 
+        /// <summary>
+        /// Creates a byte array that can be used to create a .pkpasses file for bundling multiple tickets 
+        /// </summary>
+        /// <returns>
+        /// A byte array of a zip archive that contains one or more .pkpass files
+        /// </returns>
+        /// <param name="bundleRequest">
+        /// A dictionary of filenames and PassGeneratorRequest objects
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        public byte[] Generate(Dictionary<string, PassGeneratorRequest> bundleRequest)
+        {
+            if (bundleRequest == null)
+            {
+                throw new ArgumentNullException("bundleRequest", "You must pass a dictionary instance containing filename keys and PassGeneratorRequest values");
+            }
+
+            ZipBundle(bundleRequest);
+
+            return pkPassBundle;
+        }
+
+        private void ZipBundle(Dictionary<string, PassGeneratorRequest> bundleRequest)
+        {
+            using (MemoryStream zipToOpen = new MemoryStream())
+            {
+                using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Create, true))
+                {
+                    foreach (KeyValuePair<string, PassGeneratorRequest> bundleItem in bundleRequest) 
+                    {
+                        ZipArchiveEntry zipEntry = archive.CreateEntry(bundleItem.Key);
+                        
+                        CreatePackage(bundleItem.Value);
+                        ZipPackage(bundleItem.Value);
+                        
+                        using (MemoryStream originalFileStream = new MemoryStream(pkPassFile))
+                        {
+                            using (Stream zipEntryStream = zipEntry.Open())
+                            {
+                                originalFileStream.CopyTo(zipEntryStream);
+                            }
+                        }
+                    }
+                    
+                    archive.Dispose();
+                }
+                
+                pkPassBundle = zipToOpen.ToArray();
+                zipToOpen.Flush();
+            }
+        }
+        
         private void ZipPackage(PassGeneratorRequest request)
         {
             using (MemoryStream zipToOpen = new MemoryStream())
