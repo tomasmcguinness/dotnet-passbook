@@ -149,22 +149,20 @@ If you're running the signing code within an IIS application, you might run into
 To be able to update your pass, you must provide it with a callback. When generating your request, you must provide it with an AuthenticationToken and a WebServiceUrl. Both of these values are required. The WebServiceUrl must be HTTPS by default, but you can disable this requirement in the iOS developer options on any device you're testing on.
 
 The authentication token is a string that will be included in the header of all requets made to your API. It's your responsibility to validate this token.
-
+```
     request.AuthenticationToken = "<a secret to ensure authorized access>";
     request.WebServiceUrl = "https://<your api>";
-
+```
 The webservice you point to must support Apple's protocol, outlined here https://developer.apple.com/library/archive/documentation/PassKit/Reference/PassKit_WebService/WebService.html#//apple_ref/doc/uid/TP40011988
-
-I'm working on a sample implementation of the protocol in ASP.Net Core and you can find it on the branch new-sample-webservice.
 
 ## NFC Support
 
-As of version 2.0.1, the NFC keys are now supported. To use them, just set hte Nfc property with a new Nfc object. Both the message and encoded public key values are mandatory.
-
+As of version 2.0.1, the NFC keys are now supported. To use them, just set the Nfc property with a new NFC object. Both the message and encoded public key values are mandatory.
+```
 	PassGeneratorRequest request = new PassGeneratorRequest();
 	request.Nfc = new Nfc("THE NFC Message", "<encoded private key>");
-
-I cannot supply any information as to the values required since it's not available publically.
+```
+Unfortunately, I cannot supply any information as to the values required since it's not available publically. If anyone knows what goes here, I'd be more than happy to add changes to my library to support this key.
 
 ## Contribute
 
@@ -172,4 +170,4 @@ All pull requests are welcomed! If you come across an issue you cannot fix, plea
 
 ## License
 
-Dotnet-passbook is distributed under the MIT license: [http://tomasmcguinness.mit-license.org/](http://tomasmcguinness.mit-license.org/)
+dotnet-passbook is distributed under the MIT license: [http://tomasmcguinness.mit-license.org/](http://tomasmcguinness.mit-license.org/)
