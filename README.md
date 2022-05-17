@@ -34,24 +34,24 @@ Secondly, you need the Apple WWDR (WorldWide Developer Relations) certificate. Y
 
 Depending on when you generated your Passbook certificate you'll need either the G1 or G4 certificate. If you generated your passbook certificate on or before the January 27, 2022, use G1. Otherwise use G4.
 
-The other "Worldwide Developer Relations" certificates listed here will work, but will create signed passes which don't actually work with Apple Wallet. *("Sorry, your Pass cannot be installed to Passbook at this time.")*
+The other "Worldwide Developer Relations" certificates listed here won't work with Apple Wallet. *("Sorry, your Pass cannot be installed to Passbook at this time.")*
 
 There are [instructions on my blog](http://www.tomasmcguinness.com/2012/06/28/generating-an-apple-ios-certificate-using-windows/) for generating a certificate using IIS if you're using a Windows machine
 
 If you're on Linux/macOS or would prefer to use OpenSSL on Windows, check out [using-openssl.md](using-openssl.md) for instructions on how to create the necessary certificates using OpenSSL.
 
-Be sure that your Passbook certificate includes the private key component 
+When moving certificates around, be sure that your Passbook certificate always includes the private key component, else the signing will fail.
 
 ## Technical Stuff
 
 To generate a pass, start by declaring a PassGenerator.
-
+```
     PassGenerator generator = new PassGenerator();
-
+```
 Next, create a PassGeneratorRequest. This is a raw request that gives you the full power to add all the fields necessary for the pass you wish to create. Each pass is broken down into several sections. Each section is rendered in a different way, based on the style of the pass you are trying to produce. For more information on this, please consult Apple's Passbook Programming Guide. The example below here will show how to create a very basic boarding pass.
 
 Since each pass has a set of mandatory data, fill that in first.
-
+```
     PassGeneratorRequest request = new PassGeneratorRequest();
     request.PassTypeIdentifier = "pass.tomsamcguinness.events";   
     request.TeamIdentifier = "RW121242";
@@ -59,9 +59,9 @@ Since each pass has a set of mandatory data, fill that in first.
     request.Description = "My first pass";
     request.OrganizationName = "Tomas McGuinness";
     request.LogoText = "My Pass";
-
+```
 Colours can be specified in HTML format or in RGB format.
-
+```
     request.BackgroundColor = "#FFFFFF";
     request.LabelColor = "#000000";
     request.ForegroundColor = "#000000";
@@ -69,20 +69,20 @@ Colours can be specified in HTML format or in RGB format.
     request.BackgroundColor = "rgb(255,255,255)";
     request.LabelColor = "rgb(0,0,0)";
     request.ForegroundColor = "rgb(0,0,0)";
-
+```
 You must provide both the Apple WWDR and your Passbook certificate as X509Certificate instances. NOTE: This is a change from previous versions. 
-
+```
     request.AppleWWDRCACertificate = new X509Certificate(...);
     request.PassbookCertificate = new X509Certificate(...);
-
+```
 Next, define the images you with to use. You must always include both standard and retina sized images. Images are supplied as byte[].
-
+```
     request.Images.Add(PassbookImage.Icon, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon.png")));
     request.Images.Add(PassbookImage.Icon2X, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@2x.png")));
     request.Images.Add(PassbookImage.Icon3X, System.IO.File.ReadAllBytes(Server.MapPath("~/Icons/icon@3x.png")));
-
+```
 You can now provide more pass specific information. The Style must be set and then all information is then added to fields to the required sections. For a baording pass, the fields are add to three sections;  primary, secondary and auxiliary.
-
+```
 	request.Style = PassStyle.BoardingPass;
 	
 	request.AddPrimaryField(new StandardField("origin", "San Francisco", "SFO"));
@@ -94,25 +94,25 @@ You can now provide more pass specific information. The Style must be set and th
 	request.AddAuxiliaryField(new StandardField("passenger-name", "Passenger", "Thomas Anderson"));
 	
 	request.TransitType = TransitType.PKTransitTypeAir;
-
+```
 You can add a BarCode.
-
+```
     request.AddBarCode(BarcodeType.PKBarcodeFormatPDF417, "01927847623423234234", "ISO-8859-1", "01927847623423234234");
-
+```
 Starting with iOS 9, multiple barcodes are now supported. This helper method supports this new feature. If you wanted to support iOS 8 and earlier, you can use the method SetBarcode().
 
 To link the pass to an existing app, you can add the app's Apple ID to the AssociatedStoreIdentifiers array.
-
+```
     request.AssociatedStoreIdentifiers.Add(551768478);
-
+```
 Finally, generate the pass by passing the request into the instance of the Generator. This will create the signed manifest and package all the the image files into zip.
-
+```
     byte[] generatedPass = generator.Generate(request);
-
+```
 If you are using ASP.NET MVC for example, you can return this byte[] as a Passbook package
-
+```
     return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
-
+```
 iOS 15 introduced the ability to bundle and distribute multiple passes using a singular .pkpasses file. You can generate pass bundles as well by passing in a dictionary of requests values and string keys that represent the filename for each individual request.
 ```
     PassGeneratorRequest myFirstRequest = new PassGeneratorRequest();
@@ -120,10 +120,10 @@ iOS 15 introduced the ability to bundle and distribute multiple passes using a s
     
     // Build out your requests
     
-    Dictionary<string, PassGeneratorRequest> requests = new Dictionary<string, PassGeneratorRequest>;
+    List<PassGeneratorRequest> requests = new List<PassGeneratorRequest>;
     
-    requests.Add("ticket1.pkpass", myFirstRequest);
-    request.Add("ticket2.pkpass", mySecondRequest);
+    requests.Add(myFirstRequest);
+    request.Add(mySecondRequest);
     
     byte[] generatedBundle = generator.Generate(requests);
 ```
