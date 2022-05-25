@@ -97,7 +97,7 @@ You can now provide more pass specific information. The Style must be set and th
 ```
 You can add a BarCode.
 ```
-    request.AddBarCode(BarcodeType.PKBarcodeFormatPDF417, "01927847623423234234", "ISO-8859-1", "01927847623423234234");
+    request.AddBarcode(BarcodeType.PKBarcodeFormatPDF417, "01927847623423234234", "ISO-8859-1", "01927847623423234234");
 ```
 Starting with iOS 9, multiple barcodes are now supported. This helper method supports this new feature. If you wanted to support iOS 8 and earlier, you can use the method SetBarcode().
 
