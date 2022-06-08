@@ -113,17 +113,17 @@ If you are using ASP.NET MVC for example, you can return this byte[] as a Passbo
 
     return new FileContentResult(generatedPass, "application/vnd.apple.pkpass");
 
-iOS 15 introduced the ability to bundle and distribute multiple passes using a singular .pkpasses file. You can generate pass bundles as well by passing in a dictionary of requests values and string keys that represent the filename for each individual request.
+iOS 15 introduced the ability to bundle and distribute multiple passes using a singular .pkpasses file. You can generate pass bundles as well by passing in a list of requests.
 ```
     PassGeneratorRequest myFirstRequest = new PassGeneratorRequest();
     PassGeneratorRequest mySecondRequest = new PassGeneratorRequest();
     
     // Build out your requests
     
-    Dictionary<string, PassGeneratorRequest> requests = new Dictionary<string, PassGeneratorRequest>;
+    List<PassGeneratorRequest> requests = new List<PassGeneratorRequest>();
     
-    requests.Add("ticket1.pkpass", myFirstRequest);
-    request.Add("ticket2.pkpass", mySecondRequest);
+    requests.Add(myFirstRequest);
+    request.Add(mySecondRequest);
     
     byte[] generatedBundle = generator.Generate(requests);
 ```
@@ -132,7 +132,7 @@ The resulting byte array is treated almost identically to a singular .pkpass fil
 ```
     return new FileContentResult(generatedBundle, "application/vnd.apple.pkpasses")
     {
-        FileDownloadName = "tickets.pkpasses.zip"
+        FileDownloadName = "tickets.pkpasses"
     };
 ```
 
