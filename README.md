@@ -85,6 +85,13 @@ request.AppleWWDRCACertificate = new X509Certificate(...);
 request.PassbookCertificate = new X509Certificate(...);
 ```
 
+When you are creating the X509Certificate instances in the cloud, you may experience issues with the signing process. I recommend you use the MachineKeySet and Exportable X509KeyStorageFlags.
+
+```cs
+X509KeyStorageFlags flags = X509KeyStorageFlags.MachineKeySet | X509KeyStorageFlags.Exportable;
+X509Certificate2 certificate = new X509Certificate2(bytes, password, flags);
+```
+
 Next, define the images you with to use. You must always include both standard and retina sized images. Images are supplied as byte[].
 
 ```cs
