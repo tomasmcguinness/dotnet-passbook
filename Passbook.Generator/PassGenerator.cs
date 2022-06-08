@@ -24,47 +24,57 @@ namespace Passbook.Generator
         private byte[] pkPassBundle = null;
         private const string passTypePrefix = "Pass Type ID: ";
 
-        public byte[] Generate(PassGeneratorRequest request)
+        /// <summary>
+        /// Creates a byte array which contains one pkpass file
+        /// </summary>
+        /// <param name="generatorRequest">
+        /// An instance of a PassGeneratorRequest</param>
+        /// <returns>
+        /// A byte array which contains a zipped pkpass file.
+        /// </returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public byte[] Generate(PassGeneratorRequest generatorRequest)
         {
-            if (request == null)
+            if (generatorRequest == null)
             {
-                throw new ArgumentNullException(nameof(request), "You must pass an instance of PassGeneratorRequest");
+                throw new ArgumentNullException(nameof(generatorRequest), "You must pass an instance of PassGeneratorRequest");
             }
 
-            CreatePackage(request);
-            ZipPackage(request);
+            CreatePackage(generatorRequest);
+            ZipPackage(generatorRequest);
 
             return pkPassFile;
         }
 
         /// <summary>
-        /// Creates a byte array that can be used to create a .pkpasses file for bundling multiple tickets 
+        /// Creates a byte array that can contains a .pkpasses file for bundling multiple passes together 
         /// </summary>
-        /// <returns>
-        /// A byte array of a zip archive that contains one or more .pkpass files
-        /// </returns>
-        /// <param name="requests">
+        /// <param name="generatorRequests">
         /// A list of PassGeneratorRequest objects
         /// </param>
+        /// <returns>
+        /// A byte array which contains a zipped pkpasses file.
+        /// </returns>
         /// <exception cref="System.ArgumentNullException">
-        public byte[] Generate(List<PassGeneratorRequest> requests)
+        /// <exception cref="System.ArgumentException">
+        public byte[] Generate(IReadOnlyList<PassGeneratorRequest> generatorRequests)
         {
-            if (requests == null)
+            if (generatorRequests == null)
             {
-                throw new ArgumentNullException(nameof(requests), "You must pass an array of PassGeneratorRequest objects");
+                throw new ArgumentNullException(nameof(generatorRequests), "You must pass an instance of IReadOnlyList containing at least one PassGeneratorRequest");
             }
 
-            if (requests.Count == 0)
+            if (generatorRequests.Count() == 0)
             {
-                throw new ArgumentException(nameof(requests), "You must pass at least one PassGeneratorRequest object in the list");
+                throw new ArgumentException(nameof(generatorRequests), "The IReadOnlyList must contain at least one PassGeneratorRequest");
             }
 
-            ZipBundle(requests);
+            ZipBundle(generatorRequests);
 
             return pkPassBundle;
         }
 
-        private void ZipBundle(List<PassGeneratorRequest> requests)
+        private void ZipBundle(IEnumerable<PassGeneratorRequest> generatorRequests)
         {
             using (MemoryStream zipToOpen = new MemoryStream())
             {
@@ -72,12 +82,12 @@ namespace Passbook.Generator
                 {
                     int i = 0;
 
-                    foreach (PassGeneratorRequest request in requests)
+                    foreach (PassGeneratorRequest generatorRequest in generatorRequests)
                     {
-                        ZipArchiveEntry zipEntry = archive.CreateEntry($"pass{i}.pkpass");
+                        ZipArchiveEntry zipEntry = archive.CreateEntry($"pass{i++}.pkpass");
 
-                        CreatePackage(request);
-                        ZipPackage(request);
+                        CreatePackage(generatorRequest);
+                        ZipPackage(generatorRequest);
 
                         using (MemoryStream originalFileStream = new MemoryStream(pkPassFile))
                         {
@@ -87,11 +97,10 @@ namespace Passbook.Generator
                             }
                         }
                     }
-
-                    archive.Dispose();
                 }
 
                 pkPassBundle = zipToOpen.ToArray();
+
                 zipToOpen.Flush();
             }
         }

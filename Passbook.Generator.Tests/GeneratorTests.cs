@@ -4,9 +4,8 @@ using Passbook.Generator.Fields;
 using System;
 using System.IO;
 using System.Text;
-using Xunit;
-using Microsoft.CSharp;
 using TimeZoneConverter;
+using Xunit;
 
 namespace Passbook.Generator.Tests
 {
@@ -65,7 +64,6 @@ namespace Passbook.Generator.Tests
                     Assert.Equal("Test", (string)auxField["value"]);
                     Assert.Equal("Label", (string)auxField["label"]);
                     Assert.Equal(1, (int)auxField["row"]);
-
                 }
             }
         }
@@ -109,7 +107,6 @@ namespace Passbook.Generator.Tests
                 Label = "Label",
             });
 
-
             using (MemoryStream ms = new MemoryStream())
             {
                 using (StreamWriter sr = new StreamWriter(ms))
@@ -152,7 +149,6 @@ namespace Passbook.Generator.Tests
                     Assert.DoesNotContain("Z", datetime1);
                     Assert.Equal("Label", (string)datetimeField["label"]);
 
-
                     var utcdatetimeField = genericKeys["auxiliaryFields"][2];
                     Assert.Equal("datetime-2", (string)utcdatetimeField["key"]);
                     string datetime2 = (string)utcdatetimeField["value"];
@@ -160,7 +156,6 @@ namespace Passbook.Generator.Tests
 
                     Assert.Equal(expected2, datetime2);
                     Assert.Equal("Label", (string)utcdatetimeField["label"]);
-
                 }
             }
         }
