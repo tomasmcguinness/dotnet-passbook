@@ -1,9 +1,11 @@
 using Newtonsoft.Json;
+using Passbook.Generator.Exceptions;
 using Passbook.Generator.Fields;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Passbook.Generator
@@ -254,27 +256,44 @@ namespace Passbook.Generator
 
         public void AddHeaderField(Field field)
         {
+            EnsureFieldKeyIsUnique(field.Key);
             HeaderFields.Add(field);
         }
 
         public void AddPrimaryField(Field field)
         {
+            EnsureFieldKeyIsUnique(field.Key);
             PrimaryFields.Add(field);
         }
 
         public void AddSecondaryField(Field field)
         {
+            EnsureFieldKeyIsUnique(field.Key);
             SecondaryFields.Add(field);
         }
 
         public void AddAuxiliaryField(Field field)
         {
+            EnsureFieldKeyIsUnique(field.Key);
             AuxiliaryFields.Add(field);
         }
 
         public void AddBackField(Field field)
         {
+            EnsureFieldKeyIsUnique(field.Key);
             BackFields.Add(field);
+        }
+
+        private void EnsureFieldKeyIsUnique(string key)
+        {
+            if (HeaderFields.Any(x => x.Key == key) ||
+                PrimaryFields.Any(x => x.Key == key) ||
+                SecondaryFields.Any(x => x.Key == key) ||
+                AuxiliaryFields.Any(x => x.Key == key) ||
+                BackFields.Any(x => x.Key == key))
+            {
+                throw new DuplicateFieldKeyException(key);
+            }
         }
 
         public void AddBarcode(BarcodeType type, string message, string encoding, string alternateText)
