@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Passbook.Generator.Exceptions;
 using Passbook.Generator.Fields;
 using System;
 using System.IO;
@@ -66,6 +67,26 @@ namespace Passbook.Generator.Tests
                     Assert.Equal(1, (int)auxField["row"]);
                 }
             }
+        }
+
+        [Fact]
+        public void EnsureDuplicteKeysThrowAnException()
+        {
+            PassGeneratorRequest request = new PassGeneratorRequest();
+
+            request.AddAuxiliaryField(new StandardField()
+            {
+                Key = "aux-1",
+                Value = "Test",
+                Label = "Label",
+            });
+
+            Assert.Throws<DuplicateFieldKeyException>(() => request.AddHeaderField(new StandardField()
+            {
+                Key = "aux-1",
+                Value = "Test",
+                Label = "Label",
+            }));
         }
 
         [Fact]
