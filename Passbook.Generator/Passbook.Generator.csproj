@@ -8,7 +8,7 @@
     <Company>Tomas McGuinness</Company>
     <Product>dotnet-passbook</Product>
     <Description>Generate pass files for Apple Wallet. This library allows you to build and sign a pkpass file.</Description>
-    <PackageReleaseNotes>Includes support for Semantic Tags. This version includes a breaking change. Certificates must now be provided to the library directly.</PackageReleaseNotes>
+    <PackageReleaseNotes>Includes upgrade of Newtonsoft.Json to 13 in order to fix a security vunerability.</PackageReleaseNotes>
     <PackageTags>PassBook Wallet Apple Passkit</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression></PackageLicenseExpression>
