@@ -5,14 +5,13 @@ VisualStudioVersion = 17.0.31606.5
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4C5E4812-6174-4F75-8AEE-45100AB9205F}"
 	ProjectSection(SolutionItems) = preProject
-		dotnet-passbook.nuspec = dotnet-passbook.nuspec
 		license.txt = license.txt
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passbook.Generator", "Passbook.Generator\Passbook.Generator.csproj", "{3723CA11-BB28-4CE6-B70C-2631DF1F14A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Passbook.Generator.Tests", "Passbook.Generator.Tests\Passbook.Generator.Tests.csproj", "{391EC91F-4EFD-4CB4-85F6-B391B8F15308}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Passbook.Generator.Tests", "Passbook.Generator.Tests\Passbook.Generator.Tests.csproj", "{391EC91F-4EFD-4CB4-85F6-B391B8F15308}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
