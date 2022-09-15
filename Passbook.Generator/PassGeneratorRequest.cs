@@ -624,8 +624,6 @@ namespace Passbook.Generator
             }
         }
 
-        #endregion
-
         private static string ConvertColor(string color)
         {
             if (!string.IsNullOrEmpty(color) && color.Substring(0, 1) == "#")
@@ -656,5 +654,7 @@ namespace Passbook.Generator
                 return color;
             }
         }
+
+        #endregion
     }
 }
