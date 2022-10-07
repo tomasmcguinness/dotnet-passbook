@@ -2,7 +2,7 @@
 {
     public class SilenceRequested : SemanticTagBaseValue
     {
-        public SilenceRequested(bool value) : base("sportName", value)
+        public SilenceRequested(bool value) : base("silenceRequested", value)
         {
             // NO OP
         }
