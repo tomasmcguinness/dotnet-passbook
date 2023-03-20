@@ -23,7 +23,7 @@ namespace Passbook.Generator
             Images = new Dictionary<PassbookImage, byte[]>();
             RelevantLocations = new List<RelevantLocation>();
             RelevantBeacons = new List<RelevantBeacon>();
-            AssociatedStoreIdentifiers = new List<int>();
+            AssociatedStoreIdentifiers = new List<long>();
             Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
             Barcodes = new List<Barcode>();
             UserInfo = new Dictionary<string, object>();
@@ -224,7 +224,7 @@ namespace Passbook.Generator
 
         #region Associated App Keys
 
-        public List<int> AssociatedStoreIdentifiers { get; set; }
+        public List<long> AssociatedStoreIdentifiers { get; set; }
 
         public string AppLaunchURL { get; set; }
 
