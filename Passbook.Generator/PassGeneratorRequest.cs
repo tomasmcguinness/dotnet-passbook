@@ -526,7 +526,7 @@ namespace Passbook.Generator
                 writer.WritePropertyName("associatedStoreIdentifiers");
                 writer.WriteStartArray();
 
-                foreach (int storeIdentifier in AssociatedStoreIdentifiers)
+                foreach (var storeIdentifier in AssociatedStoreIdentifiers)
                 {
                     writer.WriteValue(storeIdentifier);
                 }

@@ -64,7 +64,7 @@ namespace Passbook.Generator
                 throw new ArgumentNullException(nameof(generatorRequests), "You must pass an instance of IReadOnlyList containing at least one PassGeneratorRequest");
             }
 
-            if (generatorRequests.Count() == 0)
+            if (!generatorRequests.Any())
             {
                 throw new ArgumentException(nameof(generatorRequests), "The IReadOnlyList must contain at least one PassGeneratorRequest");
             }

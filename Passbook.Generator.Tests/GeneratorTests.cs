@@ -33,6 +33,8 @@ namespace Passbook.Generator.Tests
                 Row = 1
             });
 
+            request.AssociatedStoreIdentifiers.Add(long.MaxValue);
+
             using (MemoryStream ms = new MemoryStream())
             {
                 using (StreamWriter sr = new StreamWriter(ms))
@@ -65,6 +67,10 @@ namespace Passbook.Generator.Tests
                     Assert.Equal("Test", (string)auxField["value"]);
                     Assert.Equal("Label", (string)auxField["label"]);
                     Assert.Equal(1, (int)auxField["row"]);
+
+                    var associatedAppIdentifiersPayload = (JArray)json["associatedStoreIdentifiers"];
+                    Assert.Single(associatedAppIdentifiersPayload);
+                    Assert.Equal(long.MaxValue, associatedAppIdentifiersPayload[0]);
                 }
             }
         }
