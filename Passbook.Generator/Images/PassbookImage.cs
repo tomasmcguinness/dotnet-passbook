@@ -6,51 +6,100 @@ namespace Passbook.Generator
     {
         public static string ToFilename(this PassbookImage passbookImage)
         {
-            switch (passbookImage)
+            String filename;
+            switch (passbookImage.Type)
             {
-                case PassbookImage.Icon:
-                    return "icon.png";
-                case PassbookImage.Icon2X:
-                    return "icon@2x.png";
-                case PassbookImage.Icon3X:
-                    return "icon@3x.png";
-                case PassbookImage.Logo:
-                    return "logo.png";
-                case PassbookImage.Logo2X:
-                    return "logo@2x.png";
-                case PassbookImage.Logo3X:
-                    return "logo@3x.png";
-                case PassbookImage.Background:
-                    return "background.png";
-                case PassbookImage.Background2X:
-                    return "background@2x.png";
-                case PassbookImage.Background3X:
-                    return "background@3x.png";
-                case PassbookImage.Strip:
-                    return "strip.png";
-                case PassbookImage.Strip2X:
-                    return "strip@2x.png";
-                case PassbookImage.Strip3X:
-                    return "strip@3x.png";
-                case PassbookImage.Thumbnail:
-                    return "thumbnail.png";
-                case PassbookImage.Thumbnail2X:
-                    return "thumbnail@2x.png";
-                case PassbookImage.Thumbnail3X:
-                    return "thumbnail@3x.png";
-                case PassbookImage.Footer:
-                    return "footer.png";
-                case PassbookImage.Footer2X:
-                    return "footer@2x.png";
-                case PassbookImage.Footer3X:
-                    return "footer@3x.png";
+                case PassbookImageType.Icon:
+                    filename = "icon.png";
+                    break;
+                case PassbookImageType.Icon2X:
+                    filename = "icon@2x.png";
+                    break;
+                case PassbookImageType.Icon3X:
+                    filename = "icon@3x.png";
+                    break;
+                case PassbookImageType.Logo:
+                    filename = "logo.png";
+                    break;
+                case PassbookImageType.Logo2X:
+                    filename = "logo@2x.png";
+                    break;
+                case PassbookImageType.Logo3X:
+                    filename = "logo@3x.png";
+                    break;
+                case PassbookImageType.Background:
+                    filename = "background.png";
+                    break;
+                case PassbookImageType.Background2X:
+                    filename = "background@2x.png";
+                    break;
+                case PassbookImageType.Background3X:
+                    filename = "background@3x.png";
+                    break;
+                case PassbookImageType.Strip:
+                    filename = "strip.png";
+                    break;
+                case PassbookImageType.Strip2X:
+                    filename = "strip@2x.png";
+                    break;
+                case PassbookImageType.Strip3X:
+                    filename = "strip@3x.png";
+                    break;
+                case PassbookImageType.Thumbnail:
+                    filename = "thumbnail.png";
+                    break;
+                case PassbookImageType.Thumbnail2X:
+                    filename = "thumbnail@2x.png";
+                    break;
+                case PassbookImageType.Thumbnail3X:
+                    filename = "thumbnail@3x.png";
+                    break;
+                case PassbookImageType.Footer:
+                    filename = "footer.png";
+                    break;
+                case PassbookImageType.Footer2X:
+                    filename = "footer@2x.png";
+                    break;
+                case PassbookImageType.Footer3X:
+                    filename = "footer@3x.png";
+                    break;
                 default:
                     throw new NotImplementedException("Unknown PassbookImage type.");
             }
+            if (!String.IsNullOrEmpty(passbookImage.Culture))
+            {
+                filename = passbookImage.Culture + "/" + filename;
+            }
+            return filename;
         }
     }
 
-    public enum PassbookImage
+    public struct PassbookImage
+    {
+        public PassbookImageType Type { get; set; }
+        public String LanguageCode { get; set; }
+
+        public static readonly PassbookImage Background = new PassbookImage() { Type = PassbookImageType.Background };
+        public static readonly PassbookImage Background2X = new PassbookImage() { Type = PassbookImageType.Background2X };
+        public static readonly PassbookImage Background3X = new PassbookImage() { Type = PassbookImageType.Background3X };
+        public static readonly PassbookImage Icon = new PassbookImage() { Type = PassbookImageType.Icon };
+        public static readonly PassbookImage Icon2X = new PassbookImage() { Type = PassbookImageType.Icon2X };
+        public static readonly PassbookImage Icon3X = new PassbookImage() { Type = PassbookImageType.Icon3X };
+        public static readonly PassbookImage Logo = new PassbookImage() { Type = PassbookImageType.Logo };
+        public static readonly PassbookImage Logo2X = new PassbookImage() { Type = PassbookImageType.Logo2X };
+        public static readonly PassbookImage Logo3X = new PassbookImage() { Type = PassbookImageType.Logo3X };
+        public static readonly PassbookImage Strip = new PassbookImage() { Type = PassbookImageType.Strip };
+        public static readonly PassbookImage Strip2X = new PassbookImage() { Type = PassbookImageType.Strip2X };
+        public static readonly PassbookImage Strip3X = new PassbookImage() { Type = PassbookImageType.Strip3X };
+        public static readonly PassbookImage Thumbnail = new PassbookImage() { Type = PassbookImageType.Thumbnail };
+        public static readonly PassbookImage Thumbnail2X = new PassbookImage() { Type = PassbookImageType.Thumbnail2X };
+        public static readonly PassbookImage Thumbnail3X = new PassbookImage() { Type = PassbookImageType.Thumbnail3X };
+        public static readonly PassbookImage Footer = new PassbookImage() { Type = PassbookImageType.Footer };
+        public static readonly PassbookImage Footer2X = new PassbookImage() { Type = PassbookImageType.Footer2X };
+        public static readonly PassbookImage Footer3X = new PassbookImage() { Type = PassbookImageType.Footer3X };
+    }
+
+    public enum PassbookImageType
     {
         /// <summary>
         /// Background image, 180x220 points

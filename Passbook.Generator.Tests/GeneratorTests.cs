@@ -16,7 +16,7 @@ namespace Passbook.Generator.Tests
         public void EnsurePassIsGeneratedCorrectly()
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
-            request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Local);
+            request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             request.Nfc = new Nfc("My NFC Message", "SKLSJLKJ");
 
             DateTime offset = new DateTime(2018, 01, 05, 12, 00, 0);
@@ -99,7 +99,7 @@ namespace Passbook.Generator.Tests
         public void EnsureFieldHasLocalTime()
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
-            request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Local);
+            request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             request.Nfc = new Nfc("My NFC Message", "SKLSJLKJ");
 
             DateTime offset = new DateTime(2018, 01, 05, 12, 00, 0);
