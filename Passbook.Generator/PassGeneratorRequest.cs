@@ -25,6 +25,7 @@ namespace Passbook.Generator
             RelevantBeacons = new List<RelevantBeacon>();
             AssociatedStoreIdentifiers = new List<long>();
             Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+            ImageLocalizations = new Dictionary<string, Dictionary<PassbookImage, byte[]>>(StringComparer.OrdinalIgnoreCase);
             Barcodes = new List<Barcode>();
             UserInfo = new Dictionary<string, object>();
         }
@@ -243,7 +244,11 @@ namespace Passbook.Generator
         #endregion
 
         #region Localization
+        
         public Dictionary<string, Dictionary<string, string>> Localizations { get; set; }
+
+        public Dictionary<string, Dictionary<PassbookImage, byte[]>> ImageLocalizations { get; set; }
+
         #endregion
 
         #region NFC
@@ -336,14 +341,23 @@ namespace Passbook.Generator
             RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major, Minor = minor });
         }
 
-        public void AddLocalization(string languageCode, string key, string value)
+        public void AddLocalization(string languageCode, string key, string value) 
         {
-            Dictionary<string, string> values;
-
-            if (!Localizations.TryGetValue(languageCode, out values))
+            if (!Localizations.TryGetValue(languageCode, out Dictionary<string, string> values))
             {
                 values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 Localizations.Add(languageCode, values);
+            }
+
+            values[key] = value;
+        }
+
+        public void AddImageLocalization(string languageCode, PassbookImage key, byte[] value)
+        {
+            if (!ImageLocalizations.TryGetValue(languageCode, out Dictionary<PassbookImage, byte[]> values))
+            {
+                values = new Dictionary<PassbookImage, byte[]>();
+                ImageLocalizations.Add(languageCode, values);
             }
 
             values[key] = value;

@@ -19,7 +19,7 @@ namespace Passbook.Generator
         private byte[] passFile = null;
         private byte[] signatureFile = null;
         private byte[] manifestFile = null;
-        private Dictionary<string, byte[]> localizationFiles = null;
+        private Dictionary<string, Dictionary<string, byte[]>> localizationFiles = null;
         private byte[] pkPassFile = null;
         private byte[] pkPassBundle = null;
         private const string passTypePrefix = "Pass Type ID: ";
@@ -122,14 +122,17 @@ namespace Passbook.Generator
                         }
                     }
 
-                    foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
+                    foreach (KeyValuePair<string, Dictionary<string, byte[]>> localization in localizationFiles)
                     {
-                        ZipArchiveEntry localizationEntry = archive.CreateEntry(string.Format("{0}.lproj/pass.strings", localization.Key.ToLower()));
-
-                        using (BinaryWriter writer = new BinaryWriter(localizationEntry.Open()))
+                        foreach (KeyValuePair<string, byte[]> localizationFile in localization.Value)
                         {
-                            writer.Write(localization.Value);
-                            writer.Flush();
+                            ZipArchiveEntry localizationEntry = archive.CreateEntry(string.Format("{0}.lproj/{1}", localization.Key.ToLower(), localizationFile.Key.ToLower()));
+
+                            using (BinaryWriter writer = new BinaryWriter(localizationEntry.Open()))
+                            {
+                                writer.Write(localizationFile.Value);
+                                writer.Flush();
+                            }
                         }
                     }
 
@@ -241,7 +244,7 @@ namespace Passbook.Generator
 
         private void GenerateLocalizationFiles(PassGeneratorRequest request)
         {
-            localizationFiles = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+            localizationFiles = new Dictionary<string, Dictionary<string, byte[]>>(StringComparer.OrdinalIgnoreCase);
 
             foreach (KeyValuePair<string, Dictionary<string, string>> localization in request.Localizations)
             {
@@ -255,9 +258,27 @@ namespace Passbook.Generator
                         }
 
                         sr.Flush();
-                        localizationFiles.Add(localization.Key, ms.ToArray());
+
+                        Dictionary<string, byte[]> files = new Dictionary<string, byte[]>
+                        {
+                            { "pass.strings", ms.ToArray() }
+                        };
+
+                        localizationFiles.Add(localization.Key, files);
                     }
                 }
+            }
+
+            foreach (KeyValuePair<string, Dictionary<PassbookImage, byte[]>> localization in request.ImageLocalizations)
+            {
+                if (!localizationFiles.TryGetValue(localization.Key, out var files))
+                {
+                    files = new Dictionary<string, byte[]>();
+                    localizationFiles[localization.Key] = files;
+                }
+
+                foreach (KeyValuePair<PassbookImage, byte[]> imageLocalization in localization.Value)
+                    files.Add(imageLocalization.Key.ToFilename(), imageLocalization.Value);
             }
         }
 
@@ -292,11 +313,14 @@ namespace Passbook.Generator
                             }
                         }
 
-                        foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
+                        foreach (KeyValuePair<string, Dictionary<string, byte[]>> localization in localizationFiles)
                         {
-                            hash = GetHashForBytes(localization.Value);
-                            jsonWriter.WritePropertyName(string.Format("{0}.lproj/pass.strings", localization.Key.ToLower()));
-                            jsonWriter.WriteValue(hash);
+                            foreach (KeyValuePair<string, byte[]> localizationFile in localization.Value)
+                            {
+                                hash = GetHashForBytes(localizationFile.Value);
+                                jsonWriter.WritePropertyName(string.Format("{0}.lproj/{1}", localization.Key.ToLower(), localizationFile.Key.ToLower()));
+                                jsonWriter.WriteValue(hash);
+                            }
                         }
                     }
 
