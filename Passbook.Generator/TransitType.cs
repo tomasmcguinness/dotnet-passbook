@@ -1,11 +1,10 @@
-﻿namespace Passbook.Generator
+﻿namespace Passbook.Generator;
+
+public enum TransitType
 {
-    public enum TransitType
-    {
-        PKTransitTypeAir,
-        PKTransitTypeBoat,
-        PKTransitTypeBus,
-        PKTransitTypeGeneric,
-        PKTransitTypeTrain
-    }
+    PKTransitTypeAir,
+    PKTransitTypeBoat,
+    PKTransitTypeBus,
+    PKTransitTypeGeneric,
+    PKTransitTypeTrain
 }

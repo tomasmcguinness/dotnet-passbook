@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <Version>3.2.4.0</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>dotnet-passbook</PackageId>
     <Company>Tomas McGuinness</Company>
     <Product>dotnet-passbook</Product>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <Description>Generate pass files for Apple Wallet. This library allows you to build and sign a pkpass file.</Description>
     <PackageReleaseNotes>Fix issue where some Associated Store Identifier values where not being handled correctly (GitHub issue #179)</PackageReleaseNotes>
     <PackageTags>PassBook Wallet Apple Passkit</PackageTags>
@@ -27,15 +27,9 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
- <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Security" />
-  </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="8.0.1" />
   </ItemGroup>
 
 </Project>

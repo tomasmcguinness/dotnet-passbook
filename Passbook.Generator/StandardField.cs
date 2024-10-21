@@ -1,46 +1,46 @@
-﻿using Passbook.Generator.Exceptions;
+﻿using System.Text.Json;
+using Passbook.Generator.Exceptions;
 
-namespace Passbook.Generator.Fields
+namespace Passbook.Generator.Fields;
+
+public class StandardField : Field
 {
-    public class StandardField : Field
+    public StandardField()
+        : base()
+    { }
+
+    public StandardField(string key, string label, string value)
+        : base(key, label)
     {
-        public StandardField()
-            : base()
-        { }
+        Value = value;
+    }
 
-        public StandardField(string key, string label, string value)
-            : base(key, label)
+    public StandardField(string key, string label, string value, string attributedValue, DataDetectorTypes dataDetectorTypes)
+        : this(key, label, value)
+    {
+        AttributedValue = attributedValue;
+        DataDetectorTypes = dataDetectorTypes;
+    }
+
+    public string Value { get; set; }
+
+    protected override void WriteValue(Utf8JsonWriter writer)
+    {
+        if (Value == null)
         {
-            this.Value = value;
+            throw new RequiredFieldValueMissingException(Key);
         }
 
-        public StandardField(string key, string label, string value, string attributedValue, DataDetectorTypes dataDetectorTypes)
-            : this(key, label, value)
-        {
-            this.AttributedValue = attributedValue;
-            this.DataDetectorTypes = dataDetectorTypes;
-        }
+        writer.WriteStringValue(Value);
+    }
 
-        public string Value { get; set; }
+    public override void SetValue(object value)
+    {
+        Value = value as string;
+    }
 
-        protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
-        {
-            if (Value == null)
-            {
-                throw new RequiredFieldValueMissingException(Key);
-            }
-
-            writer.WriteValue(Value);
-        }
-
-        public override void SetValue(object value)
-        {
-            this.Value = value as string;
-        }
-
-        public override bool HasValue
-        {
-            get { return !string.IsNullOrEmpty(Value); }
-        }
+    public override bool HasValue
+    {
+        get { return !string.IsNullOrEmpty(Value); }
     }
 }

@@ -1,14 +1,13 @@
-﻿namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags;
+
+public enum EventTypes
 {
-    public enum EventTypes
-    {
-        PKEventTypeGeneric,
-        PKEventTypeLivePerformance,
-        PKEventTypeMovie,
-        PKEventTypeSports,
-        PKEventTypeConference,
-        PKEventTypeConvention,
-        PKEventTypeWorkshop,
-        PKEventTypeSocialGathering
-    }
+    PKEventTypeGeneric,
+    PKEventTypeLivePerformance,
+    PKEventTypeMovie,
+    PKEventTypeSports,
+    PKEventTypeConference,
+    PKEventTypeConvention,
+    PKEventTypeWorkshop,
+    PKEventTypeSocialGathering
 }

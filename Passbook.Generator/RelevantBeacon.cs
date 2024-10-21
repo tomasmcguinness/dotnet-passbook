@@ -1,60 +1,59 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 using Passbook.Generator.Exceptions;
 
-namespace Passbook.Generator
+namespace Passbook.Generator;
+
+public class RelevantBeacon
 {
-    public class RelevantBeacon
+    /// <summary>
+    /// Required. Unique identifier of a Bluetooth Low Energy location beacon.
+    /// </summary>
+    public string ProximityUUID { get; set; }
+
+    /// <summary>
+    /// Optional. Text displayed on the lock screen when the pass is currently relevant.
+    /// </summary>
+    public string RelevantText { get; set; }
+
+    public int? Major { get; set; }
+
+    public int? Minor { get; set; }
+
+    public void Write(Utf8JsonWriter writer)
     {
-        /// <summary>
-        /// Required. Unique identifier of a Bluetooth Low Energy location beacon.
-        /// </summary>
-        public string ProximityUUID { get; set; }
+        Validate();
 
-        /// <summary>
-        /// Optional. Text displayed on the lock screen when the pass is currently relevant.
-        /// </summary>
-        public string RelevantText { get; set; }
+        writer.WriteStartObject();
 
-        public int? Major { get; set; }
+        writer.WritePropertyName("proximityUUID");
+        writer.WriteStringValue(ProximityUUID);
 
-        public int? Minor { get; set; }
-
-        public void Write(JsonWriter writer)
+        if (!string.IsNullOrEmpty(RelevantText))
         {
-            Validate();
-
-            writer.WriteStartObject();
-
-            writer.WritePropertyName("proximityUUID");
-            writer.WriteValue(ProximityUUID);
-
-            if (!string.IsNullOrEmpty(RelevantText))
-            {
-                writer.WritePropertyName("relevantText");
-                writer.WriteValue(RelevantText);
-            }
-
-            if (Minor.HasValue)
-            {
-                writer.WritePropertyName("minor");
-                writer.WriteValue(Minor);
-            }
-
-            if (Major.HasValue)
-            {
-                writer.WritePropertyName("major");
-                writer.WriteValue(Major);
-            }
-
-            writer.WriteEndObject();
+            writer.WritePropertyName("relevantText");
+            writer.WriteStringValue(RelevantText);
         }
 
-        private void Validate()
+        if (Minor.HasValue)
         {
-            if (string.IsNullOrEmpty(ProximityUUID))
-            {
-                throw new RequiredFieldValueMissingException("ProximityUUID");
-            }
+            writer.WritePropertyName("minor");
+            writer.WriteNumberValue(Minor.Value);
+        }
+
+        if (Major.HasValue)
+        {
+            writer.WritePropertyName("major");
+            writer.WriteNumberValue(Major.Value);
+        }
+
+        writer.WriteEndObject();
+    }
+
+    private void Validate()
+    {
+        if (string.IsNullOrEmpty(ProximityUUID))
+        {
+            throw new RequiredFieldValueMissingException("ProximityUUID");
         }
     }
 }

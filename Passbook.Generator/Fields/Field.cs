@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using Passbook.Generator.Exceptions;
+﻿using Passbook.Generator.Exceptions;
 using System;
+using System.Text.Json;
 
 namespace Passbook.Generator.Fields
 {
@@ -8,21 +8,21 @@ namespace Passbook.Generator.Fields
     {
         public Field()
         {
-            this.DataDetectorTypes = DataDetectorTypes.PKDataDetectorAll;
+            DataDetectorTypes = DataDetectorTypes.PKDataDetectorAll;
         }
 
         public Field(string key, string label)
             : this()
         {
-            this.Key = key;
-            this.Label = label;
+            Key = key;
+            Label = label;
         }
 
         public Field(string key, string label, string changeMessage, FieldTextAlignment textAligment)
             : this(key, label)
         {
-            this.ChangeMessage = changeMessage;
-            this.TextAlignment = textAligment;
+            ChangeMessage = changeMessage;
+            TextAlignment = textAligment;
         }
 
         /// <summary>
@@ -95,43 +95,43 @@ namespace Passbook.Generator.Fields
         /// </summary>
         public int? Row { get; set; }
 
-        public void Write(JsonWriter writer)
+        public void Write(Utf8JsonWriter writer)
         {
             Validate();
 
             writer.WriteStartObject();
 
             writer.WritePropertyName("key");
-            writer.WriteValue(Key);
+            writer.WriteStringValue(Key);
 
             if (!string.IsNullOrEmpty(ChangeMessage))
             {
                 writer.WritePropertyName("changeMessage");
-                writer.WriteValue(ChangeMessage);
+                writer.WriteStringValue(ChangeMessage);
             }
 
             if (!string.IsNullOrEmpty(Label))
             {
                 writer.WritePropertyName("label");
-                writer.WriteValue(Label);
+                writer.WriteStringValue(Label);
             }
 
             if (TextAlignment != FieldTextAlignment.Unspecified)
             {
                 writer.WritePropertyName("textAlignment");
-                writer.WriteValue(TextAlignment.ToString());
+                writer.WriteStringValue(TextAlignment.ToString());
             }
 
             if (!string.IsNullOrEmpty(AttributedValue))
             {
                 writer.WritePropertyName("attributedValue");
-                writer.WriteValue(this.AttributedValue);
+                writer.WriteStringValue(AttributedValue);
             }
 
             if (Row.HasValue)
             {
                 writer.WritePropertyName("row");
-                writer.WriteValue(this.Row.Value);
+                writer.WriteNumberValue(Row.Value);
             }
 
             WriteKeys(writer);
@@ -144,7 +144,7 @@ namespace Passbook.Generator.Fields
             writer.WriteEndObject();
         }
 
-        private void WriteDataDetectorTypes(JsonWriter writer)
+        private void WriteDataDetectorTypes(Utf8JsonWriter writer)
         {
             if (DataDetectorTypes != DataDetectorTypes.PKDataDetectorAll)
             {
@@ -155,7 +155,7 @@ namespace Passbook.Generator.Fields
                     if (value.CompareTo(DataDetectorTypes.PKDataDetectorNone) != 0 &&
                         value.CompareTo(DataDetectorTypes.PKDataDetectorAll) != 0 &&
                         DataDetectorTypes.HasFlag(value))
-                        writer.WriteValue(value.ToString());
+                        writer.WriteStringValue(value.ToString());
 
                 writer.WriteEndArray();
             }
@@ -169,12 +169,12 @@ namespace Passbook.Generator.Fields
             }
         }
 
-        protected virtual void WriteKeys(JsonWriter writer)
+        protected virtual void WriteKeys(Utf8JsonWriter writer)
         {
             // NO OP
         }
 
-        protected abstract void WriteValue(JsonWriter writer);
+        protected abstract void WriteValue(Utf8JsonWriter writer);
 
         public abstract void SetValue(object value);
 

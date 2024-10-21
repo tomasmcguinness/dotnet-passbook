@@ -1,22 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 
-namespace Passbook.Generator.Tags
+namespace Passbook.Generator.Tags;
+
+/// <summary>
+/// An array of the full names of the performers and opening acts at the event, in decreasing order of significance. Use this key for any type of event ticket.
+/// </summary>
+public class PerformerNames(params string[] performerNames) : SemanticTag("performerNames")
 {
-    /// <summary>
-    /// An array of the full names of the performers and opening acts at the event, in decreasing order of significance. Use this key for any type of event ticket.
-    /// </summary>
-    public class PerformerNames : SemanticTag
+    public override void WriteValue(Utf8JsonWriter writer)
     {
-        private readonly string[] _performerNames;
-
-        public PerformerNames(params string[] performerNames) : base("performerNames")
+        writer.WriteStartArray();
+        foreach (var performerName in performerNames)
         {
-            _performerNames = performerNames;
+            writer.WriteStringValue(performerName);
         }
-
-        public override void WriteValue(JsonWriter writer)
-        {
-            writer.WriteValue(_performerNames);
-        }
+        writer.WriteEndArray();
     }
 }

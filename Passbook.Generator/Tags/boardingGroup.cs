@@ -1,10 +1,5 @@
-﻿namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags;
+
+public class BoardingGroup(string value) : SemanticTagBaseValue("boardingGroup", value)
 {
-    public class BoardingGroup : SemanticTagBaseValue
-    {
-        public BoardingGroup(string value) : base("boardingGroup", value)
-        {
-            // NO OP
-        }
-    }
 }

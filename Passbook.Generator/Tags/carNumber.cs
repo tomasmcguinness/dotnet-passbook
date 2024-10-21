@@ -1,10 +1,5 @@
-﻿namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags;
+
+public class CarNumber(string value) : SemanticTagBaseValue("carNumber", value)
 {
-    public class CarNumber : SemanticTagBaseValue
-    {
-        public CarNumber(string value) : base("carNumber", value)
-        {
-            // NO OP
-        }
-    }
 }

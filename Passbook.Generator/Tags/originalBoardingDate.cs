@@ -1,10 +1,5 @@
-﻿namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags;
+
+public class OriginalBoardingDate(string value) : SemanticTagBaseValue("originalBoardingDate", value)
 {
-    public class OriginalBoardingDate : SemanticTagBaseValue
-    {
-        public OriginalBoardingDate(string value) : base("originalBoardingDate", value)
-        {
-            // NO OP
-        }
-    }
 }

@@ -1,26 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 
-namespace Passbook.Generator.Tags
+namespace Passbook.Generator.Tags;
+
+public class VenueLocation(double latitude, double longitude) : SemanticTag("venueLocation")
 {
-    public class VenueLocation : SemanticTag
+    public override void WriteValue(Utf8JsonWriter writer)
     {
-        private readonly double _latitude;
-        private readonly double _longitude;
-
-        public VenueLocation(double latitude, double longitude) : base("venueLocation")
-        {
-            _latitude = latitude;
-            _longitude = longitude;
-        }
-
-        public override void WriteValue(JsonWriter writer)
-        {
-            writer.WriteStartObject();
-            writer.WritePropertyName("latitude");
-            writer.WriteValue(_latitude);
-            writer.WritePropertyName("longitude");
-            writer.WriteValue(_longitude);
-            writer.WriteEndObject();
-        }
+        writer.WriteStartObject();
+        writer.WritePropertyName("latitude");
+        writer.WriteNumberValue(latitude);
+        writer.WritePropertyName("longitude");
+        writer.WriteNumberValue(longitude);
+        writer.WriteEndObject();
     }
 }

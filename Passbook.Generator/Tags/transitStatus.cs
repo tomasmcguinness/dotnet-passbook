@@ -1,10 +1,5 @@
-﻿namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags;
+
+public class TransitStatus(string value) : SemanticTagBaseValue("transitStatus", value)
 {
-    public class TransitStatus : SemanticTagBaseValue
-    {
-        public TransitStatus(string value) : base("transitStatus", value)
-        {
-            // NO OP
-        }
-    }
 }

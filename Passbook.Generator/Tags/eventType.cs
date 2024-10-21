@@ -1,22 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 
-namespace Passbook.Generator.Tags
+namespace Passbook.Generator.Tags;
+
+/// <summary>
+/// The type of event. Use this key for any type of event ticket.
+/// </summary>
+public class EventType(EventTypes eventType) : SemanticTag("eventType")
 {
-    /// <summary>
-    /// The type of event. Use this key for any type of event ticket.
-    /// </summary>
-    public class EventType : SemanticTag
+    public override void WriteValue(Utf8JsonWriter writer)
     {
-        private readonly EventTypes _eventType;
-
-        public EventType(EventTypes eventType) : base("eventType")
-        {
-            _eventType = eventType;
-        }
-
-        public override void WriteValue(JsonWriter writer)
-        {
-            writer.WriteValue(_eventType.ToString());
-        }
+        writer.WriteStringValue(eventType.ToString());
     }
 }
