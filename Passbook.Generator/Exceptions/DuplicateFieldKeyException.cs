@@ -1,11 +1,7 @@
 ﻿using System;
 
-namespace Passbook.Generator.Exceptions
+namespace Passbook.Generator.Exceptions;
+
+public class DuplicateFieldKeyException(string key) : Exception($"A field with the key `{key}` is already present")
 {
-    public class DuplicateFieldKeyException : Exception
-    {
-        public DuplicateFieldKeyException(string key) :
-            base($"A field with the key `{key}` is already present")
-        { }
-    }
 }

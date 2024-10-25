@@ -1,28 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 
-namespace Passbook.Generator.Tags
+namespace Passbook.Generator.Tags;
+
+public class Seats(params Seat[] seats) : SemanticTag("seats")
 {
-    public class Seats : SemanticTag
+    public override void WriteValue(Utf8JsonWriter writer)
     {
-        private readonly Seat[] _seats;
-
-        public Seats(params Seat[] seats) : base("seats")
+        writer.WriteStartArray();
+        
+        foreach(var seat in seats)
         {
-            _seats = seats;
+            writer.WriteStartObject();
+
+            writer.WriteEndObject();
         }
 
-        public override void WriteValue(JsonWriter writer)
-        {
-            writer.WriteStartArray();
-            
-            foreach(var seat in _seats)
-            {
-                writer.WriteStartObject();
-
-                writer.WriteEndObject();
-            }
-
-            writer.WriteEndArray();
-        }
+        writer.WriteEndArray();
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Passbook.Generator.Fields
+﻿using System.Text.Json;
+
+namespace Passbook.Generator.Fields
 {
     public class NumberField : Field
     {
@@ -9,8 +11,8 @@
         public NumberField(string key, string label, decimal value, FieldNumberStyle numberStyle)
             : base(key, label)
         {
-            this.Value = value;
-            this.NumberStyle = numberStyle;
+            Value = value;
+            NumberStyle = numberStyle;
         }
 
         public NumberField(string key, string label, int value, FieldNumberStyle numberStyle)
@@ -30,29 +32,29 @@
 
         public decimal Value { get; set; }
 
-        protected override void WriteKeys(Newtonsoft.Json.JsonWriter writer)
+        protected override void WriteKeys(Utf8JsonWriter writer)
         {
             if (!string.IsNullOrEmpty(CurrencyCode))
             {
                 writer.WritePropertyName("currencyCode");
-                writer.WriteValue(CurrencyCode);
+                writer.WriteStringValue(CurrencyCode);
             }
 
             if (NumberStyle != FieldNumberStyle.Unspecified)
             {
                 writer.WritePropertyName("numberStyle");
-                writer.WriteValue(NumberStyle.ToString());
+                writer.WriteStringValue(NumberStyle.ToString());
             }
         }
 
-        protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
+        protected override void WriteValue(Utf8JsonWriter writer)
         {
-            writer.WriteValue(Value);
+            writer.WriteNumberValue(Value);
         }
 
         public override void SetValue(object value)
         {
-            this.Value = (decimal)value;
+            Value = (decimal)value;
         }
 
         public override bool HasValue

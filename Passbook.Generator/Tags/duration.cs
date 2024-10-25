@@ -1,12 +1,6 @@
-﻿using Newtonsoft.Json;
-
-namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags
 {
-    public class Duration : SemanticTagBaseValue
+    public class Duration(double value) : SemanticTagBaseValue("duration", value)
     {
-        public Duration(double value) : base("duration", value)
-        {
-            // NO OP
-        }
     }
 }

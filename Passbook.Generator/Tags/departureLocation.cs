@@ -1,25 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 
 namespace Passbook.Generator.Tags
 {
-    public class DepartureLocation : SemanticTag
+    public class DepartureLocation(double latitude, double longitude) : SemanticTag("departureLocation")
     {
-        private readonly double _latitude;
-        private readonly double _longitude;
-
-        public DepartureLocation(double latitude, double longitude) : base("departureLocation")
-        {
-            _latitude = latitude;
-            _longitude = longitude;
-        }
-
-        public override void WriteValue(JsonWriter writer)
+        public override void WriteValue(Utf8JsonWriter writer)
         {
             writer.WriteStartObject();
             writer.WritePropertyName("latitude");
-            writer.WriteValue(_latitude);
+            writer.WriteNumberValue(latitude);
             writer.WritePropertyName("longitude");
-            writer.WriteValue(_longitude);
+            writer.WriteNumberValue(longitude);
             writer.WriteEndObject();
         }
     }

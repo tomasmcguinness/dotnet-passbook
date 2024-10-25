@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.Text.Json;
 
 namespace Passbook.Generator.Fields
 {
@@ -12,16 +13,16 @@ namespace Passbook.Generator.Fields
         public DateField(string key, string label, FieldDateTimeStyle dateStyle, FieldDateTimeStyle timeStyle)
             : base(key, label)
         {
-            this.DateStyle = dateStyle;
-            this.TimeStyle = timeStyle;
+            DateStyle = dateStyle;
+            TimeStyle = timeStyle;
         }
 
         public DateField(string key, string label, FieldDateTimeStyle dateStyle, FieldDateTimeStyle timeStyle, DateTime value)
             : base(key, label)
         {
-            this.Value = value;
-            this.DateStyle = dateStyle;
-            this.TimeStyle = timeStyle;
+            Value = value;
+            DateStyle = dateStyle;
+            TimeStyle = timeStyle;
         }
 
         public DateTime Value { get; set; }
@@ -46,44 +47,44 @@ namespace Passbook.Generator.Fields
         /// </summary>
         public bool? IgnoresTimeZone { get; set; }
 
-        protected override void WriteKeys(Newtonsoft.Json.JsonWriter writer)
+        protected override void WriteKeys(Utf8JsonWriter writer)
         {
             if (DateStyle != FieldDateTimeStyle.Unspecified)
             {
                 writer.WritePropertyName("dateStyle");
-                writer.WriteValue(DateStyle.ToString());
+                writer.WriteStringValue(DateStyle.ToString());
             }
 
             if (TimeStyle != FieldDateTimeStyle.Unspecified)
             {
                 writer.WritePropertyName("timeStyle");
-                writer.WriteValue(TimeStyle.ToString());
+                writer.WriteStringValue(TimeStyle.ToString());
             }
 
             if (IsRelative.HasValue)
             {
                 writer.WritePropertyName("isRelative");
-                writer.WriteValue(IsRelative.Value);
+                writer.WriteBooleanValue(IsRelative.Value);
             }
 
             if (IgnoresTimeZone.HasValue)
             {
                 writer.WritePropertyName("ignoresTimeZone");
-                writer.WriteValue(IgnoresTimeZone.Value);
+                writer.WriteBooleanValue(IgnoresTimeZone.Value);
             }
         }
 
-        protected override void WriteValue(Newtonsoft.Json.JsonWriter writer)
+        protected override void WriteValue(Utf8JsonWriter writer)
         {
-            if (this.Value.Kind == DateTimeKind.Utc ||
-                this.Value.Kind == DateTimeKind.Unspecified)
+            if (Value.Kind == DateTimeKind.Utc ||
+                Value.Kind == DateTimeKind.Unspecified)
             {
-                writer.WriteValue(Value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+                writer.WriteStringValue(Value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
             }
             else
             {
-                var localDate = new DateTime(this.Value.Year, this.Value.Month, this.Value.Day, this.Value.Hour, this.Value.Minute, this.Value.Second, this.Value.Kind);
-                var utcDate = new DateTime(this.Value.Year, this.Value.Month, this.Value.Day, this.Value.Hour, this.Value.Minute, this.Value.Second, this.Value.Kind);
+                var localDate = new DateTime(Value.Year, Value.Month, Value.Day, Value.Hour, Value.Minute, Value.Second, Value.Kind);
+                var utcDate = new DateTime(Value.Year, Value.Month, Value.Day, Value.Hour, Value.Minute, Value.Second, Value.Kind);
                 var diff = utcDate - localDate.ToUniversalTime();
 
                 string outputText = localDate.ToString("yyyy-MM-ddTHH:mm:ss", CultureInfo.InvariantCulture);
@@ -96,13 +97,13 @@ namespace Passbook.Generator.Fields
                     outputText = string.Format("{0}+{1:00}:{2:00}", outputText, Math.Abs(diff.Hours), diff.Minutes);
                 }
                 
-                writer.WriteValue(outputText);
+                writer.WriteStringValue(outputText);
             }
         }
 
         public override void SetValue(object value)
         {
-            this.Value = (DateTime)value;
+            Value = (DateTime)value;
         }
 
         public override bool HasValue

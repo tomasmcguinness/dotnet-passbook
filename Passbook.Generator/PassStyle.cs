@@ -1,14 +1,13 @@
-﻿namespace Passbook.Generator
+﻿namespace Passbook.Generator;
+
+/// <summary>
+/// 
+/// </summary>
+public enum PassStyle
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public enum PassStyle
-    {
-        Generic,
-        BoardingPass,
-        Coupon,
-        EventTicket,
-        StoreCard
-    }
+    Generic,
+    BoardingPass,
+    Coupon,
+    EventTicket,
+    StoreCard
 }

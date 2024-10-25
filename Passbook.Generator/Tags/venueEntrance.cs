@@ -1,10 +1,5 @@
-﻿namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags;
+
+public class VenueEntrance(string value) : SemanticTagBaseValue("venueEntrance", value)
 {
-    public class VenueEntrance : SemanticTagBaseValue
-    {
-        public VenueEntrance(string value) : base("venueEntrance", value)
-        {
-            // NO OP
-        }
-    }
 }

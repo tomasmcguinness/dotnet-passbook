@@ -1,10 +1,5 @@
-﻿namespace Passbook.Generator.Tags
+﻿namespace Passbook.Generator.Tags;
+
+public class SecurityScreening(string value) : SemanticTagBaseValue("securityScreening", value)
 {
-    public class SecurityScreening : SemanticTagBaseValue
-    {
-        public SecurityScreening(string value) : base("securityScreening", value)
-        {
-            // NO OP
-        }
-    }
 }

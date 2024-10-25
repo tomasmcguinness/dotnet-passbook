@@ -1,15 +1,8 @@
-﻿namespace Passbook.Generator
+﻿namespace Passbook.Generator;
+
+public class Nfc(string message, string encryptionPublicKey)
 {
-    public class Nfc
-    {
-        public Nfc(string message, string encryptionPublicKey)
-        {
-            Message = message;
-            EncryptionPublicKey = encryptionPublicKey;
-        }
+    public string Message { get; } = message;
 
-        public string Message { get; }
-
-        public string EncryptionPublicKey { get; }
-    }
+    public string EncryptionPublicKey { get; } = encryptionPublicKey;
 }

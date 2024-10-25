@@ -1,190 +1,210 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Passbook.Generator.Exceptions;
 using Passbook.Generator.Fields;
-using System;
-using System.IO;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using TimeZoneConverter;
 using Xunit;
 
-namespace Passbook.Generator.Tests
+namespace Passbook.Generator.Tests;
+
+public class GeneratorTests
 {
-    public class GeneratorTests
+    [Fact]
+    public void EnsurePassIsGeneratedCorrectly()
     {
-        [Fact]
-        public void EnsurePassIsGeneratedCorrectly()
+        var request = new PassGeneratorRequest();
+        request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        request.Nfc = new Nfc("My NFC Message", "SKLSJLKJ");
+
+        var offset = new DateTime(2018, 01, 05, 12, 00, 0);
+        var zone = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
+        var offsetConverted = new DateTimeOffset(offset, zone.GetUtcOffset(offset));
+
+        request.RelevantDate = offsetConverted;
+
+        request.AddAuxiliaryField(new StandardField()
         {
-            PassGeneratorRequest request = new PassGeneratorRequest();
-            request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Local);
-            request.Nfc = new Nfc("My NFC Message", "SKLSJLKJ");
+            Key = "aux-1",
+            Value = "Test",
+            Label = "Label",
+            Row = 1
+        });
 
-            DateTime offset = new DateTime(2018, 01, 05, 12, 00, 0);
-            TimeZoneInfo zone = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
-            DateTimeOffset offsetConverted = new DateTimeOffset(offset, zone.GetUtcOffset(offset));
+        request.AssociatedStoreIdentifiers.Add(long.MaxValue);
 
-            request.RelevantDate = offsetConverted;
+        using var ms = new MemoryStream();
+        var opts = new JsonWriterOptions { Indented = true };
+        using (var writer = new Utf8JsonWriter(ms, opts))
+        
+        request.Write(writer);
 
-            request.AddAuxiliaryField(new StandardField()
-            {
-                Key = "aux-1",
-                Value = "Test",
-                Label = "Label",
-                Row = 1
-            });
+        string jsonString = Encoding.UTF8.GetString(ms.ToArray());
 
-            request.AssociatedStoreIdentifiers.Add(long.MaxValue);
+        dynamic json = JsonSerializer.Deserialize<dynamic>(jsonString)!;
 
-            using (MemoryStream ms = new MemoryStream())
-            {
-                using (StreamWriter sr = new StreamWriter(ms))
-                {
-                    using (JsonWriter writer = new JsonTextWriter(sr))
-                    {
-                        writer.Formatting = Formatting.Indented;
-                        request.Write(writer);
-                    }
+        json.TryGetProperty("expirationDate", out JsonElement expirationDate);
+        Assert.Equal("2018-01-01T00:00:00+00:00", expirationDate.GetString());
 
-                    string jsonString = Encoding.UTF8.GetString(ms.ToArray());
+        json.TryGetProperty("relevantDate", out JsonElement relevantDate);
+        Assert.Equal("2018-01-05T12:00:00-05:00", relevantDate.GetString());
 
-                    var settings = new JsonSerializerSettings { DateParseHandling = DateParseHandling.None };
+        json.TryGetProperty("nfc", out JsonElement nfcPayload);
+        nfcPayload.TryGetProperty("message", out JsonElement nfcMessage);
+        Assert.Equal("My NFC Message", nfcMessage.GetString());
 
-                    dynamic json = JsonConvert.DeserializeObject(jsonString, settings);
+        json.TryGetProperty("generic", out JsonElement genericKeys);
+        genericKeys.TryGetProperty("auxiliaryFields", out JsonElement auxFields);
+        Assert.Equal(1, auxFields.GetArrayLength());
 
-                    Assert.Equal("2018-01-01T00:00:00+00:00", (string)json["expirationDate"]);
-                    Assert.Equal("2018-01-05T12:00:00-05:00", (string)json["relevantDate"]);
+        var auxField = auxFields.EnumerateArray().ToArray()[0];
 
-                    var nfcPayload = (JToken)json["nfc"];
-                    var nfcMessage = (string)nfcPayload["message"];
-                    Assert.Equal("My NFC Message", nfcMessage);
+        auxField.TryGetProperty("key", out JsonElement key);
+        Assert.Equal("aux-1", key.GetString());
 
-                    var genericKeys = json["generic"];
-                    Assert.Equal(1, genericKeys["auxiliaryFields"].Count);
+        auxField.TryGetProperty("value", out JsonElement value);
+        Assert.Equal("Test", value.GetString());
 
-                    var auxField = genericKeys["auxiliaryFields"][0];
+        auxField.TryGetProperty("label", out JsonElement label);
+        Assert.Equal("Label", label.GetString());
 
-                    Assert.Equal("aux-1", (string)auxField["key"]);
-                    Assert.Equal("Test", (string)auxField["value"]);
-                    Assert.Equal("Label", (string)auxField["label"]);
-                    Assert.Equal(1, (int)auxField["row"]);
+        auxField.TryGetProperty("row", out JsonElement row);
+        Assert.Equal(1, row.GetInt32());
 
-                    var associatedAppIdentifiersPayload = (JArray)json["associatedStoreIdentifiers"];
-                    Assert.Single(associatedAppIdentifiersPayload);
-                    Assert.Equal(long.MaxValue, associatedAppIdentifiersPayload[0]);
-                }
-            }
-        }
+        json.TryGetProperty("associatedStoreIdentifiers", out JsonElement associatedAppIdentifiersPayload);
+        Assert.Equal(1, associatedAppIdentifiersPayload.GetArrayLength());
 
-        [Fact]
-        public void EnsureDuplicteKeysThrowAnException()
+        var assocId = associatedAppIdentifiersPayload
+            .EnumerateArray()
+            .ToArray()[0];
+        Assert.Equal(long.MaxValue, assocId.GetInt64());
+    }
+
+    [Fact]
+    public void EnsureDuplicteKeysThrowAnException()
+    {
+        PassGeneratorRequest request = new PassGeneratorRequest();
+
+        request.AddAuxiliaryField(new StandardField()
         {
-            PassGeneratorRequest request = new PassGeneratorRequest();
+            Key = "aux-1",
+            Value = "Test",
+            Label = "Label",
+        });
 
-            request.AddAuxiliaryField(new StandardField()
-            {
-                Key = "aux-1",
-                Value = "Test",
-                Label = "Label",
-            });
-
-            Assert.Throws<DuplicateFieldKeyException>(() => request.AddHeaderField(new StandardField()
-            {
-                Key = "aux-1",
-                Value = "Test",
-                Label = "Label",
-            }));
-        }
-
-        [Fact]
-        public void EnsureFieldHasLocalTime()
+        Assert.Throws<DuplicateFieldKeyException>(() => request.AddHeaderField(new StandardField()
         {
-            PassGeneratorRequest request = new PassGeneratorRequest();
-            request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Local);
-            request.Nfc = new Nfc("My NFC Message", "SKLSJLKJ");
+            Key = "aux-1",
+            Value = "Test",
+            Label = "Label",
+        }));
+    }
 
-            DateTime offset = new DateTime(2018, 01, 05, 12, 00, 0);
-            TimeZoneInfo zone = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
-            DateTimeOffset offsetConverted = new DateTimeOffset(offset, zone.GetUtcOffset(offset));
+    [Fact]
+    public void EnsureFieldHasLocalTime()
+    {
+        var request = new PassGeneratorRequest
+        {
+            ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Local),
+            Nfc = new Nfc("My NFC Message", "SKLSJLKJ")
+        };
 
-            request.RelevantDate = offsetConverted;
+        var offset = new DateTime(2018, 01, 05, 12, 00, 0);
+        var zone = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
+        var offsetConverted = new DateTimeOffset(offset, zone.GetUtcOffset(offset));
 
-            request.AddAuxiliaryField(new StandardField()
-            {
-                Key = "aux-1",
-                Value = "Test",
-                Label = "Label",
-                Row = 1
-            });
+        request.RelevantDate = offsetConverted;
 
-            var local = DateTime.Now;
-            local = new DateTime(local.Year, local.Month, local.Day, local.Hour, local.Minute, local.Second, local.Kind);
-            request.AddAuxiliaryField(new DateField()
-            {
-                Key = "datetime-1",
-                Value = local,
-                Label = "Label",
-            });
+        request.AddAuxiliaryField(new StandardField()
+        {
+            Key = "aux-1",
+            Value = "Test",
+            Label = "Label",
+            Row = 1
+        });
 
-            var utc = DateTime.UtcNow;
-            utc = new DateTime(utc.Year, utc.Month, utc.Day, utc.Hour, utc.Minute, utc.Second, utc.Kind);
-            request.AddAuxiliaryField(new DateField()
-            {
-                Key = "datetime-2",
-                Value = utc,
-                Label = "Label",
-            });
+        var local = DateTime.Now;
+        local = new DateTime(local.Year, local.Month, local.Day, local.Hour, local.Minute, local.Second, local.Kind);
+        request.AddAuxiliaryField(new DateField()
+        {
+            Key = "datetime-1",
+            Value = local,
+            Label = "Label",
+        });
 
-            using (MemoryStream ms = new MemoryStream())
-            {
-                using (StreamWriter sr = new StreamWriter(ms))
-                {
-                    using (JsonWriter writer = new JsonTextWriter(sr))
-                    {
-                        writer.Formatting = Formatting.Indented;
-                        request.Write(writer);
-                    }
+        var utc = DateTime.UtcNow;
+        utc = new DateTime(utc.Year, utc.Month, utc.Day, utc.Hour, utc.Minute, utc.Second, utc.Kind);
+        request.AddAuxiliaryField(new DateField()
+        {
+            Key = "datetime-2",
+            Value = utc,
+            Label = "Label",
+        });
 
-                    string jsonString = Encoding.UTF8.GetString(ms.ToArray());
-                    Console.WriteLine(jsonString);
-                    var settings = new JsonSerializerSettings { DateParseHandling = DateParseHandling.None };
+        using var ms = new MemoryStream();
+        var opts = new JsonWriterOptions { Indented = true };
+        using (var writer = new Utf8JsonWriter(ms, opts))
 
-                    dynamic json = JsonConvert.DeserializeObject(jsonString, settings);
+        request.Write(writer);
 
-                    Assert.Equal("2018-01-01T00:00:00+00:00", (string)json["expirationDate"]);
-                    Assert.Equal("2018-01-05T12:00:00-05:00", (string)json["relevantDate"]);
+        string jsonString = Encoding.UTF8.GetString(ms.ToArray());
+        Console.WriteLine(jsonString);
 
-                    var nfcPayload = (JToken)json["nfc"];
-                    var nfcMessage = (string)nfcPayload["message"];
-                    Assert.Equal("My NFC Message", nfcMessage);
+        dynamic json = JsonSerializer.Deserialize<dynamic>(jsonString)!;
 
-                    var genericKeys = json["generic"];
-                    Assert.Equal(3, genericKeys["auxiliaryFields"].Count);
+        json.TryGetProperty("expirationDate", out JsonElement expirationDate);
+        Assert.Equal("2018-01-01T00:00:00+02:00", expirationDate.GetString());
 
-                    var auxField = genericKeys["auxiliaryFields"][0];
+        json.TryGetProperty("relevantDate", out JsonElement relevantDate);
+        Assert.Equal("2018-01-05T12:00:00-05:00", relevantDate.GetString());
 
-                    Assert.Equal("aux-1", (string)auxField["key"]);
-                    Assert.Equal("Test", (string)auxField["value"]);
-                    Assert.Equal("Label", (string)auxField["label"]);
-                    Assert.Equal(1, (int)auxField["row"]);
+        json.TryGetProperty("nfc", out JsonElement nfcPayload);
+        nfcPayload.TryGetProperty("message", out JsonElement nfcMessage);
+        Assert.Equal("My NFC Message", nfcMessage.GetString());
 
-                    var datetimeField = genericKeys["auxiliaryFields"][1];
-                    Assert.Equal("datetime-1", (string)datetimeField["key"]);
-                    string datetime1 = (string)datetimeField["value"];
-                    string expected1start = string.Format("{0:yyyy-MM-ddTHH:mm}", local);
+        json.TryGetProperty("generic", out JsonElement genericKeys);
 
-                    Assert.StartsWith(expected1start, datetime1);
-                    Assert.DoesNotContain("Z", datetime1);
-                    Assert.Equal("Label", (string)datetimeField["label"]);
+        genericKeys.TryGetProperty("auxiliaryFields", out JsonElement auxFields);
+        Assert.Equal(3, auxFields.EnumerateArray().Count());
 
-                    var utcdatetimeField = genericKeys["auxiliaryFields"][2];
-                    Assert.Equal("datetime-2", (string)utcdatetimeField["key"]);
-                    string datetime2 = (string)utcdatetimeField["value"];
-                    string expected2 = string.Format("{0:yyyy-MM-ddTHH:mm:ss}Z", utc);
+        var auxField = auxFields.EnumerateArray()
+            .ToArray()[0];
 
-                    Assert.Equal(expected2, datetime2);
-                    Assert.Equal("Label", (string)utcdatetimeField["label"]);
-                }
-            }
-        }
+        auxField.TryGetProperty("key", out JsonElement key);
+        Assert.Equal("aux-1", key.GetString());
+        auxField.TryGetProperty("value", out JsonElement value);
+        Assert.Equal("Test", value.GetString());
+        auxField.TryGetProperty("label", out JsonElement label);
+        Assert.Equal("Label", label.GetString());
+        auxField.TryGetProperty("row", out JsonElement row);
+        Assert.Equal(1, row.GetInt32());
+
+        var dateTimeField = auxFields.EnumerateArray()
+            .ToArray()[1];
+
+        dateTimeField.TryGetProperty("key", out JsonElement datetimeKey);
+        Assert.Equal("datetime-1", datetimeKey.GetString());
+
+        dateTimeField.TryGetProperty("value", out JsonElement dateTimeValue);
+        string expected1start = string.Format("{0:yyyy-MM-ddTHH:mm}", local);
+
+        Assert.StartsWith(expected1start, dateTimeValue.GetString());
+        Assert.DoesNotContain("Z", dateTimeValue.GetString());
+
+        dateTimeField.TryGetProperty("label", out JsonElement dateTimeLabel);
+        Assert.Equal("Label", dateTimeLabel.GetString());
+
+        var utcDateTimeField = auxFields.EnumerateArray().ToArray()[2];
+
+        utcDateTimeField.TryGetProperty("key", out JsonElement utcDateTimeFieldKey);
+        Assert.Equal("datetime-2", utcDateTimeFieldKey.GetString());
+
+        utcDateTimeField.TryGetProperty("value", out JsonElement utcDateTimeFieldValue);
+
+        string expected2 = string.Format("{0:yyyy-MM-ddTHH:mm:ss}Z", utc);
+        Assert.Equal(expected2, utcDateTimeFieldValue.GetString());
+
+        utcDateTimeField.TryGetProperty("label", out JsonElement utcDateTimeFieldLabel);
+        Assert.Equal("Label", utcDateTimeFieldLabel.GetString());
     }
 }
