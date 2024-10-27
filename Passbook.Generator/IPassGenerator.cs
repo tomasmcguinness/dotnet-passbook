@@ -1,3 +1,7 @@
+using System.Collections.Generic;
+
+namespace Passbook.Generator;
+
 public interface IPassGenerator
 {
     /// <summary>
