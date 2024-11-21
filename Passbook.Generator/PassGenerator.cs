@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 
 namespace Passbook.Generator;
 
-public class PassGenerator
+public class PassGenerator: IPassGenerator
 {
     private byte[] passFile = null;
     private byte[] signatureFile = null;
@@ -24,14 +24,6 @@ public class PassGenerator
     private byte[] pkPassBundle = null;
     private const string passTypePrefix = "Pass Type ID: ";
 
-    /// <summary>
-    /// Creates a byte array which contains one pkpass file
-    /// </summary>
-    /// <param name="generatorRequest">
-    /// An instance of a PassGeneratorRequest</param>
-    /// <returns>
-    /// A byte array which contains a zipped pkpass file.
-    /// </returns>
     /// <exception cref="ArgumentNullException"></exception>
     public byte[] Generate(PassGeneratorRequest generatorRequest)
     {
@@ -46,15 +38,6 @@ public class PassGenerator
         return pkPassFile;
     }
 
-    /// <summary>
-    /// Creates a byte array that can contains a .pkpasses file for bundling multiple passes together 
-    /// </summary>
-    /// <param name="generatorRequests">
-    /// A list of PassGeneratorRequest objects
-    /// </param>
-    /// <returns>
-    /// A byte array which contains a zipped pkpasses file.
-    /// </returns>
     /// <exception cref="System.ArgumentNullException">
     /// <exception cref="System.ArgumentException">
     public byte[] Generate(IReadOnlyList<PassGeneratorRequest> generatorRequests)

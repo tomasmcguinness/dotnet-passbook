@@ -167,6 +167,84 @@ return new FileContentResult(generatedBundle, "application/vnd.apple.pkpasses")
 };
 ```
 
+### Testing pass generator
+
+#### Strategy 1: Mocking and DI
+
+`PassGenerator` class conforms to `IPassGenerator` interface that exposes methods used to generate the passes. If you have some custom logic that builds the pass generation request, you can use easily mock the `IPassGenerator` interface using any mocking library and test whether your logic calls the `Generate` method with correct generator request.
+
+Say you have a service that receives a generator request through DI and generates a pass based on the request.
+
+```cs
+class PassGeneratorService(IPassGenerator passGenerator)
+{
+    public byte[] GeneratePassWithLogoTextAndBackgroundColor(String logoText, String backgroundColor)
+    {
+        // make a request based on parameters
+        ....
+        passGenerator.Generate(request);
+    }
+}
+```
+
+You can easily test this service by mocking the `IPassGenerator` interface and verifying that the `Generate` method is called with the correct request. Here's a sample using NSubstitute and xUnit.
+
+```cs
+[Fact]
+void ServiceUsesPassedParamsForRequest()
+{
+    // Arrange
+    var passGeneratorMock = Substitute.For<IPassGenerator>();
+    var sut = new PassGeneratorService(passGeneratorMock);
+
+    // Act
+    sut.GeneratePassWithLogoTextAndBackgroundColor("Cup'o'Joe", "#0CAFE0");
+
+    // Assert/Verify
+    passGeneratorMock.Received().Generate(Arg.Is<PassGeneratorRequest>(r =>
+    {
+        r.LogoText == "Cup'o'Joe" && r.BackgroundColor == "#0CAFE0"
+    }));
+}
+```
+
+#### Strategy 2: Testing generator request instead
+
+Another way to test if your logic works well is to test the created `PassGeneratorRequest` object itself. You can create a request object and set the properties based on your logic and then test if the request object is created correctly. Consider this basic request builder:
+
+```cs
+class PassGeneratorRequestBuilder
+{
+    public PassGeneratorRequest BuildRequestWithLogoTextAndBackgroundColor(String logoText, String backgroundColor)
+    {
+        var request = new PassGeneratorRequest();
+        request.LogoText = logoText;
+        request.BackgroundColor = backgroundColor;
+        return request;
+    }
+}
+```
+
+You can test this builder by creating a request object and verifying if the properties are set correctly.
+
+```cs
+[Fact]
+void RequestBuilderSetsPropertiesCorrectly()
+{
+    // Arrange
+    var sut = new PassGeneratorRequestBuilder();
+
+    // Act
+    var request = sut.BuildRequestWithLogoTextAndBackgroundColor("Cup'o'Joe", "#0CAFE0");
+
+    // Assert
+    Assert.Equal("Cup'o'Joe", request.LogoText);
+    Assert.Equal("#0CAFE0", request.BackgroundColor);
+}
+```
+
+Now you only have to make sure that the request is not changed/mutated on its way to the `PassGenerator` class.
+
 ### Troubleshooting Passes
 
 If the passes you create don't seem to open on iOS or in the simulator, the payload is probably invalid. To aid troubleshooting, I've created this simple tool - https://pkpassvalidator.azurewebsites.net - just run your `pkpass` file through this and it might give some idea what's wrong. The tool is new (Jul'18) and doesn't check absolutely everything. I'll try and add more validation to the generator itself.
