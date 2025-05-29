@@ -6,47 +6,28 @@ namespace Passbook.Generator
     {
         public static string ToFilename(this PassbookImage passbookImage)
         {
-            switch (passbookImage)
+            return passbookImage switch
             {
-                case PassbookImage.Icon:
-                    return "icon.png";
-                case PassbookImage.Icon2X:
-                    return "icon@2x.png";
-                case PassbookImage.Icon3X:
-                    return "icon@3x.png";
-                case PassbookImage.Logo:
-                    return "logo.png";
-                case PassbookImage.Logo2X:
-                    return "logo@2x.png";
-                case PassbookImage.Logo3X:
-                    return "logo@3x.png";
-                case PassbookImage.Background:
-                    return "background.png";
-                case PassbookImage.Background2X:
-                    return "background@2x.png";
-                case PassbookImage.Background3X:
-                    return "background@3x.png";
-                case PassbookImage.Strip:
-                    return "strip.png";
-                case PassbookImage.Strip2X:
-                    return "strip@2x.png";
-                case PassbookImage.Strip3X:
-                    return "strip@3x.png";
-                case PassbookImage.Thumbnail:
-                    return "thumbnail.png";
-                case PassbookImage.Thumbnail2X:
-                    return "thumbnail@2x.png";
-                case PassbookImage.Thumbnail3X:
-                    return "thumbnail@3x.png";
-                case PassbookImage.Footer:
-                    return "footer.png";
-                case PassbookImage.Footer2X:
-                    return "footer@2x.png";
-                case PassbookImage.Footer3X:
-                    return "footer@3x.png";
-                default:
-                    throw new NotImplementedException("Unknown PassbookImage type.");
-            }
+                PassbookImage.Icon => "icon.png",
+                PassbookImage.Icon2X => "icon@2x.png",
+                PassbookImage.Icon3X => "icon@3x.png",
+                PassbookImage.Logo => "logo.png",
+                PassbookImage.Logo2X => "logo@2x.png",
+                PassbookImage.Logo3X => "logo@3x.png",
+                PassbookImage.Background => "background.png",
+                PassbookImage.Background2X => "background@2x.png",
+                PassbookImage.Background3X => "background@3x.png",
+                PassbookImage.Strip => "strip.png",
+                PassbookImage.Strip2X => "strip@2x.png",
+                PassbookImage.Strip3X => "strip@3x.png",
+                PassbookImage.Thumbnail => "thumbnail.png",
+                PassbookImage.Thumbnail2X => "thumbnail@2x.png",
+                PassbookImage.Thumbnail3X => "thumbnail@3x.png",
+                PassbookImage.Footer => "footer.png",
+                PassbookImage.Footer2X => "footer@2x.png",
+                PassbookImage.Footer3X => "footer@3x.png",
+                _ => throw new NotImplementedException("Unknown PassbookImage type."),
+            };
         }
     }
 
