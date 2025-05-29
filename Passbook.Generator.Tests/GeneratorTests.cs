@@ -2,7 +2,6 @@ using Passbook.Generator.Exceptions;
 using Passbook.Generator.Fields;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using TimeZoneConverter;
 using Xunit;
 

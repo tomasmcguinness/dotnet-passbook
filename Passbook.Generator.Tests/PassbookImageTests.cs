@@ -1,4 +1,3 @@
-using System.IO.Enumeration;
 using Xunit;
 
 namespace Passbook.Generator.Tests;
