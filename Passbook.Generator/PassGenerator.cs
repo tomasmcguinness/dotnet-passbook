@@ -211,7 +211,7 @@ public class PassGenerator: IPassGenerator
         
         Trace.TraceInformation("Writing JSON...");
         request.Write(writer);
-
+        writer.Flush();
         passFile = ms.ToArray();
     }
 
@@ -266,6 +266,10 @@ public class PassGenerator: IPassGenerator
             jsonWriter.WritePropertyName(string.Format("{0}.lproj/pass.strings", localization.Key.ToLower()));
             jsonWriter.WriteStringValue(hash);
         }
+
+        jsonWriter.WriteEndObject();
+        jsonWriter.Flush();
+
         manifestFile = ms.ToArray();
 
         SignManifestFile(request);
