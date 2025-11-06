@@ -22,6 +22,8 @@ public class GeneratorTests
 
         request.RelevantDate = offsetConverted;
 
+        request.AddRelevantDate(offsetConverted);
+
         request.AddAuxiliaryField(new StandardField()
         {
             Key = "aux-1",
@@ -53,6 +55,15 @@ public class GeneratorTests
         Assert.Equal("My NFC Message", nfcMessage.GetString());
 
         json.TryGetProperty("generic", out JsonElement genericKeys);
+
+
+        json.TryGetProperty("relevantDates", out JsonElement relevantDates);
+        Assert.Equal(1, relevantDates.GetArrayLength());
+
+        var relevantDateItem = relevantDates.EnumerateArray().ToArray()[0];
+        relevantDateItem.TryGetProperty("date", out JsonElement date);
+        Assert.Equal("2018-01-05T12:00:00-05:00", date.GetString());
+
         genericKeys.TryGetProperty("auxiliaryFields", out JsonElement auxFields);
         Assert.Equal(1, auxFields.GetArrayLength());
 
