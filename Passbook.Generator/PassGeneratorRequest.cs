@@ -22,6 +22,7 @@ public class PassGeneratorRequest
         AuxiliaryFields = [];
         BackFields = [];
         Images = [];
+        RelevantDates = [];
         RelevantLocations = [];
         RelevantBeacons = [];
         AssociatedStoreIdentifiers = [];
@@ -175,7 +176,14 @@ public class PassGeneratorRequest
     /// <summary>
     /// Optional. Date and time when the pass becomes relevant. For example, the start time of a movie.
     /// </summary>
+    [Obsolete("RelevantDate is deprecated, please use AddRelevantDate instead.")]
     public DateTimeOffset? RelevantDate { get; set; }
+
+    /// <summary>
+    /// Optional. Date intervals that the system uses to show a relevant pass.
+    /// </summary>
+    public List<RelevantDate> RelevantDates { get; private set; }
+
 
     /// <summary>
     /// Optional. Locations where the passisrelevant. For example, the location of your store.
@@ -312,6 +320,16 @@ public class PassGeneratorRequest
         Barcode = new Barcode(type, message, encoding, alternateText);
     }
 
+    public void AddRelevantDate(DateTimeOffset date)
+    {
+        RelevantDates.Add(new RelevantDate() { Date = date });
+    }
+
+    public void AddRelevantDate(DateTimeOffset startDate, DateTimeOffset endDate)
+    {
+        RelevantDates.Add(new RelevantDate() { StartDate = startDate, EndDate = endDate });
+    }
+
     public void AddLocation(double latitude, double longitude)
     {
         AddLocation(latitude, longitude, null);
@@ -423,6 +441,19 @@ public class PassGeneratorRequest
         {
             writer.WritePropertyName("maxDistance");
             writer.WriteStringValue(MaxDistance.Value.ToString());
+        }
+
+        if (RelevantDates.Count > 0)
+        {
+            writer.WritePropertyName("relevantDates");
+            writer.WriteStartArray();
+
+            foreach (var relevantDate in RelevantDates)
+            {
+                relevantDate.Write(writer);
+            }
+
+            writer.WriteEndArray();
         }
 
         if (RelevantLocations.Count > 0)
