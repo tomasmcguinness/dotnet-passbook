@@ -14,12 +14,12 @@ using System.Text.RegularExpressions;
 
 namespace Passbook.Generator;
 
-public class PassGenerator: IPassGenerator
+public class PassGenerator : IPassGenerator
 {
     private byte[] passFile = null;
     private byte[] signatureFile = null;
     private byte[] manifestFile = null;
-    private Dictionary<string, byte[]> localizationFiles = null;
+    private Dictionary<string, Dictionary<string, byte[]>> localizationFiles = null;
     private byte[] pkPassFile = null;
     private byte[] pkPassBundle = null;
     private const string passTypePrefix = "Pass Type ID: ";
@@ -105,14 +105,17 @@ public class PassGenerator: IPassGenerator
                     }
                 }
 
-                foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
+                foreach (KeyValuePair<string, Dictionary<string, byte[]>> localization in localizationFiles)
                 {
-                    ZipArchiveEntry localizationEntry = archive.CreateEntry(string.Format("{0}.lproj/pass.strings", localization.Key.ToLower()));
-
-                    using (BinaryWriter writer = new BinaryWriter(localizationEntry.Open()))
+                    foreach (KeyValuePair<string, byte[]> localizationFile in localization.Value)
                     {
-                        writer.Write(localization.Value);
-                        writer.Flush();
+                        ZipArchiveEntry localizationEntry = archive.CreateEntry(string.Format("{0}.lproj/{1}", localization.Key.ToLower(), localizationFile.Key.ToLower()));
+                        
+                        using (BinaryWriter writer = new BinaryWriter(localizationEntry.Open()))
+                        {
+                            writer.Write(localizationFile.Value);
+                            writer.Flush();
+                        }
                     }
                 }
 
@@ -206,9 +209,9 @@ public class PassGenerator: IPassGenerator
     private void CreatePassFile(PassGeneratorRequest request)
     {
         using var ms = new MemoryStream();
-        var options = new JsonWriterOptions {Indented = true};
+        var options = new JsonWriterOptions { Indented = true };
         var writer = new Utf8JsonWriter(ms, options);
-        
+
         Trace.TraceInformation("Writing JSON...");
         request.Write(writer);
         writer.Flush();
@@ -217,7 +220,7 @@ public class PassGenerator: IPassGenerator
 
     private void GenerateLocalizationFiles(PassGeneratorRequest request)
     {
-        localizationFiles = new Dictionary<string, byte[]>(StringComparer.OrdinalIgnoreCase);
+        localizationFiles = new Dictionary<string, Dictionary<string, byte[]>>(StringComparer.OrdinalIgnoreCase);
 
         foreach (KeyValuePair<string, Dictionary<string, string>> localization in request.Localizations)
         {
@@ -229,14 +232,35 @@ public class PassGenerator: IPassGenerator
             }
 
             sr.Flush();
-            localizationFiles.Add(localization.Key, ms.ToArray());
+
+            var files = new Dictionary<string, byte[]>
+            {
+                { "pass.strings", ms.ToArray() }
+            };
+
+            localizationFiles.Add(localization.Key, files);
+        }
+
+        foreach (KeyValuePair<string, Dictionary<PassbookImage, byte[]>> localization in request.ImageLocalizations)
+        {
+            if (!localizationFiles.TryGetValue(localization.Key, out var files))
+            {
+                files = new Dictionary<string, byte[]>();
+                localizationFiles[localization.Key] = files;
+            }
+
+            foreach (KeyValuePair<PassbookImage, byte[]> imageLocalization in localization.Value)
+            {
+                files.Add(imageLocalization.Key.ToFilename(), imageLocalization.Value);
+            }
         }
     }
+
 
     private void GenerateManifestFile(PassGeneratorRequest request)
     {
         using var ms = new MemoryStream();
-        var options = new JsonWriterOptions {Indented = true};
+        var options = new JsonWriterOptions { Indented = true };
         var jsonWriter = new Utf8JsonWriter(ms, options);
         jsonWriter.WriteStartObject();
 
@@ -260,11 +284,14 @@ public class PassGenerator: IPassGenerator
             }
         }
 
-        foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
+        foreach (KeyValuePair<string, Dictionary<string, byte[]>> localization in localizationFiles)
         {
-            hash = GetHashForBytes(localization.Value);
-            jsonWriter.WritePropertyName(string.Format("{0}.lproj/pass.strings", localization.Key.ToLower()));
-            jsonWriter.WriteStringValue(hash);
+            foreach (KeyValuePair<string, byte[]> localizationFile in localization.Value)
+            {
+                hash = GetHashForBytes(localizationFile.Value);
+                jsonWriter.WritePropertyName(string.Format("{0}.lproj/{1}", localization.Key.ToLower(), localizationFile.Key.ToLower()));
+                jsonWriter.WriteStringValue(hash);
+            }
         }
 
         jsonWriter.WriteEndObject();

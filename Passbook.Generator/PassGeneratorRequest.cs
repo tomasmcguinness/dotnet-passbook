@@ -27,6 +27,7 @@ public class PassGeneratorRequest
         RelevantBeacons = [];
         AssociatedStoreIdentifiers = [];
         Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+        ImageLocalizations = new Dictionary<string, Dictionary<PassbookImage, byte[]>>(StringComparer.OrdinalIgnoreCase);
         Barcodes = [];
         UserInfo = new Dictionary<string, object>();
     }
@@ -253,6 +254,9 @@ public class PassGeneratorRequest
 
     #region Localization
     public Dictionary<string, Dictionary<string, string>> Localizations { get; set; }
+
+    public Dictionary<string, Dictionary<PassbookImage, byte[]>> ImageLocalizations { get; set; }
+
     #endregion
 
     #region NFC
@@ -363,6 +367,17 @@ public class PassGeneratorRequest
         {
             values = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             Localizations.Add(languageCode, values);
+        }
+
+        values[key] = value;
+    }
+
+    public void AddImageLocalization(string languageCode, PassbookImage key, byte[] value)
+    {
+        if (!ImageLocalizations.TryGetValue(languageCode, out Dictionary<PassbookImage, byte[]> values))
+        {
+            values = new Dictionary<PassbookImage, byte[]>();
+            ImageLocalizations.Add(languageCode, values);
         }
 
         values[key] = value;
