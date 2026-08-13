@@ -14,6 +14,9 @@ namespace Passbook.Generator
                 PassbookImage.Logo => "logo.png",
                 PassbookImage.Logo2X => "logo@2x.png",
                 PassbookImage.Logo3X => "logo@3x.png",
+                PassbookImage.PrimaryLogo => "logoPrimary.png",
+                PassbookImage.PrimaryLogo2X => "logoPrimary@2x.png",
+                PassbookImage.PrimaryLogo3X => "logoPrimary@3x.png",
                 PassbookImage.Background => "background.png",
                 PassbookImage.Background2X => "background@2x.png",
                 PassbookImage.Background3X => "background@3x.png",
@@ -69,6 +72,18 @@ namespace Passbook.Generator
         /// @3x Retina logo, 160x50 points
         /// </summary>
         Logo3X,
+        /// <summary>
+        /// Needed for posterGeneric
+        /// </summary>
+        PrimaryLogo,
+        /// <summary>
+        /// @2x Retina primary logo, 160x50 points
+        /// </summary>
+        PrimaryLogo2X,
+        /// <summary>
+        /// @3x Retina primary logo, 160x50 points
+        /// </summary>
+        PrimaryLogo3X,
         /// <summary>
         /// Strip
         /// <list type="bullet">

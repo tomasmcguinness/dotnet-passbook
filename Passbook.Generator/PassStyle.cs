@@ -12,8 +12,7 @@ public enum PassStyle
     StoreCard,
 
     /// <summary>
-    /// The poster generic pass style: a full-art-background variant of <see cref="Generic"/> introduced
-    /// alongside poster event tickets. Written as the top-level "posterGeneric" key.
+    /// Seems to have dropped the SecondaryFields & AuxiliaryFields in posterGeneric
     /// </summary>
     PosterGeneric
 }
