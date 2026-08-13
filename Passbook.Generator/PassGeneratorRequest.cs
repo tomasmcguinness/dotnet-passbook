@@ -25,6 +25,9 @@ public class PassGeneratorRequest
         RelevantDates = [];
         RelevantLocations = [];
         RelevantBeacons = [];
+        PreferredStyleSchemes = [];
+        AdditionalInfoFields = [];
+        FeaturedActions = [];
         AssociatedStoreIdentifiers = [];
         Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
         Barcodes = [];
@@ -150,6 +153,17 @@ public class PassGeneratorRequest
     public List<Field> BackFields { get; private set; }
 
     /// <summary>
+    /// Optional. Additional fields shown in the pass's additional information sheet. Used by poster event
+    /// tickets and poster generic passes.
+    /// </summary>
+    public List<Field> AdditionalInfoFields { get; private set; }
+
+    /// <summary>
+    /// Optional. Quick-action links shown below the pass, such as opening a related collection or benefits page.
+    /// </summary>
+    public List<FeaturedAction> FeaturedActions { get; private set; }
+
+    /// <summary>
     /// Optional. Information specific to barcodes.
     /// </summary>
     public Barcode Barcode { get; private set; }
@@ -158,6 +172,20 @@ public class PassGeneratorRequest
     /// Required. Pass type.
     /// </summary>
     public PassStyle Style { get; set; }
+
+    /// <summary>
+    /// Optional. Style schemes that the system resolves into a style type for the pass, in order of preference.
+    /// For example, provide [PosterEventTicket, EventTicket] to opt into the poster event ticket style while
+    /// falling back to the legacy event ticket style on devices that don't support it.
+    /// </summary>
+    public List<PreferredStyleScheme> PreferredStyleSchemes { get; private set; }
+
+    /// <summary>
+    /// Optional. A second, legacy style dictionary written alongside <see cref="Style"/> using the same field
+    /// content, for devices that don't support the poster styles (e.g. pair PosterGeneric with Generic, or
+    /// EventTicket with EventTicket via PreferredStyleSchemes for the poster event ticket case).
+    /// </summary>
+    public PassStyle? FallbackStyle { get; set; }
 
     /// <summary>
     /// Required for boarding passes; otherwise not allowed. Type of transit.
@@ -293,13 +321,25 @@ public class PassGeneratorRequest
         BackFields.Add(field);
     }
 
+    public void AddAdditionalInfoField(Field field)
+    {
+        EnsureFieldKeyIsUnique(field.Key);
+        AdditionalInfoFields.Add(field);
+    }
+
+    public void AddFeaturedAction(string identifier, string type, string url)
+    {
+        FeaturedActions.Add(new FeaturedAction() { Identifier = identifier, Type = type, Url = url });
+    }
+
     private void EnsureFieldKeyIsUnique(string key)
     {
         if (HeaderFields.Any(x => x.Key == key) ||
             PrimaryFields.Any(x => x.Key == key) ||
             SecondaryFields.Any(x => x.Key == key) ||
             AuxiliaryFields.Any(x => x.Key == key) ||
-            BackFields.Any(x => x.Key == key))
+            BackFields.Any(x => x.Key == key) ||
+            AdditionalInfoFields.Any(x => x.Key == key))
         {
             throw new DuplicateFieldKeyException(key);
         }
@@ -328,6 +368,11 @@ public class PassGeneratorRequest
     public void AddRelevantDate(DateTimeOffset startDate, DateTimeOffset endDate)
     {
         RelevantDates.Add(new RelevantDate() { StartDate = startDate, EndDate = endDate });
+    }
+
+    public void AddPreferredStyleScheme(PreferredStyleScheme scheme)
+    {
+        PreferredStyleSchemes.Add(scheme);
     }
 
     public void AddLocation(double latitude, double longitude)
@@ -400,31 +445,18 @@ public class PassGeneratorRequest
             WriteNfcKeys(writer);
         }
 
-        Trace.TraceInformation("Opening style section..");
-        OpenStyleSpecificKey(writer);
+        Trace.TraceInformation("Writing style section..");
+        WriteStyleSpecificSection(writer, Style);
 
-        Trace.TraceInformation("Writing header fields");
-        WriteSection(writer, "headerFields", HeaderFields);
-        Trace.TraceInformation("Writing primary fields");
-        WriteSection(writer, "primaryFields", PrimaryFields);
-        Trace.TraceInformation("Writing secondary fields");
-        WriteSection(writer, "secondaryFields", SecondaryFields);
-        Trace.TraceInformation("Writing auxiliary fields");
-        WriteSection(writer, "auxiliaryFields", AuxiliaryFields);
-        Trace.TraceInformation("Writing back fields");
-        WriteSection(writer, "backFields", BackFields);
-
-        if (Style == PassStyle.BoardingPass)
+        if (FallbackStyle.HasValue)
         {
-            writer.WritePropertyName("transitType");
-            writer.WriteStringValue(TransitType.ToString());
+            Trace.TraceInformation("Writing fallback style section..");
+            WriteStyleSpecificSection(writer, FallbackStyle.Value);
         }
-
-        Trace.TraceInformation("Closing style section..");
-        CloseStyleSpecificKey(writer);
 
         WriteBarcode(writer);
         WriteUrls(writer);
+        WriteFeaturedActions(writer);
 
         writer.WriteEndObject();
     }
@@ -491,6 +523,22 @@ public class PassGeneratorRequest
             writer.WriteStringValue(AuthenticationToken);
             writer.WritePropertyName("webServiceURL");
             writer.WriteStringValue(WebServiceUrl);
+        }
+    }
+
+    private void WriteFeaturedActions(Utf8JsonWriter writer)
+    {
+        if (FeaturedActions.Count > 0)
+        {
+            writer.WritePropertyName("featuredActions");
+            writer.WriteStartArray();
+
+            foreach (var featuredAction in FeaturedActions)
+            {
+                featuredAction.Write(writer);
+            }
+
+            writer.WriteEndArray();
         }
     }
 
@@ -571,6 +619,20 @@ public class PassGeneratorRequest
             writer.WritePropertyName("appLaunchURL");
             writer.WriteStringValue(AppLaunchURL);
         }
+
+        if (PreferredStyleSchemes.Count > 0)
+        {
+            writer.WritePropertyName("preferredStyleSchemes");
+            writer.WriteStartArray();
+
+            foreach (var scheme in PreferredStyleSchemes)
+            {
+                string key = scheme.ToString();
+                writer.WriteStringValue(char.ToLowerInvariant(key[0]) + key.Substring(1));
+            }
+
+            writer.WriteEndArray();
+        }
     }
 
     private void WriteUserInfo(Utf8JsonWriter writer)
@@ -631,16 +693,29 @@ public class PassGeneratorRequest
         }
     }
 
-    private void OpenStyleSpecificKey(Utf8JsonWriter writer)
+    private void WriteStyleSpecificSection(Utf8JsonWriter writer, PassStyle style)
     {
-        string key = Style.ToString();
-
+        string key = style.ToString();
         writer.WritePropertyName(char.ToLowerInvariant(key[0]) + key.Substring(1));
         writer.WriteStartObject();
-    }
 
-    private static void CloseStyleSpecificKey(Utf8JsonWriter writer)
-    {
+        WriteSection(writer, "headerFields", HeaderFields);
+        WriteSection(writer, "primaryFields", PrimaryFields);
+        WriteSection(writer, "secondaryFields", SecondaryFields);
+        WriteSection(writer, "auxiliaryFields", AuxiliaryFields);
+        WriteSection(writer, "backFields", BackFields);
+
+        if (AdditionalInfoFields.Count > 0)
+        {
+            WriteSection(writer, "additionalInfoFields", AdditionalInfoFields);
+        }
+
+        if (style == PassStyle.BoardingPass)
+        {
+            writer.WritePropertyName("transitType");
+            writer.WriteStringValue(TransitType.ToString());
+        }
+
         writer.WriteEndObject();
     }
 

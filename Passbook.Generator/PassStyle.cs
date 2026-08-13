@@ -9,5 +9,11 @@ public enum PassStyle
     BoardingPass,
     Coupon,
     EventTicket,
-    StoreCard
+    StoreCard,
+
+    /// <summary>
+    /// The poster generic pass style: a full-art-background variant of <see cref="Generic"/> introduced
+    /// alongside poster event tickets. Written as the top-level "posterGeneric" key.
+    /// </summary>
+    PosterGeneric
 }
