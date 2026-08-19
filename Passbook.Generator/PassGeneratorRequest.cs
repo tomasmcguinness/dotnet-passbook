@@ -327,9 +327,9 @@ public class PassGeneratorRequest
         AdditionalInfoFields.Add(field);
     }
 
-    public void AddFeaturedAction(string identifier, string type, string url)
+    public void AddFeaturedAction(string identifier, FeaturedActionType type, string url, string icon = null)
     {
-        FeaturedActions.Add(new FeaturedAction() { Identifier = identifier, Type = type, Url = url });
+        FeaturedActions.Add(new FeaturedAction() { Identifier = identifier, Type = type, Url = url, Icon = icon });
     }
 
     private void EnsureFieldKeyIsUnique(string key)
