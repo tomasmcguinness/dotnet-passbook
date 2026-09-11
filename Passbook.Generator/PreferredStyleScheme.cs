@@ -13,6 +13,15 @@ public enum PreferredStyleScheme
     /// <summary>
     /// The legacy event ticket style.
     /// </summary>
-    EventTicket
+    EventTicket,
 
+    /// <summary>
+    /// The poster-style generic ticket. Falls back to <see cref="Generic"/> on devices that don't support it.
+    /// </summary>
+    PosterGeneric,
+
+    /// <summary>
+    /// The legacy generic ticket style
+    /// </summary>
+    Generic
 }
