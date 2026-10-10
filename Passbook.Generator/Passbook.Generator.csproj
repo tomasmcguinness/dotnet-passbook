@@ -1,24 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>4.0.1.1</Version>
+    <Version>5.0.0.0</Version>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>dotnet-passbook</PackageId>
     <Company>Tomas McGuinness</Company>
     <Product>dotnet-passbook</Product>
     <TargetFrameworks>net8.0</TargetFrameworks>
     <Description>Generate pass files for Apple Wallet. This library allows you to build and sign a pkpass file.</Description>
-    <PackageReleaseNotes>Fix issue #207, which resulted in empty files.</PackageReleaseNotes>
+    <PackageReleaseNotes>Support for iOS 27 thanks to the community!</PackageReleaseNotes>
     <PackageTags>PassBook Wallet Apple Passkit</PackageTags>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression></PackageLicenseExpression>
     <RepositoryUrl>https://github.com/tomasmcguinness/dotnet-passbook</RepositoryUrl>
-    <Copyright>2025 Tomas McGuinness</Copyright>
+    <Copyright>2026 Tomas McGuinness</Copyright>
     <PackageLicenseFile>license.txt</PackageLicenseFile>
-    <AssemblyVersion>4.0.0</AssemblyVersion>
-    <FileVersion>4.0.0</FileVersion>
+    <AssemblyVersion>5.0.0</AssemblyVersion>
+    <FileVersion>5.0.0</FileVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Authors>Tomas McGuinness, Eimantas</Authors>
+    <Authors>Tomas McGuinness &amp; Community</Authors>
   </PropertyGroup>
 
   <ItemGroup>
