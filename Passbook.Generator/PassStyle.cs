@@ -9,5 +9,10 @@ public enum PassStyle
     BoardingPass,
     Coupon,
     EventTicket,
-    StoreCard
+    StoreCard,
+
+    /// <summary>
+    /// Seems to have dropped the SecondaryFields & AuxiliaryFields in posterGeneric
+    /// </summary>
+    PosterGeneric
 }

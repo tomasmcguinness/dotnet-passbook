@@ -21,5 +21,22 @@
         /// Code128
         /// </summary>
         PKBarcodeFormatCode128,
+        /// <summary>
+        /// EAN-13
+        /// </summary>
+        PKBarcodeFormatEAN13,
+        /// <summary>
+        /// Code39
+        /// </summary>
+        PKBarcodeFormatCode39,
+        /// <summary>
+        /// Codabar
+        /// </summary>
+        PKBarcodeFormatCodabar,
+        /// <summary>
+        /// ITF
+        /// </summary>
+        PKBarcodeFormatITF
+
     }
 }
